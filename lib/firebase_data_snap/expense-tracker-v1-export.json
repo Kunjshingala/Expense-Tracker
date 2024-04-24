@@ -1,0 +1,220 @@
+{
+  "users": {
+    "ufVKtHLmGRbX707WtO1QWlLEDR03": {
+      "all-transactions": {
+        "categories": {
+          "9": {
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958670284237": {
+              "amount": 0,
+              "category": 9,
+              "date": "06 March 2024",
+              "description": "",
+              "id": "24-4-2024-17-7-50-IST-1713958670284",
+              "imageUrl": "",
+              "location": "",
+              "time": 1709663400000000,
+              "transactionMode": 0,
+              "transactionType": 0
+            }
+          },
+          "-2": {
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958609746435": {
+              "amount": 500,
+              "category": -2,
+              "date": "24 April 2024",
+              "description": "",
+              "id": "24-4-2024-17-6-49-IST-1713958609749",
+              "imageUrl": "",
+              "location": "",
+              "time": 1713897000000000,
+              "transactionMode": 1,
+              "transactionType": 1
+            },
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958652548737": {
+              "amount": 100,
+              "category": -2,
+              "date": "26 April 2024",
+              "description": "",
+              "id": "24-4-2024-17-7-32-IST-1713958652548",
+              "imageUrl": "",
+              "location": "",
+              "time": 1714069800000000,
+              "transactionMode": 1,
+              "transactionType": 1
+            }
+          }
+        },
+        "monthly": {
+          "April-2024": {
+            "24": {
+              "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958609746435": {
+                "amount": 500,
+                "category": -2,
+                "date": "24 April 2024",
+                "description": "",
+                "id": "24-4-2024-17-6-49-IST-1713958609749",
+                "imageUrl": "",
+                "location": "",
+                "time": 1713897000000000,
+                "transactionMode": 1,
+                "transactionType": 1
+              }
+            },
+            "26": {
+              "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958652548737": {
+                "amount": 100,
+                "category": -2,
+                "date": "26 April 2024",
+                "description": "",
+                "id": "24-4-2024-17-7-32-IST-1713958652548",
+                "imageUrl": "",
+                "location": "",
+                "time": 1714069800000000,
+                "transactionMode": 1,
+                "transactionType": 1
+              }
+            }
+          },
+          "March-2024": {
+            "06": {
+              "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958670284237": {
+                "amount": 0,
+                "category": 9,
+                "date": "06 March 2024",
+                "description": "",
+                "id": "24-4-2024-17-7-50-IST-1713958670284",
+                "imageUrl": "",
+                "location": "",
+                "time": 1709663400000000,
+                "transactionMode": 0,
+                "transactionType": 0
+              }
+            }
+          }
+        },
+        "transactions": {
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958609746435": {
+            "amount": 500,
+            "category": -2,
+            "date": "24 April 2024",
+            "description": "",
+            "id": "24-4-2024-17-6-49-IST-1713958609749",
+            "imageUrl": "",
+            "location": "",
+            "time": 1713897000000000,
+            "transactionMode": 1,
+            "transactionType": 1
+          },
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958652548737": {
+            "amount": 100,
+            "category": -2,
+            "date": "26 April 2024",
+            "description": "",
+            "id": "24-4-2024-17-7-32-IST-1713958652548",
+            "imageUrl": "",
+            "location": "",
+            "time": 1714069800000000,
+            "transactionMode": 1,
+            "transactionType": 1
+          },
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958670284237": {
+            "amount": 0,
+            "category": 9,
+            "date": "06 March 2024",
+            "description": "",
+            "id": "24-4-2024-17-7-50-IST-1713958670284",
+            "imageUrl": "",
+            "location": "",
+            "time": 1709663400000000,
+            "transactionMode": 0,
+            "transactionType": 0
+          }
+        },
+        "transfer-mode": [
+          {
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958670284237": {
+              "amount": 0,
+              "category": 9,
+              "date": "06 March 2024",
+              "description": "",
+              "id": "24-4-2024-17-7-50-IST-1713958670284",
+              "imageUrl": "",
+              "location": "",
+              "time": 1709663400000000,
+              "transactionMode": 0,
+              "transactionType": 0
+            }
+          },
+          {
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958609746435": {
+              "amount": 500,
+              "category": -2,
+              "date": "24 April 2024",
+              "description": "",
+              "id": "24-4-2024-17-6-49-IST-1713958609749",
+              "imageUrl": "",
+              "location": "",
+              "time": 1713897000000000,
+              "transactionMode": 1,
+              "transactionType": 1
+            },
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958652548737": {
+              "amount": 100,
+              "category": -2,
+              "date": "26 April 2024",
+              "description": "",
+              "id": "24-4-2024-17-7-32-IST-1713958652548",
+              "imageUrl": "",
+              "location": "",
+              "time": 1714069800000000,
+              "transactionMode": 1,
+              "transactionType": 1
+            }
+          }
+        ],
+        "transfer-type": [
+          {
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958670284237": {
+              "amount": 0,
+              "category": 9,
+              "date": "06 March 2024",
+              "description": "",
+              "id": "24-4-2024-17-7-50-IST-1713958670284",
+              "imageUrl": "",
+              "location": "",
+              "time": 1709663400000000,
+              "transactionMode": 0,
+              "transactionType": 0
+            }
+          },
+          {
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958609746435": {
+              "amount": 500,
+              "category": -2,
+              "date": "24 April 2024",
+              "description": "",
+              "id": "24-4-2024-17-6-49-IST-1713958609749",
+              "imageUrl": "",
+              "location": "",
+              "time": 1713897000000000,
+              "transactionMode": 1,
+              "transactionType": 1
+            },
+            "ufVKtHLmGRbX707WtO1QWlLEDR03-1713958652548737": {
+              "amount": 100,
+              "category": -2,
+              "date": "26 April 2024",
+              "description": "",
+              "id": "24-4-2024-17-7-32-IST-1713958652548",
+              "imageUrl": "",
+              "location": "",
+              "time": 1714069800000000,
+              "transactionMode": 1,
+              "transactionType": 1
+            }
+          }
+        ]
+      }
+    }
+  }
+}
