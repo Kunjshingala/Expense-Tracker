@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:expense_tracker/ui/common_view/main_eleveted_button.dart';
-import 'package:expense_tracker/ui/screens/navigation/home/manage_transaction/update_transaction/update_transaction_bloc.dart';
+import 'package:expense_tracker/ui/screens/manage_transaction/update_transaction/update_transaction_bloc.dart';
 import 'package:expense_tracker/utils/colors.dart';
 import 'package:expense_tracker/utils/custom_icons.dart';
 import 'package:expense_tracker/utils/dimens.dart';
@@ -11,27 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../../services/permission_handle/permission_handle.dart';
+import '../../../../modals/firebase_modal/transaction_modal.dart';
+import '../../../common_view/attachment_bottom_sheet.dart';
 
 class UpdateTransactionScreen extends StatefulWidget {
-  const UpdateTransactionScreen({
-    super.key,
-    required this.amount,
-    required this.transactionType,
-    required this.selectedCategory,
-    required this.transactionMode,
-    required this.date,
-    this.description,
-    required this.address,
-    required this.url,
-  });
-  final String amount;
-  final TransactionType transactionType;
-  final TransactionCategoryModal selectedCategory;
-  final TransactionMode transactionMode;
-  final String date;
-  final String? description;
-  final String address;
-  final String url;
+  const UpdateTransactionScreen({super.key, required this.transactionModal});
+  final TransactionModal transactionModal;
 
   @override
   State<UpdateTransactionScreen> createState() => _UpdateTransactionScreenState();
@@ -51,13 +36,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     updateTransactionBloc = UpdateTransactionBloc(context: context);
-
-    updateTransactionBloc.amountController.text = widget.amount;
-    updateTransactionBloc.setTransactionType(widget.transactionType);
-    updateTransactionBloc.setTransactionMode(widget.transactionMode);
-    updateTransactionBloc.dateController.text = widget.date;
-    updateTransactionBloc.descriptionController.text = widget.description ?? '';
-    updateTransactionBloc.addressController.text = widget.address;
+    updateTransactionBloc.setLastData(widget.transactionModal);
   }
 
   @override
@@ -224,10 +203,10 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                               padding: EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.03),
                               child: Row(
                                 children: [
-                                  widget.selectedCategory.icon,
+                                  getCategoryModalById(widget.transactionModal.category).icon,
                                   SizedBox(width: screenWidth * 0.02),
                                   Text(
-                                    widget.selectedCategory.label,
+                                    getCategoryModalById(widget.transactionModal.category).label,
                                     style: GoogleFonts.inter(
                                       color: dark50Color,
                                       fontSize: averageScreenSize * 0.03,
@@ -382,8 +361,13 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                         return Stack(
                                           alignment: AlignmentDirectional.topEnd,
                                           children: [
-                                            Padding(
+                                            Container(
                                               padding: EdgeInsetsDirectional.all(averageScreenSize * 0.01),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: dark75Color, width: averageScreenSize * 0.001),
+                                                borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
+                                              ),
                                               child: ClipRRect(
                                                 borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
                                                 child: Image.file(
@@ -421,13 +405,31 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                           children: [
                                             Flexible(
                                               fit: FlexFit.loose,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
-                                                child: Image.network(
-                                                  widget.url,
-                                                  width: averageScreenSize * 0.2,
-                                                  height: averageScreenSize * 0.2,
-                                                  fit: BoxFit.cover,
+                                              child: Container(
+                                                padding: EdgeInsetsDirectional.all(averageScreenSize * 0.01),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: dark75Color, width: averageScreenSize * 0.001),
+                                                  borderRadius:
+                                                      BorderRadius.circular(averageScreenSize * 0.02),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(averageScreenSize * 0.02),
+                                                  child: widget.transactionModal.imageUrl != null
+                                                      ? Image.network(
+                                                          widget.transactionModal.imageUrl!,
+                                                          width: averageScreenSize * 0.2,
+                                                          height: averageScreenSize * 0.2,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Text(
+                                                          'NO Image Added',
+                                                          style: GoogleFonts.inter(
+                                                            color: dark75Color,
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                        ),
                                                 ),
                                               ),
                                             ),
@@ -440,14 +442,14 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                                 color: light20Color,
                                                 child: GestureDetector(
                                                   onTap: () {
-                                                    // showModalBottomSheet(
-                                                    //   context: context,
-                                                    //   constraints: BoxConstraints.expand(
-                                                    //       width: screenWidth, height: screenHeight * 0.25),
-                                                    //   builder: (context) => AttachmentBottomSheet(
-                                                    //     addTransactionBloc: addTransactionBloc,
-                                                    //   ),
-                                                    // );
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      constraints: BoxConstraints.expand(
+                                                          width: screenWidth, height: screenHeight * 0.25),
+                                                      builder: (context) => AttachmentBottomSheet(
+                                                        setFile: updateTransactionBloc.setFile,
+                                                      ),
+                                                    );
                                                   },
                                                   child: Container(
                                                     constraints: BoxConstraints.expand(
@@ -464,7 +466,9 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                                         ),
                                                         SizedBox(width: screenWidth * 0.03),
                                                         Text(
-                                                          'update',
+                                                          widget.transactionModal.imageUrl != null
+                                                              ? 'Update'
+                                                              : 'Add',
                                                           style: GoogleFonts.inter(
                                                             color: light0Color,
                                                             fontSize: averageScreenSize * 0.03,
@@ -486,23 +490,35 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                               ],
                             ),
                             SizedBox(height: screenHeight * 0.03),
-                            CustomElevatedButton(
-                              width: screenWidth * 0.9,
-                              height: screenHeight * 0.07,
-                              borderRadius: averageScreenSize * 0.03,
-                              color: violet100Color,
-                              onPressed: () {
-                                updateTransactionBloc.onComplete();
-                              },
-                              child: Text(
-                                'Update',
-                                style: GoogleFonts.inter(
-                                  color: light80Color,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: averageScreenSize * 0.025,
-                                ),
-                              ),
-                            ),
+                            StreamBuilder<bool>(
+                                stream: updateTransactionBloc.getUpdateTransactionProcessStatus,
+                                builder: (context, snapshot) {
+                                  return CustomElevatedButton(
+                                    width: screenWidth * 0.9,
+                                    height: screenHeight * 0.07,
+                                    borderRadius: averageScreenSize * 0.03,
+                                    color: violet100Color,
+                                    onPressed: () {
+                                      if (snapshot.hasData && !(snapshot.data!)) {
+                                        updateTransactionBloc.onComplete(widget.transactionModal);
+                                      }
+                                    },
+                                    child: snapshot.hasData && !(snapshot.data!)
+                                        ? Text(
+                                            'Update',
+                                            style: GoogleFonts.inter(
+                                              color: light80Color,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: averageScreenSize * 0.025,
+                                            ),
+                                          )
+                                        : CircularProgressIndicator(
+                                            color: light100Color,
+                                            backgroundColor: violet100Color,
+                                            strokeWidth: screenWidth * 0.005,
+                                          ),
+                                  );
+                                }),
                             SizedBox(height: screenHeight * 0.02),
                           ],
                         ),

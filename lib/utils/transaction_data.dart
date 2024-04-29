@@ -35,7 +35,7 @@ List<TransactionCategoryModal> expenseTransactionCategoryList = [
   ),
   TransactionCategoryModal(
     id: 3,
-    label: 'Fule',
+    label: 'Fuel',
     icon: const CategoryIcon(iconData: CustomIcons.fule_icon, id: 3),
   ),
   TransactionCategoryModal(

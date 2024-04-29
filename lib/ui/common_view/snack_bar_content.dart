@@ -39,7 +39,7 @@ class SnackBarContent extends StatelessWidget {
 
 enum MessageType { warning, success, failed }
 
-void showMySnackBar(String message, MessageType messageType) {
+void showMySnackBar({required String message, required MessageType messageType}) {
   scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
       backgroundColor: getSnackBarBGColor(messageType),
@@ -50,13 +50,13 @@ void showMySnackBar(String message, MessageType messageType) {
 
 Color? getSnackBarBGColor(MessageType messageType) {
   if (messageType == MessageType.warning) {
-    return yellow60Color;
+    return yellow80Color;
   }
   if (messageType == MessageType.success) {
-    return green60Color;
+    return green80Color;
   }
   if (messageType == MessageType.failed) {
-    return red60Color;
+    return red80Color;
   }
   return null;
 }

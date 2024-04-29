@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Flutter Demo',
+      navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const SplashScreen(),
       // home: const MainNavigationScreen(),
+      // home: const ProfileScreen(),
       // home: const AddTransactionScreen(),
 
       /// update screen

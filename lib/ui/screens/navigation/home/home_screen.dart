@@ -9,11 +9,12 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../modals/local_modal/home_chart_data_modal.dart';
 import '../../../../utils/custom_icons.dart';
+import '../../manage_transaction/add_transaction/add_transaction_screen.dart';
 import 'home_widget/home_tab_pages/all_trans_tab/home_all_trans_tab_pages.dart';
 import 'home_widget/home_tab_pages/today_trans_tab/home_today_trans_tab_pages.dart';
-import 'manage_transaction/add_transaction/add_transaction_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -56,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Good Morning, ${homeBloc.currentUserName}',
+                  '${homeBloc.greeting}, ${homeBloc.currentUserName}',
                   style: GoogleFonts.inter(
                     color: dark75Color,
                     fontWeight: FontWeight.w500,
@@ -118,13 +119,28 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                   fontSize: averageScreenSize * 0.025,
                                 ),
                               ),
-                              Text(
-                                '4100',
-                                style: GoogleFonts.inter(
-                                  color: dark75Color,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: averageScreenSize * 0.05,
-                                ),
+                              StreamBuilder<FinanceOverviewModal>(
+                                stream: homeBloc.getFinanceOverview,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      '${snapshot.data!.budget}',
+                                      style: GoogleFonts.inter(
+                                        color: dark75Color,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: averageScreenSize * 0.05,
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: screenHeight * 0.05,
+                                      child: LoadingAnimationWidget.hexagonDots(
+                                        color: dark50Color,
+                                        size: averageScreenSize * 0.03,
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -132,20 +148,35 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Remain Budget',
+                                'Total Balance',
                                 style: GoogleFonts.inter(
                                   color: light0Color,
                                   fontWeight: FontWeight.w500,
                                   fontSize: averageScreenSize * 0.025,
                                 ),
                               ),
-                              Text(
-                                '3100',
-                                style: GoogleFonts.inter(
-                                  color: green60Color,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: averageScreenSize * 0.05,
-                                ),
+                              StreamBuilder<FinanceOverviewModal>(
+                                stream: homeBloc.getFinanceOverview,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      '${snapshot.data!.balance}',
+                                      style: GoogleFonts.inter(
+                                        color: snapshot.data!.balance > 0 ? green60Color : red60Color,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: averageScreenSize * 0.05,
+                                      ),
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: screenHeight * 0.05,
+                                      child: LoadingAnimationWidget.hexagonDots(
+                                        color: dark50Color,
+                                        size: averageScreenSize * 0.03,
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -211,13 +242,42 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                           fontSize: averageScreenSize * 0.0225,
                                         ),
                                       ),
-                                      Text(
-                                        '\$2.0 k',
-                                        style: GoogleFonts.inter(
-                                          color: light80Color,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: averageScreenSize * 0.03,
-                                        ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '\$',
+                                            style: GoogleFonts.inter(
+                                              color: light80Color,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: averageScreenSize * 0.03,
+                                            ),
+                                          ),
+                                          StreamBuilder<FinanceOverviewModal>(
+                                            stream: homeBloc.getFinanceOverview,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Text(
+                                                  '${snapshot.data!.income}',
+                                                  style: GoogleFonts.inter(
+                                                    color: light80Color,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: averageScreenSize * 0.03,
+                                                  ),
+                                                );
+                                              } else {
+                                                return Container(
+                                                  height: screenHeight * 0.05,
+                                                  padding:
+                                                      EdgeInsetsDirectional.only(start: screenWidth * 0.02),
+                                                  child: LoadingAnimationWidget.halfTriangleDot(
+                                                    color: light80Color,
+                                                    size: averageScreenSize * 0.025,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ],
                                       )
                                     ],
                                   )
@@ -273,20 +333,49 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       Text(
-                                        'Expenses',
+                                        'Expense',
                                         style: GoogleFonts.inter(
                                           color: light80Color,
                                           fontWeight: FontWeight.w500,
                                           fontSize: averageScreenSize * 0.0225,
                                         ),
                                       ),
-                                      Text(
-                                        '\$3.0 k',
-                                        style: GoogleFonts.inter(
-                                          color: light80Color,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: averageScreenSize * 0.03,
-                                        ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '\$',
+                                            style: GoogleFonts.inter(
+                                              color: light80Color,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: averageScreenSize * 0.03,
+                                            ),
+                                          ),
+                                          StreamBuilder<FinanceOverviewModal>(
+                                            stream: homeBloc.getFinanceOverview,
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasData) {
+                                                return Text(
+                                                  '${snapshot.data!.expense}',
+                                                  style: GoogleFonts.inter(
+                                                    color: light80Color,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: averageScreenSize * 0.03,
+                                                  ),
+                                                );
+                                              } else {
+                                                return Container(
+                                                  height: screenHeight * 0.05,
+                                                  padding:
+                                                      EdgeInsetsDirectional.only(start: screenWidth * 0.02),
+                                                  child: LoadingAnimationWidget.halfTriangleDot(
+                                                    color: light80Color,
+                                                    size: averageScreenSize * 0.025,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ],
                                       )
                                     ],
                                   )
@@ -319,7 +408,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                       minHeight: screenHeight * 0.3,
                     ),
                     decoration: const BoxDecoration(color: Colors.transparent),
-                    child: StreamBuilder<List<List<HomeChartDataModal>>>(
+                    child: StreamBuilder<HomeGraphSpineSeriesListModal>(
                       stream: homeBloc.getChartDataList,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -369,12 +458,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             ),
                             series: [
                               SplineSeries(
-                                dataSource: snapshot.data?.first,
+                                dataSource: snapshot.data!.expensesDataList,
                                 xValueMapper: (datum, index) => datum.x,
                                 yValueMapper: (datum, index) => datum.y,
                                 color: red100Color,
                                 width: averageScreenSize * 0.0025,
-                                cardinalSplineTension: 0.1,
                                 markerSettings: MarkerSettings(
                                   isVisible: true,
                                   width: averageScreenSize * 0.0075,
@@ -383,12 +471,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 ),
                               ),
                               SplineSeries(
-                                dataSource: snapshot.data![1],
+                                dataSource: snapshot.data!.incomeDataList,
                                 xValueMapper: (datum, index) => datum.x,
                                 yValueMapper: (datum, index) => datum.y,
                                 color: green100Color,
                                 width: averageScreenSize * 0.0025,
-                                cardinalSplineTension: 0.1,
                                 markerSettings: MarkerSettings(
                                   isVisible: true,
                                   width: averageScreenSize * 0.0075,

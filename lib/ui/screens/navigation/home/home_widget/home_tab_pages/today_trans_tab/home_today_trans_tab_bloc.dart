@@ -8,11 +8,9 @@ import '../../../../../../../modals/firebase_modal/transaction_modal.dart';
 import '../../../../../../../utils/firebase_references.dart';
 
 class HomeTodayTabBloc {
-  final BuildContext context;
+  HomeTodayTabBloc({required this.context});
 
-  HomeTodayTabBloc({required this.context}) {
-    getTodayTransaction();
-  }
+  final BuildContext context;
 
   late FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
@@ -21,41 +19,56 @@ class HomeTodayTabBloc {
   Stream<List<TransactionModal>?> get getTransactionList => transactionListSubject.stream;
   Function(List<TransactionModal>?) get setTransactionList => transactionListSubject.add;
 
-  void getTodayTransaction() async {
+  getTodayTransaction() async {
     /// Main Ref.
     final rtDatabaseRef = realtimeDatabase
         .ref()
         .child(FirebaseRealTimeDatabaseRef.users)
         .child(auth.currentUser!.uid)
-        .child(FirebaseRealTimeDatabaseRef.allTransaction);
+        .child(FirebaseRealTimeDatabaseRef.transactions)
+        .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions);
 
     String date = DateFormat('dd MMMM yyyy').format(DateTime.now());
     final dateDataList = date.split(' ');
 
     final todayTransactionsRef = rtDatabaseRef
-        .child(FirebaseRealTimeDatabaseRef.monthly)
         .child('${dateDataList[1]}-${dateDataList[2]}')
-        .child(dateDataList[0]);
+        .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions)
+        .child(dateDataList[0])
+        .child(FirebaseRealTimeDatabaseRef.transactions);
 
-    final snapshot = await todayTransactionsRef.get();
+    // final snapshot = await todayTransactionsRef.get();
+    // if (snapshot.exists) {
+    //   List<TransactionModal> list = [];
+    //
+    //   final data = snapshot.children;
+    //
+    //   for (var element in data) {
+    //     Map<String, dynamic> mappedSnapshot = Map.from(element.value as Map);
+    //     list.add(TransactionModal.fromMap(mappedSnapshot));
+    //   }
+    //
+    //   setTransactionList(list);
+    //
+    //   debugPrint('---------------------------------->${list.length}');
+    // } else {
+    //   setTransactionList([]);
+    //   debugPrint('---------------------------------->No data available.');
+    // }
 
-    if (snapshot.exists) {
+    final todayDataStream = todayTransactionsRef.onValue;
+
+    todayDataStream.listen((event) {
       List<TransactionModal> list = [];
 
-      final data = snapshot.children;
+      final daysData = event.snapshot.children;
 
-      for (var element in data) {
+      for (var element in daysData) {
         Map<String, dynamic> mappedSnapshot = Map.from(element.value as Map);
         list.add(TransactionModal.fromMap(mappedSnapshot));
       }
-
       setTransactionList(list);
-
-      debugPrint('---------------------------------->${list.length}');
-    } else {
-      setTransactionList([]);
-      debugPrint('---------------------------------->No data available.');
-    }
+    });
   }
 
   void dispose() {

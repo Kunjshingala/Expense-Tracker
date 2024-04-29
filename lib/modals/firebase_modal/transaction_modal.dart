@@ -6,7 +6,7 @@ class TransactionModal {
   final String date;
   final int time;
   final int category;
-  final String description;
+  final String? description;
   final String? location;
   final String? imageUrl;
 

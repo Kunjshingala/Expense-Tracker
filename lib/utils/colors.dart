@@ -1,4 +1,7 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
+
+const shimmerBaseColor = Color(0xffe5ecf1);
+const shimmerHighlightColor = Color(0xffF5F5F5);
 
 const dark25Color = Color(0xff7A7E80);
 const dark50Color = Color(0xff464A4D);

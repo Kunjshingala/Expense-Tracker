@@ -43,7 +43,7 @@ class ForgotPasswordBloc {
 
       if (context.mounted) {
         if (context.mounted) {
-          showMySnackBar('Sent Successfully', MessageType.success);
+          showMySnackBar(message: 'Sent Successfully', messageType: MessageType.success);
         }
 
         Navigator.pushAndRemoveUntil(
@@ -56,47 +56,47 @@ class ForgotPasswordBloc {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'auth/invalid-email') {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       } else if (e.code == 'auth/missing-android-pkg-name') {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       } else if (e.code == 'auth/missing-continue-uri') {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       } else if (e.code == 'auth/missing-ios-bundle-id') {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       } else if (e.code == 'auth/invalid-continue-uri') {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       } else if (e.code == 'auth/unauthorized-continue-uri') {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       } else if (e.code == 'auth/user-not-found') {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       } else {
         if (context.mounted) {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       }
     } catch (e) {
       if (context.mounted) {
-        showMySnackBar('Something went wrong', MessageType.failed);
+        showMySnackBar(message: 'Something went wrong', messageType: MessageType.failed);
       }
     }
 
     if (isReadyToSend) {
     } else {
       if (context.mounted) {
-        showMySnackBar('Fill all Required detail', MessageType.warning);
+        showMySnackBar(message: 'Fill all Required detail', messageType: MessageType.warning);
       }
     }
   }

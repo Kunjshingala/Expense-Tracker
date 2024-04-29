@@ -28,6 +28,7 @@ class CustomIcons {
   static const IconData sort_icons = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData success_icons = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData transaction_icons = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData edit_icons_outlined = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData trash_icons = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData user_icons = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData wallet_icons = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);

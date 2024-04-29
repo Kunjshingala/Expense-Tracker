@@ -25,7 +25,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       body: PersistentTabView(
         tabs: mainNavigationBloc.persistentTabList,
-        navBarBuilder: (navBarConfig) => Style6BottomNavBar(navBarConfig: navBarConfig),
+        navBarBuilder: (navBarConfig) => Style1BottomNavBar(
+          navBarConfig: navBarConfig,
+          navBarDecoration: const NavBarDecoration(),
+        ),
         screenTransitionAnimation: const ScreenTransitionAnimation(curve: Curves.bounceInOut),
         backgroundColor: const Color(0xffF2F2F2),
         handleAndroidBackButtonPress: true,

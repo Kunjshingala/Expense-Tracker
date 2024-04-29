@@ -53,7 +53,7 @@ class LoginBloc {
         );
 
         if (context.mounted) {
-          showMySnackBar('Login Successfully', MessageType.success);
+          showMySnackBar(message: 'Login Successfully', messageType: MessageType.success);
 
           Navigator.pushAndRemoveUntil(
             context,
@@ -64,32 +64,32 @@ class LoginBloc {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'wrong-password') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else if (e.code == 'invalid-email') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else if (e.code == 'user-disabled') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else if (e.code == 'user-not-found') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         }
       } catch (e) {
         if (context.mounted) {
-          showMySnackBar('Something went wrong', MessageType.failed);
+          showMySnackBar(message: 'Something went wrong', messageType: MessageType.failed);
         }
       }
     } else {
-      showMySnackBar('Fill all Required detail', MessageType.warning);
+      showMySnackBar(message: 'Fill all Required detail', messageType: MessageType.warning);
     }
   }
 

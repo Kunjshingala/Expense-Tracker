@@ -1,21 +1,18 @@
 import 'dart:io';
 
 import 'package:expense_tracker/modals/firebase_modal/transaction_modal.dart';
-import 'package:expense_tracker/services/image_crop_screvice.dart';
-import 'package:expense_tracker/services/permission_handle/permission_handle.dart';
 import 'package:expense_tracker/ui/common_view/snack_bar_content.dart';
 import 'package:expense_tracker/utils/transaction_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../../../../../modals/firebase_modal/day_finance_overview_modal.dart';
 import '../../../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../../../utils/firebase_references.dart';
+import '../../../../utils/constant.dart';
 
 class AddTransactionBloc {
   final BuildContext context;
@@ -23,9 +20,6 @@ class AddTransactionBloc {
   AddTransactionBloc({required this.context}) {
     amountController.text = '0';
   }
-
-  late File file;
-  late XFile xFile;
 
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
@@ -35,6 +29,10 @@ class AddTransactionBloc {
   final addressController = TextEditingController();
   final descriptionController = TextEditingController();
   final dateController = TextEditingController();
+
+  final addTransactionProcessStatusSubject = BehaviorSubject<bool>.seeded(false);
+  Stream<bool> get getAddTransactionProcessStatus => addTransactionProcessStatusSubject.stream;
+  Function(bool) get setAddTransactionProcessStatus => addTransactionProcessStatusSubject.add;
 
   final transactionTypeSubject = BehaviorSubject<TransactionType>.seeded(TransactionType.Expense);
   Stream<TransactionType> get getTransactionType => transactionTypeSubject.stream;
@@ -46,7 +44,7 @@ class AddTransactionBloc {
 
   final fileSubject = BehaviorSubject<File?>();
   Stream<File?> get getFile => fileSubject.stream;
-  Function(File) get setFile => fileSubject.add;
+  Function(File?) get setFile => fileSubject.add;
 
   final categoryListSubject =
       BehaviorSubject<List<TransactionCategoryModal>>.seeded(expenseTransactionCategoryList);
@@ -57,10 +55,6 @@ class AddTransactionBloc {
   Stream<TransactionCategoryModal?> get getSelectedCategory => selectedCategorySubject.stream;
   Function(TransactionCategoryModal?) get setSelectedCategory => selectedCategorySubject.add;
 
-  final microTimeSubject = BehaviorSubject<int>.seeded(DateTime.now().microsecondsSinceEpoch);
-  Stream<int> get getMicroTime => microTimeSubject.stream;
-  Function(int) get setMicroTime => microTimeSubject.add;
-
   void pickDate() async {
     final selectedDate = await showDatePicker(
       context: context,
@@ -69,46 +63,10 @@ class AddTransactionBloc {
       lastDate: DateTime(2100),
     );
 
-    DateFormat dateFormat = DateFormat('dd MMMM yyyy');
-
     if (selectedDate != null) {
       debugPrint('selectedDate.microsecondsSinceEpoch---------------------------------->$selectedDate');
-      debugPrint(
-          'selectedDate.microsecondsSinceEpoch---------------------------------->${selectedDate.microsecondsSinceEpoch}');
-      setMicroTime(selectedDate.microsecondsSinceEpoch);
 
       dateController.text = dateFormat.format(selectedDate);
-    }
-  }
-
-  captureImage(BuildContext context) async {
-    bool camaraPermissionAllowed = await checkCameraPermission();
-
-    if (camaraPermissionAllowed) {
-      xFile = (await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 100))!;
-      file = File(xFile.path);
-
-      if (context.mounted) Navigator.pop(context);
-
-      if (context.mounted) {
-        final croppedFile = await cropImage(context, file);
-        setFile(croppedFile);
-      }
-    }
-  }
-
-  pickImage(BuildContext context) async {
-    bool isStoragePermissionAllowed = await checkStoragePermission();
-
-    if (isStoragePermissionAllowed) {
-      xFile = (await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100))!;
-      file = File(xFile.path);
-      if (context.mounted) Navigator.pop(context);
-
-      if (context.mounted) {
-        final croppedFile = await cropImage(context, file);
-        setFile(croppedFile);
-      }
     }
   }
 
@@ -117,7 +75,7 @@ class AddTransactionBloc {
   }
 
   bool isReadyToComplete() {
-    if (amountController.text.trim().isEmpty) {
+    if (int.parse(amountController.text.trim()) <= 0) {
       showMySnackBar(message: 'Add Sufficient Amount.', messageType: MessageType.warning);
       return false;
     }
@@ -125,16 +83,69 @@ class AddTransactionBloc {
       showMySnackBar(message: 'Select Category.', messageType: MessageType.warning);
       return false;
     }
+
     if (dateController.text.trim().isEmpty) {
       showMySnackBar(message: 'Select Date.', messageType: MessageType.warning);
       return false;
     }
 
-    /// currently address and image and description can be null.
+    /// currently address, image and description can be null.
+
     return true;
   }
 
-  Map<String, dynamic> setModalToMap() {
+  void onComplete() async {
+    if (isReadyToComplete()) {
+      setAddTransactionProcessStatus(true);
+
+      String? fileUrl;
+      final transactionId = '${auth.currentUser!.uid}-${DateTime.now().microsecondsSinceEpoch}';
+
+      /// Firebase Storage.
+      if (fileSubject.hasValue) {
+        fileUrl = await addFile(transactionId);
+      }
+
+      /// set data in map.
+      TransactionModal transactionModal = setDataIntoModal(transactionId, fileUrl);
+
+      /// map of modal.
+      Map<String, dynamic> map = transactionModal.toMap();
+
+      /// Firebase Realtime Database.
+      await addData(transactionId, map);
+
+      showMySnackBar(message: 'Transaction Added Successfully.', messageType: MessageType.success);
+
+      setAddTransactionProcessStatus(false);
+
+      if (context.mounted && Navigator.canPop(context)) Navigator.pop(context);
+      debugPrint('onComplete---------------------------------->Complete');
+    }
+  }
+
+  /// Firebase Storage.
+  Future<String?> addFile(String transactionId) async {
+    final storageRef = firebaseStorage
+        .ref()
+        .child(FirebaseStorageRef.users)
+        .child(auth.currentUser!.uid)
+        .child(transactionId)
+        .child('$transactionId.jpg');
+
+    try {
+      TaskSnapshot taskSnapshot = await storageRef.putFile(fileSubject.value!);
+      debugPrint('storageRef---------------------------------->${await taskSnapshot.ref.getDownloadURL()}');
+      return await taskSnapshot.ref.getDownloadURL();
+    } on FirebaseException catch (e) {
+      debugPrint('---------------------------------->$e');
+    } catch (e) {
+      debugPrint('---------------------------------->$e');
+    }
+    return null;
+  }
+
+  TransactionModal setDataIntoModal(String transactionId, String? url) {
     late TransactionModal transactionModal;
 
     final amount = int.parse(amountController.text.trim());
@@ -145,65 +156,25 @@ class AddTransactionBloc {
     final location = addressController.text.trim();
     final transactionMode = transactionModeSubject.value.index;
 
-    final transactionId =
-        '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}-${DateTime.now().hour}-${DateTime.now().minute}-${DateTime.now().second}-${DateTime.now().timeZoneName}-${DateTime.now().millisecondsSinceEpoch}';
-
     transactionModal = TransactionModal(
       id: transactionId,
       amount: amount,
       transactionType: transactionType,
       transactionMode: transactionMode,
       date: date,
-      time: microTimeSubject.value,
+      time: DateTime.now().microsecondsSinceEpoch,
       category: category,
       description: description,
       location: location,
-      imageUrl: '',
+      imageUrl: url,
     );
 
-    return transactionModal.toMap();
-  }
-
-  void onComplete() async {
-    if (isReadyToComplete()) {
-      final transactionId = '${auth.currentUser!.uid}-${DateTime.now().microsecondsSinceEpoch}';
-
-      /// Firebase Realtime Database.
-      await addData(transactionId);
-
-      if (fileSubject.hasValue) {
-        /// Firebase Storage.
-        await addFile(transactionId);
-      }
-
-      showMySnackBar(message: 'Transaction Added Successfully.', messageType: MessageType.success);
-
-      if (context.mounted && Navigator.canPop(context)) Navigator.pop(context);
-      debugPrint('onComplete---------------------------------->Complete');
-    }
-  }
-
-  /// Firebase Storage.
-  addFile(String transactionId) async {
-    final storageRef = firebaseStorage
-        .ref()
-        .child(FirebaseStorageRef.users)
-        .child(auth.currentUser!.uid)
-        .child('$transactionId.jpg');
-
-    try {
-      await storageRef.putFile(fileSubject.value!);
-      debugPrint('storageRef---------------------------------->Done');
-    } on FirebaseException catch (e) {
-      debugPrint('---------------------------------->$e');
-    } catch (e) {
-      debugPrint('---------------------------------->$e');
-    }
+    return transactionModal;
   }
 
   /// Firebase Realtime database.
-  addData(String transactionId) async {
-    final dateList = dateController.text.split(" ");
+  addData(String transactionId, Map<String, dynamic> map) async {
+    final dateDataList = dateController.text.split(dateSplitFormat);
 
     final category = selectedCategorySubject.value!.id;
     final transactionType = transactionTypeSubject.value.index;
@@ -216,9 +187,6 @@ class AddTransactionBloc {
         .child(auth.currentUser!.uid)
         .child(FirebaseRealTimeDatabaseRef.transactions);
 
-    /// set data in map
-    final map = setModalToMap();
-
     /// All transaction.
     addDataAtAllTransaction(transactionId: transactionId, rtDatabaseRef: rtDatabaseRef, map: map);
 
@@ -227,7 +195,7 @@ class AddTransactionBloc {
       transactionId: transactionId,
       rtDatabaseRef: rtDatabaseRef,
       map: map,
-      dateList: dateList,
+      dateDataList: dateDataList,
     );
 
     /// Category Summary transaction.
@@ -235,7 +203,7 @@ class AddTransactionBloc {
       transactionId: transactionId,
       rtDatabaseRef: rtDatabaseRef,
       map: map,
-      dateList: dateList,
+      dateDataList: dateDataList,
       category: category,
     );
 
@@ -244,7 +212,7 @@ class AddTransactionBloc {
       transactionId: transactionId,
       rtDatabaseRef: rtDatabaseRef,
       map: map,
-      dateList: dateList,
+      dateDataList: dateDataList,
       transactionType: transactionType,
     );
 
@@ -253,21 +221,21 @@ class AddTransactionBloc {
       transactionId: transactionId,
       rtDatabaseRef: rtDatabaseRef,
       map: map,
-      dateList: dateList,
+      dateDataList: dateDataList,
       transactionMode: transactionMode,
     );
 
     /// Add or Update Day Wise Summary.
     addOrUpdateDataIntoDayFinanceOverviewSummary(
       rtDatabaseRef: rtDatabaseRef,
-      dateList: dateList,
+      dateDataList: dateDataList,
       transactionType: transactionType,
     );
 
-    /// Update Whole transaction summary.
+    /// Add or Update Month Wise Summary.
     addOrUpdateDataIntoMonthFinanceOverviewSummary(
       rtDatabaseRef: rtDatabaseRef,
-      dateList: dateList,
+      dateDataList: dateDataList,
       transactionType: transactionType,
     );
 
@@ -283,8 +251,8 @@ class AddTransactionBloc {
         rtDatabaseRef.child(FirebaseRealTimeDatabaseRef.allTransaction).child(transactionId);
 
     await allTransactionRef.set(map).onError((error, stackTrace) {
-      debugPrint('---------------------------------->$error');
-      debugPrint('---------------------------------->$stackTrace');
+      debugPrint('allTransactionRef---------------------------------->$error');
+      debugPrint('allTransactionRef---------------------------------->$stackTrace');
       showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
     });
     debugPrint('transactionsRef---------------------------------->Done');
@@ -294,41 +262,42 @@ class AddTransactionBloc {
     required String transactionId,
     required DatabaseReference rtDatabaseRef,
     required Map<String, dynamic> map,
-    required List<String> dateList,
+    required List<String> dateDataList,
   }) async {
     final monthlyDataRef = rtDatabaseRef
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${dateList[1]}-${dateList[2]}')
+        .child('${dateDataList[1]}-${dateDataList[2]}')
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions)
-        .child(dateList[0])
+        .child(dateDataList[0])
         .child(FirebaseRealTimeDatabaseRef.transactions)
         .child(transactionId);
 
     await monthlyDataRef.set(map).onError((error, stackTrace) {
-      debugPrint('---------------------------------->$error');
-      debugPrint('---------------------------------->$stackTrace');
+      debugPrint('monthlyDataRef---------------------------------->$error');
+      debugPrint('monthlyDataRef---------------------------------->$stackTrace');
       showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
     });
+    debugPrint('monthlyDataRef---------------------------------->Done');
   }
 
   void addDataIntoCategorySummary({
     required String transactionId,
     required DatabaseReference rtDatabaseRef,
     required Map<String, dynamic> map,
-    required List<String> dateList,
+    required List<String> dateDataList,
     required int category,
   }) async {
     final categoryRef = rtDatabaseRef
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${dateList[1]}-${dateList[2]}')
+        .child('${dateDataList[1]}-${dateDataList[2]}')
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.categories)
         .child('$category')
         .child(transactionId);
 
     await categoryRef.set(map).onError((error, stackTrace) {
-      debugPrint('---------------------------------->$error');
-      debugPrint('---------------------------------->$stackTrace');
+      debugPrint('categoryRef---------------------------------->$error');
+      debugPrint('categoryRef---------------------------------->$stackTrace');
       showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
     });
   }
@@ -337,20 +306,20 @@ class AddTransactionBloc {
     required String transactionId,
     required DatabaseReference rtDatabaseRef,
     required Map<String, dynamic> map,
-    required List<String> dateList,
+    required List<String> dateDataList,
     required int transactionType,
   }) async {
     final transactionTypeRef = rtDatabaseRef
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${dateList[1]}-${dateList[2]}')
+        .child('${dateDataList[1]}-${dateDataList[2]}')
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.transferType)
         .child('$transactionType')
         .child(transactionId);
 
     await transactionTypeRef.set(map).onError((error, stackTrace) {
-      debugPrint('---------------------------------->$error');
-      debugPrint('---------------------------------->$stackTrace');
+      debugPrint('transactionTypeRef---------------------------------->$error');
+      debugPrint('transactionTypeRef---------------------------------->$stackTrace');
       showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
     });
   }
@@ -359,36 +328,36 @@ class AddTransactionBloc {
     required String transactionId,
     required DatabaseReference rtDatabaseRef,
     required Map<String, dynamic> map,
-    required List<String> dateList,
+    required List<String> dateDataList,
     required int transactionMode,
   }) async {
     final transactionModeRef = rtDatabaseRef
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${dateList[1]}-${dateList[2]}')
+        .child('${dateDataList[1]}-${dateDataList[2]}')
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.transferMode)
         .child('$transactionMode')
         .child(transactionId);
 
     await transactionModeRef.set(map).onError((error, stackTrace) {
-      debugPrint('---------------------------------->$error');
-      debugPrint('---------------------------------->$stackTrace');
+      debugPrint('transactionModeRef---------------------------------->$error');
+      debugPrint('transactionModeRef---------------------------------->$stackTrace');
       showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
     });
   }
 
   void addOrUpdateDataIntoDayFinanceOverviewSummary({
     required DatabaseReference rtDatabaseRef,
-    required List<String> dateList,
+    required List<String> dateDataList,
     required int transactionType,
   }) async {
     late DayFinanceOverviewModal dayFinanceOverviewModal;
 
     final dayFinanceOverviewSummaryRef = rtDatabaseRef
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${dateList[1]}-${dateList[2]}')
+        .child('${dateDataList[1]}-${dateDataList[2]}')
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions)
-        .child(dateList[0])
+        .child(dateDataList[0])
         .child(FirebaseRealTimeDatabaseRef.dayFinanceOverview);
 
     /// get last updated data.
@@ -418,28 +387,28 @@ class AddTransactionBloc {
 
     dayFinanceOverviewModal = DayFinanceOverviewModal(expense: expense, income: income);
 
-    dayFinanceOverviewSummaryRef.set(dayFinanceOverviewModal.toMap()).onError((error, stackTrace) {
-      debugPrint('---------------------------------->$error');
-      debugPrint('---------------------------------->$stackTrace');
+    await dayFinanceOverviewSummaryRef.set(dayFinanceOverviewModal.toMap()).onError((error, stackTrace) {
+      debugPrint('dayFinanceOverviewSummaryRef---------------------------------->$error');
+      debugPrint('dayFinanceOverviewSummaryRef---------------------------------->$stackTrace');
       showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
     });
   }
 
   void addOrUpdateDataIntoMonthFinanceOverviewSummary({
     required DatabaseReference rtDatabaseRef,
-    required List<String> dateList,
+    required List<String> dateDataList,
     required int transactionType,
   }) async {
     late FinanceOverviewModal financeOverviewModal;
 
     /// get last data from server.
-    final financeOverviewSummaryRef = rtDatabaseRef
+    final monthFinanceOverviewSummaryRef = rtDatabaseRef
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${dateList[1]}-${dateList[2]}')
+        .child('${dateDataList[1]}-${dateDataList[2]}')
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.monthFinanceOverview);
 
-    final snapshot = await financeOverviewSummaryRef.get();
+    final snapshot = await monthFinanceOverviewSummaryRef.get();
 
     debugPrint(
         'updateDataIntoFinanceOverviewSummary---------------------------------->snapshot.exists = ${snapshot.exists}');
@@ -491,9 +460,9 @@ class AddTransactionBloc {
     debugPrint('---------------------------------->${financeOverviewModal.income}');
     debugPrint('---------------------------------->${financeOverviewModal.isSurpassed}');
 
-    financeOverviewSummaryRef.set(financeOverviewModal.toMap()).onError((error, stackTrace) {
-      debugPrint('---------------------------------->$error');
-      debugPrint('---------------------------------->$stackTrace');
+    await monthFinanceOverviewSummaryRef.update(financeOverviewModal.toMap()).onError((error, stackTrace) {
+      debugPrint('monthFinanceOverviewSummaryRef---------------------------------->$error');
+      debugPrint('monthFinanceOverviewSummaryRef---------------------------------->$stackTrace');
       showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
     });
   }
@@ -508,6 +477,6 @@ class AddTransactionBloc {
     categoryListSubject.close();
     selectedCategorySubject.close();
     dateController.dispose();
-    microTimeSubject.close();
+    addTransactionProcessStatusSubject.close();
   }
 }

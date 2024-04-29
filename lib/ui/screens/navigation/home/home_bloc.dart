@@ -1,13 +1,13 @@
-import 'package:expense_tracker/modals/firebase_modal/transaction_modal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../../../../modals/firebase_modal/day_finance_overview_modal.dart';
+import '../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../modals/local_modal/home_chart_data_modal.dart';
 import '../../../../utils/firebase_references.dart';
-import '../../../../utils/transaction_data.dart';
 
 class HomeBloc {
   final BuildContext context;
@@ -16,6 +16,7 @@ class HomeBloc {
     /// get basic details, like UserName, DateTime and Gratitude .
     getBasicDetails();
     getMonthlyDataForChart();
+    getBudgetSummary();
   }
 
   late TabController tabController;
@@ -23,9 +24,13 @@ class HomeBloc {
   late FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
 
-  final chartDataListSubject = BehaviorSubject<List<List<HomeChartDataModal>>>();
-  Stream<List<List<HomeChartDataModal>>> get getChartDataList => chartDataListSubject.stream;
-  Function(List<List<HomeChartDataModal>>) get setChartDataList => chartDataListSubject.add;
+  final chartDataListSubject = BehaviorSubject<HomeGraphSpineSeriesListModal>();
+  Stream<HomeGraphSpineSeriesListModal> get getChartDataList => chartDataListSubject.stream;
+  Function(HomeGraphSpineSeriesListModal) get setChartDataList => chartDataListSubject.add;
+
+  final financeOverviewSubject = BehaviorSubject<FinanceOverviewModal>();
+  Stream<FinanceOverviewModal> get getFinanceOverview => financeOverviewSubject.stream;
+  Function(FinanceOverviewModal) get setFinanceOverview => financeOverviewSubject.add;
 
   late String currentUserName;
   late String currentGratitude;
@@ -33,9 +38,9 @@ class HomeBloc {
   late String currentMonth;
   late String currentYear;
   late String currentDate;
-  late String userName;
+  late String greeting;
 
-  getBasicDetails() {
+  void getBasicDetails() {
     currentUserName = (auth.currentUser!.displayName != null && auth.currentUser!.displayName!.isNotEmpty)
         ? auth.currentUser!.displayName!
         : 'Xyz ';
@@ -43,9 +48,64 @@ class HomeBloc {
     currentDate = DateFormat('dd MMMM yyyy').format(DateTime.now());
     final dateDataList = currentDate.split(' ');
 
+    /// Date.
     currentDay = dateDataList[0];
     currentMonth = dateDataList[1];
     currentYear = dateDataList[2];
+
+    /// Greeting.
+    var hour = DateTime.now().hour;
+    debugPrint('getGreeting---------------------------------->$hour');
+    if (hour <= 11) {
+      greeting = 'Good Morning';
+    }
+    if (hour >= 12 && hour < 17) {
+      greeting = 'Good Afternoon';
+    }
+    if (hour >= 17) {
+      greeting = 'Good Evening';
+    }
+  }
+
+  /// For Transaction Summary (Monthly budget, Remain Budget, Expenses, Income)
+  void getBudgetSummary() async {
+    late FinanceOverviewModal financeOverviewModal;
+
+    /// get last data from server.
+    String date = DateFormat('dd MMMM yyyy').format(DateTime.now());
+    final dateDataList = date.split(' ');
+
+    final financeOverviewSummaryRef = realtimeDatabase
+        .ref()
+        .child(FirebaseRealTimeDatabaseRef.users)
+        .child(auth.currentUser!.uid)
+        .child(FirebaseRealTimeDatabaseRef.transactions)
+        .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
+        .child('${dateDataList[1]}-${dateDataList[2]}')
+        .child(FirebaseRealTimeDatabaseRef.summary)
+        .child(FirebaseRealTimeDatabaseRef.monthFinanceOverview);
+
+    final financeOverviewStream = financeOverviewSummaryRef.onValue;
+
+    financeOverviewStream.listen((event) {
+      if (event.snapshot.exists) {
+        debugPrint('financeOverviewStream---------------------------------->${event.snapshot}');
+        debugPrint('financeOverviewStream---------------------------------->${event.snapshot.value}');
+        debugPrint('financeOverviewStream---------------------------------->${event.snapshot.children}');
+
+        final financeOverviewData = event.snapshot.value;
+
+        Map<String, dynamic> mappedSnapshot = Map.from(financeOverviewData as Map);
+
+        financeOverviewModal = FinanceOverviewModal.fromMap(mappedSnapshot);
+
+        debugPrint('financeOverviewStream---------------------------------->$financeOverviewModal');
+      } else {
+        financeOverviewModal =
+            FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0, isSurpassed: false);
+      }
+      setFinanceOverview(financeOverviewModal);
+    });
   }
 
   /// For Chart
@@ -53,80 +113,64 @@ class HomeBloc {
     String date = DateFormat('dd MMMM yyyy').format(DateTime.now());
     final dateDataList = date.split(' ');
 
-    List<TransactionModal> list = [];
-
     /// Main Ref.
     final rtDatabaseRef = realtimeDatabase
         .ref()
         .child(FirebaseRealTimeDatabaseRef.users)
         .child(auth.currentUser!.uid)
-        .child(FirebaseRealTimeDatabaseRef.allTransaction);
+        .child(FirebaseRealTimeDatabaseRef.transactions)
+        .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions);
 
-    /// this Month Ref.
+    /// this Month transaction Ref.
     final transactionsRef = rtDatabaseRef
-        .child(FirebaseRealTimeDatabaseRef.monthly)
-        .child('${dateDataList[1]}-${dateDataList[2]}');
+        .child('${dateDataList[1]}-${dateDataList[2]}')
+        .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions);
 
-    final monthlyDataStream = transactionsRef.onValue;
+    final daysDataStream = transactionsRef.onValue;
 
-    monthlyDataStream.listen((event) {
-      final monthData = event.snapshot.children;
+    daysDataStream.listen((event) {
+      List<HomeChartDataModal> expenseChartDataList = [];
+      List<HomeChartDataModal> incomeChartDataList = [];
 
-      for (var days in monthData) {
-        for (var transaction in days.children) {
-          Map<String, dynamic> mappedSnapshot = Map.from(transaction.value as Map);
-          list.add(TransactionModal.fromMap(mappedSnapshot));
+      final daysData = event.snapshot.children;
+
+      for (var daysElement in daysData) {
+        daysElement
+            .child(FirebaseRealTimeDatabaseRef.daySummary)
+            .child(FirebaseRealTimeDatabaseRef.dayFinanceOverview);
+
+        int date = int.parse(daysElement.key!);
+
+        final dayFinanceOverviewData =
+            daysElement.child(FirebaseRealTimeDatabaseRef.dayFinanceOverview).value;
+
+        if (dayFinanceOverviewData != null) {
+          Map<String, dynamic> mappedSnapshot = Map.from(dayFinanceOverviewData as Map);
+
+          DayFinanceOverviewModal dayFinanceOverviewModal = DayFinanceOverviewModal.fromMap(mappedSnapshot);
+
+          if (dayFinanceOverviewModal.expense > 0) {
+            expenseChartDataList.add(HomeChartDataModal(date, dayFinanceOverviewModal.expense));
+          }
+          if (dayFinanceOverviewModal.income > 0) {
+            incomeChartDataList.add(HomeChartDataModal(date, dayFinanceOverviewModal.income));
+          }
         }
+
+        debugPrint('-------------------------------------------------------------------->');
       }
 
-      list.sort(
-        (a, b) {
-          return a.time.compareTo(b.time);
-        },
+      setChartDataList(
+        HomeGraphSpineSeriesListModal(
+            expensesDataList: expenseChartDataList, incomeDataList: incomeChartDataList),
       );
-
-      /// set data for chart
-      addDataInChartList(list);
     }).onError((e) {
       debugPrint('---------------------------------->$e');
     });
   }
 
-  addDataInChartList(List<TransactionModal> list) {
-    List<HomeChartDataModal> expenseChartDataList = [];
-    List<HomeChartDataModal> incomeChartDataList = [];
-
-    for (var element in list) {
-      debugPrint(
-          'TransactionList---------------------------------->${element.amount},${element.transactionType == 0 ? TransactionType.Expense.name : TransactionType.Income.name}');
-    }
-
-    for (var element in list) {
-      int date = int.parse(element.date.split(' ')[0]);
-      int amount = element.amount;
-
-      /// transaction type Expense->0 Income->1.
-      if (element.transactionType == 0) {
-        expenseChartDataList.add(HomeChartDataModal(date, amount));
-      } else {
-        incomeChartDataList.add(HomeChartDataModal(date, amount));
-      }
-    }
-
-    debugPrint('---------------------------------->');
-    for (var element in expenseChartDataList) {
-      debugPrint('expenseChartDataList---------------------------------->${element.x}-${element.y}');
-    }
-
-    debugPrint('---------------------------------->');
-    for (var element in incomeChartDataList) {
-      debugPrint('incomeChartDataList---------------------------------->${element.x}-${element.y}');
-    }
-
-    setChartDataList([expenseChartDataList, incomeChartDataList]);
-  }
-
   void dispose() {
     chartDataListSubject.close();
+    financeOverviewSubject.close();
   }
 }

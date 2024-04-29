@@ -1,14 +1,17 @@
-import 'package:expense_tracker/ui/screens/navigation/home/manage_transaction/add_transaction/add_transaction_bloc.dart';
+import 'dart:io';
+
 import 'package:expense_tracker/utils/colors.dart';
 import 'package:expense_tracker/utils/custom_icons.dart';
 import 'package:expense_tracker/utils/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AttachmentBottomSheet extends StatelessWidget {
-  const AttachmentBottomSheet({super.key, required this.addTransactionBloc});
+import '../../services/image_handle/get_cropped_image.dart';
 
-  final AddTransactionBloc addTransactionBloc;
+class AttachmentBottomSheet extends StatelessWidget {
+  const AttachmentBottomSheet({super.key, required this.setFile});
+
+  final Function(File?) setFile;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +29,8 @@ class AttachmentBottomSheet extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             GestureDetector(
-              onTap: () {
-                addTransactionBloc.pickImage(context);
+              onTap: () async {
+                setFile(await pickAndCropImage(context));
               },
               child: Container(
                 width: screenWidth * 0.35,
@@ -47,8 +50,8 @@ class AttachmentBottomSheet extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                addTransactionBloc.captureImage(context);
+              onTap: () async {
+                setFile(await captureAndCropImage(context));
               },
               child: Container(
                 width: screenWidth * 0.35,

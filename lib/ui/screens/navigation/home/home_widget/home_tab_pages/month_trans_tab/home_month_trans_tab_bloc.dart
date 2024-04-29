@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,7 @@ import '../../../../../../../utils/firebase_references.dart';
 class HomeMonthTabBloc {
   final BuildContext context;
 
-  HomeMonthTabBloc({required this.context}) {
-    getThisMonthTransaction();
-  }
+  HomeMonthTabBloc({required this.context});
 
   late FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
@@ -21,47 +21,64 @@ class HomeMonthTabBloc {
   Stream<List<TransactionModal>?> get getTransactionList => transactionListSubject.stream;
   Function(List<TransactionModal>?) get setTransactionList => transactionListSubject.add;
 
-  void getThisMonthTransaction() async {
+  getThisMonthTransaction() async {
     /// Main Ref.
     final rtDatabaseRef = realtimeDatabase
         .ref()
         .child(FirebaseRealTimeDatabaseRef.users)
         .child(auth.currentUser!.uid)
-        .child(FirebaseRealTimeDatabaseRef.allTransaction);
+        .child(FirebaseRealTimeDatabaseRef.transactions)
+        .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions);
 
     String date = DateFormat('dd MMMM yyyy').format(DateTime.now());
     final dateDataList = date.split(' ');
 
     final monthlyTransactionsRef = rtDatabaseRef
-        .child(FirebaseRealTimeDatabaseRef.monthly)
-        .child('${dateDataList[1]}-${dateDataList[2]}');
+        .child('${dateDataList[1]}-${dateDataList[2]}')
+        .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions);
 
-    final snapshot = await monthlyTransactionsRef.get();
+    // final snapshot = await monthlyTransactionsRef.get();
+    //
+    // if (snapshot.exists) {
+    //   List<TransactionModal> list = [];
+    //
+    //   log('snapshot---------------------------------->snapshot.ref.key${snapshot.ref.key}');
+    //   final monthData = snapshot.children;
+    //
+    //   for (var days in monthData) {
+    //     final daysTransactions = days.child(FirebaseRealTimeDatabaseRef.transactions).children;
+    //     for (var transaction in daysTransactions) {
+    //       Map<String, dynamic> mappedSnapshot = Map.from(transaction.value as Map);
+    //       log('snapshot---------------------------------->days.value $mappedSnapshot}');
+    //       list.add(TransactionModal.fromMap(mappedSnapshot));
+    //     }
+    //   }
+    //
+    //   setTransactionList(list);
+    //
+    //   debugPrint('---------------------------------->${list.length}');
+    // } else {
+    //   setTransactionList([]);
+    //   debugPrint('---------------------------------->No data available.');
+    // }
 
-    if (snapshot.exists) {
+    final monthDataStream = monthlyTransactionsRef.onValue;
+
+    monthDataStream.listen((event) {
       List<TransactionModal> list = [];
 
-      final monthData = snapshot.children;
+      final monthData = event.snapshot.children;
 
       for (var days in monthData) {
-        for (var transaction in days.children) {
-          /// Show only 10 entries.
-          if (list.length <= 10) {
-            Map<String, dynamic> mappedSnapshot = Map.from(transaction.value as Map);
-            list.add(TransactionModal.fromMap(mappedSnapshot));
-          } else {
-            break;
-          }
+        final daysTransactions = days.child(FirebaseRealTimeDatabaseRef.transactions).children;
+        for (var transaction in daysTransactions) {
+          Map<String, dynamic> mappedSnapshot = Map.from(transaction.value as Map);
+          log('snapshot---------------------------------->days.value $mappedSnapshot}');
+          list.add(TransactionModal.fromMap(mappedSnapshot));
         }
       }
-
       setTransactionList(list);
-
-      debugPrint('---------------------------------->${list.length}');
-    } else {
-      setTransactionList([]);
-      debugPrint('---------------------------------->No data available.');
-    }
+    });
   }
 
   void dispose() {

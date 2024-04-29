@@ -14,11 +14,12 @@ Future<File?> captureAndCropImage(BuildContext context) async {
     final xFile = (await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 100))!;
     final file = File(xFile.path);
 
-    if (context.mounted) Navigator.pop(context);
-    return file;
-  } else {
-    return null;
+    if (context.mounted) {
+      final croppedFile = await cropImage(context, file);
+      return croppedFile;
+    }
   }
+  return null;
 }
 
 Future<File?> pickAndCropImage(BuildContext context) async {
@@ -30,10 +31,12 @@ Future<File?> pickAndCropImage(BuildContext context) async {
 
     if (context.mounted) Navigator.pop(context);
 
-    return file;
-  } else {
-    return null;
+    if (context.mounted) {
+      final croppedFile = await cropImage(context, file);
+      return croppedFile;
+    }
   }
+  return null;
 }
 
 Future<File> cropImage(BuildContext context, File sourceFile) async {

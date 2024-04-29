@@ -4,7 +4,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:expense_tracker/services/permission_handle/permission_handle.dart';
 import 'package:expense_tracker/ui/common_view/attachment_bottom_sheet.dart';
 import 'package:expense_tracker/ui/common_view/main_eleveted_button.dart';
-import 'package:expense_tracker/ui/screens/navigation/home/manage_transaction/add_transaction/add_transaction_bloc.dart';
 import 'package:expense_tracker/utils/transaction_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../../../utils/colors.dart';
 import '../../../../../../utils/custom_icons.dart';
 import '../../../../../../utils/dimens.dart';
+import 'add_transaction_bloc.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   const AddTransactionScreen({super.key});
@@ -400,8 +400,13 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                       return Stack(
                                         alignment: AlignmentDirectional.topEnd,
                                         children: [
-                                          Padding(
+                                          Container(
                                             padding: EdgeInsetsDirectional.all(averageScreenSize * 0.01),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: dark75Color, width: averageScreenSize * 0.001),
+                                              borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
+                                            ),
                                             child: ClipRRect(
                                               borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
                                               child: Image.file(
@@ -447,7 +452,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                                 height: screenHeight * 0.25,
                                               ),
                                               builder: (context) => AttachmentBottomSheet(
-                                                addTransactionBloc: addTransactionBloc,
+                                                setFile: addTransactionBloc.setFile,
                                               ),
                                             );
                                           },
@@ -484,23 +489,33 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                               ],
                             ),
                             SizedBox(height: screenHeight * 0.03),
-                            CustomElevatedButton(
-                              width: screenWidth * 0.9,
-                              height: screenHeight * 0.07,
-                              borderRadius: averageScreenSize * 0.03,
-                              color: violet100Color,
-                              onPressed: () {
-                                addTransactionBloc.onComplete();
-                              },
-                              child: Text(
-                                'Complete',
-                                style: GoogleFonts.inter(
-                                  color: light80Color,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: averageScreenSize * 0.025,
-                                ),
-                              ),
-                            ),
+                            StreamBuilder<bool>(
+                                stream: addTransactionBloc.getAddTransactionProcessStatus,
+                                builder: (context, snapshot) {
+                                  return CustomElevatedButton(
+                                    width: screenWidth * 0.9,
+                                    height: screenHeight * 0.07,
+                                    borderRadius: averageScreenSize * 0.03,
+                                    color: violet100Color,
+                                    onPressed: snapshot.hasData && !(snapshot.data!)
+                                        ? addTransactionBloc.onComplete
+                                        : null,
+                                    child: snapshot.hasData && !(snapshot.data!)
+                                        ? Text(
+                                            'Add',
+                                            style: GoogleFonts.inter(
+                                              color: light80Color,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: averageScreenSize * 0.025,
+                                            ),
+                                          )
+                                        : CircularProgressIndicator(
+                                            color: light100Color,
+                                            backgroundColor: violet100Color,
+                                            strokeWidth: screenWidth * 0.005,
+                                          ),
+                                  );
+                                }),
                             SizedBox(height: screenHeight * 0.02),
                           ],
                         ),

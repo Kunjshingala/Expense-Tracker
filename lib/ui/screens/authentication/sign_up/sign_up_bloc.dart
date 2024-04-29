@@ -62,7 +62,7 @@ class SignUpBloc {
 
         /// SignOut and Move to Login page.
         if (context.mounted) {
-          showMySnackBar('Login successfully', MessageType.success);
+          showMySnackBar(message: 'Login successfully', messageType: MessageType.success);
         }
 
         // await auth.signOut();
@@ -79,32 +79,32 @@ class SignUpBloc {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use:') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else if (e.code == 'invalid-email') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else if (e.code == 'operation-not-allowed') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else if (e.code == 'weak-password') {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         } else {
           if (context.mounted) {
-            showMySnackBar(e.code, MessageType.failed);
+            showMySnackBar(message: e.code, messageType: MessageType.failed);
           }
         }
       } catch (e) {
         if (context.mounted) {
-          showMySnackBar('Something Went Wrong', MessageType.failed);
+          showMySnackBar(message: 'Something Went Wrong', messageType: MessageType.failed);
         }
       }
     } else {
-      showMySnackBar('Fill all Required detail', MessageType.warning);
+      showMySnackBar(message: 'Fill all Required detail', messageType: MessageType.warning);
     }
   }
 
@@ -122,14 +122,14 @@ class SignUpBloc {
     } on FirebaseAuthException catch (e) {
       if (context.mounted) {
         if (e.code == 'user-disabled') {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         } else {
-          showMySnackBar(e.code, MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       }
     } catch (e) {
       if (context.mounted) {
-        showMySnackBar('Something Went Wrong', MessageType.failed);
+        showMySnackBar(message: 'Something Went Wrong', messageType: MessageType.failed);
       }
     }
   }

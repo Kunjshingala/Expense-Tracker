@@ -21,7 +21,8 @@ Future<bool> getLocationServiceStatus(BuildContext context) async {
       return true;
     } else {
       if (context.mounted) {
-        showMySnackBar('This feature cant use, Enable location services', MessageType.warning);
+        showMySnackBar(
+            message: 'This feature cant use, Enable location services', messageType: MessageType.warning);
       }
       return false;
     }
@@ -50,8 +51,9 @@ Future<bool> getLocationPermission() async {
     }
 
     if (permission == LocationPermission.denied) {
+      showMySnackBar(
+          message: 'Please allow permission to use this permission.', messageType: MessageType.warning);
       return false;
-      showMySnackBar('Please allow permission to use this permission.', MessageType.warning);
     }
   }
 
@@ -63,7 +65,8 @@ Future<bool> getLocationPermission() async {
     }
 
     if (permission == LocationPermission.denied) {
-      showMySnackBar('Please allow permission to use this permission.', MessageType.warning);
+      showMySnackBar(
+          message: 'Please allow permission to use this permission.', messageType: MessageType.warning);
 
       return false;
     }
@@ -90,7 +93,7 @@ Future<bool> checkStoragePermission() async {
       if (status[Permission.storage]!.isGranted) {
         return true;
       } else {
-        showMySnackBar('Storage Permission Needed', MessageType.warning);
+        showMySnackBar(message: 'Storage Permission Needed', messageType: MessageType.warning);
 
         return false;
       }
@@ -101,7 +104,7 @@ Future<bool> checkStoragePermission() async {
             if (status[Permission.storage]!.isGranted) {
               return true;
             } else {
-              showMySnackBar('Storage Permission Needed', MessageType.warning);
+              showMySnackBar(message: 'Storage Permission Needed', messageType: MessageType.warning);
               return false;
             }
           } else {
@@ -130,7 +133,7 @@ Future<bool> checkCameraPermission() async {
     if (status[Permission.camera]!.isGranted) {
       return true;
     } else {
-      showMySnackBar('Camera Permission Needed', MessageType.warning);
+      showMySnackBar(message: 'Camera Permission Needed', messageType: MessageType.warning);
     }
   } else if (status[Permission.camera]!.isPermanentlyDenied) {
     openAppSettings().then(
@@ -140,7 +143,7 @@ Future<bool> checkCameraPermission() async {
           if (status[Permission.camera]!.isGranted) {
             return true;
           } else {
-            showMySnackBar('Camera Permission Needed', MessageType.warning);
+            showMySnackBar(message: 'Camera Permission Needed', messageType: MessageType.warning);
 
             return false;
           }
