@@ -1,13 +1,15 @@
-class BudgetModal {
+class FinanceOverviewModal {
   final int budget;
   final int expense;
   final int income;
+  final int balance;
   final bool isSurpassed;
 
-  BudgetModal({
+  FinanceOverviewModal({
     required this.budget,
     required this.expense,
     required this.income,
+    required this.balance,
     required this.isSurpassed,
   });
 
@@ -16,15 +18,17 @@ class BudgetModal {
       'budget': budget,
       'expense': expense,
       'income': income,
+      'balance': balance,
       'isSurpassed': isSurpassed,
     };
   }
 
-  factory BudgetModal.fromMap(Map<String, dynamic> map) {
-    return BudgetModal(
+  factory FinanceOverviewModal.fromMap(Map<String, dynamic> map) {
+    return FinanceOverviewModal(
       budget: map['budget'],
       expense: map['expense'],
       income: map['income'],
+      balance: map['balance'],
       isSurpassed: map['isSurpassed'],
     );
   }

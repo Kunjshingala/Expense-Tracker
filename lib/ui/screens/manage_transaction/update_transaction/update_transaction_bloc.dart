@@ -86,11 +86,11 @@ class UpdateTransactionBloc {
 
   bool isReadyToComplete() {
     if (amountController.text.trim().isEmpty) {
-      showMySnackBar('Add Sufficient Amount.', MessageType.warning);
+      showMySnackBar(message: 'Add Sufficient Amount.', messageType: MessageType.warning);
       return false;
     }
     if (dateController.text.trim().isEmpty) {
-      showMySnackBar('Select Date.', MessageType.warning);
+      showMySnackBar(message: 'Select Date.', messageType: MessageType.warning);
       return false;
     }
 

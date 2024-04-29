@@ -443,7 +443,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                             showModalBottomSheet(
                                               context: context,
                                               constraints: BoxConstraints.expand(
-                                                  width: screenWidth, height: screenHeight * 0.25),
+                                                width: screenWidth,
+                                                height: screenHeight * 0.25,
+                                              ),
                                               builder: (context) => AttachmentBottomSheet(
                                                 addTransactionBloc: addTransactionBloc,
                                               ),
