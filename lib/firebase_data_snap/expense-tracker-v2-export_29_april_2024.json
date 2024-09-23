@@ -1,0 +1,385 @@
+{
+  "users": {
+    "HUnpYGcdsiXMcXgRShXBLzlUNWe2": {
+      "transactions": {
+        "all-transactions": {
+          "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216": {
+            "amount": 100,
+            "category": 2,
+            "date": "29 April 2024",
+            "description": "",
+            "id": "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216",
+            "location": "",
+            "time": 1714368040564257,
+            "transactionMode": 0,
+            "transactionType": 0
+          }
+        },
+        "month-wise-transactions": {
+          "April-2024": {
+            "day-wise-transactions": {
+              "29": {
+                "day-finance-overview": {
+                  "expense": 100,
+                  "income": 0
+                },
+                "transactions": {
+                  "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216": {
+                    "amount": 100,
+                    "category": 2,
+                    "date": "29 April 2024",
+                    "description": "",
+                    "id": "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216",
+                    "location": "",
+                    "time": 1714368040564257,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              }
+            },
+            "summary": {
+              "categories": {
+                "2": {
+                  "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216": {
+                    "amount": 100,
+                    "category": 2,
+                    "date": "29 April 2024",
+                    "description": "",
+                    "id": "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216",
+                    "location": "",
+                    "time": 1714368040564257,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              },
+              "month-finance-overview": {
+                "balance": -100,
+                "budget": 0,
+                "expense": 100,
+                "income": 0,
+                "isSurpassed": true
+              },
+              "transfer-mode": [
+                {
+                  "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216": {
+                    "amount": 100,
+                    "category": 2,
+                    "date": "29 April 2024",
+                    "description": "",
+                    "id": "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216",
+                    "location": "",
+                    "time": 1714368040564257,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ],
+              "transfer-type": [
+                {
+                  "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216": {
+                    "amount": 100,
+                    "category": 2,
+                    "date": "29 April 2024",
+                    "description": "",
+                    "id": "HUnpYGcdsiXMcXgRShXBLzlUNWe2-1714368040564216",
+                    "location": "",
+                    "time": 1714368040564257,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "ufVKtHLmGRbX707WtO1QWlLEDR03": {
+      "transactions": {
+        "all-transactions": {
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759": {
+            "amount": 10,
+            "category": 0,
+            "date": "28 April 2024",
+            "description": "",
+            "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759",
+            "location": "",
+            "time": 1714307872519619,
+            "transactionMode": 1,
+            "transactionType": 1
+          },
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207": {
+            "amount": 100,
+            "category": 6,
+            "date": "09 August 2023",
+            "description": "",
+            "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207",
+            "location": "",
+            "time": 1714308424590076,
+            "transactionMode": 0,
+            "transactionType": 0
+          },
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536": {
+            "amount": 200,
+            "category": 4,
+            "date": "28 April 2022",
+            "description": "",
+            "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536",
+            "location": "",
+            "time": 1714308497359567,
+            "transactionMode": 0,
+            "transactionType": 0
+          }
+        },
+        "month-wise-transactions": {
+          "April-2022": {
+            "day-wise-transactions": {
+              "28": {
+                "day-finance-overview": {
+                  "expense": 200,
+                  "income": 0
+                },
+                "transactions": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536": {
+                    "amount": 200,
+                    "category": 4,
+                    "date": "28 April 2022",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536",
+                    "location": "",
+                    "time": 1714308497359567,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              }
+            },
+            "summary": {
+              "categories": {
+                "4": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536": {
+                    "amount": 200,
+                    "category": 4,
+                    "date": "28 April 2022",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536",
+                    "location": "",
+                    "time": 1714308497359567,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              },
+              "month-finance-overview": {
+                "balance": -200,
+                "budget": 0,
+                "expense": 200,
+                "income": 0,
+                "isSurpassed": true
+              },
+              "transfer-mode": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536": {
+                    "amount": 200,
+                    "category": 4,
+                    "date": "28 April 2022",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536",
+                    "location": "",
+                    "time": 1714308497359567,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ],
+              "transfer-type": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536": {
+                    "amount": 200,
+                    "category": 4,
+                    "date": "28 April 2022",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308497359536",
+                    "location": "",
+                    "time": 1714308497359567,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ]
+            }
+          },
+          "April-2024": {
+            "day-wise-transactions": {
+              "28": {
+                "day-finance-overview": {
+                  "expense": 0,
+                  "income": 10
+                },
+                "transactions": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759": {
+                    "amount": 10,
+                    "category": 0,
+                    "date": "28 April 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759",
+                    "location": "",
+                    "time": 1714307872519619,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  }
+                }
+              }
+            },
+            "summary": {
+              "categories": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759": {
+                    "amount": 10,
+                    "category": 0,
+                    "date": "28 April 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759",
+                    "location": "",
+                    "time": 1714307872519619,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  }
+                }
+              ],
+              "month-finance-overview": {
+                "balance": 10,
+                "budget": 0,
+                "expense": 0,
+                "income": 10,
+                "isSurpassed": false
+              },
+              "transfer-mode": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759": {
+                    "amount": 10,
+                    "category": 0,
+                    "date": "28 April 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759",
+                    "location": "",
+                    "time": 1714307872519619,
+                    "transactionMode": 1,
+                    "transactionType": 0
+                  }
+                },
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759": {
+                    "amount": 10,
+                    "category": 0,
+                    "date": "28 April 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759",
+                    "location": "",
+                    "time": 1714307872519619,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  }
+                }
+              ],
+              "transfer-type": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759": {
+                    "amount": 10,
+                    "category": 0,
+                    "date": "28 April 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714307872518759",
+                    "location": "",
+                    "time": 1714307872519619,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  }
+                }
+              ]
+            }
+          },
+          "August-2023": {
+            "day-wise-transactions": {
+              "09": {
+                "day-finance-overview": {
+                  "expense": 100,
+                  "income": 0
+                },
+                "transactions": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207": {
+                    "amount": 100,
+                    "category": 6,
+                    "date": "09 August 2023",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207",
+                    "location": "",
+                    "time": 1714308424590076,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              }
+            },
+            "summary": {
+              "categories": {
+                "6": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207": {
+                    "amount": 100,
+                    "category": 6,
+                    "date": "09 August 2023",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207",
+                    "location": "",
+                    "time": 1714308424590076,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              },
+              "month-finance-overview": {
+                "balance": -100,
+                "budget": 0,
+                "expense": 100,
+                "income": 0,
+                "isSurpassed": true
+              },
+              "transfer-mode": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207": {
+                    "amount": 100,
+                    "category": 6,
+                    "date": "09 August 2023",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207",
+                    "location": "",
+                    "time": 1714308424590076,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ],
+              "transfer-type": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207": {
+                    "amount": 100,
+                    "category": 6,
+                    "date": "09 August 2023",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714308424589207",
+                    "location": "",
+                    "time": 1714308424590076,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

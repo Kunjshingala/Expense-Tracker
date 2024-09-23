@@ -1,0 +1,314 @@
+{
+  "users": {
+    "ufVKtHLmGRbX707WtO1QWlLEDR03": {
+      "transactions": {
+        "all-transactions": {
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979": {
+            "amount": 100,
+            "category": -1,
+            "date": "26 April 2024",
+            "description": "🥇🏆",
+            "id": "26-4-2024-17-8-24-IST-1714131504362",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979.jpg?alt=media&token=aba51347-ad77-4903-94de-72b5cde93356",
+            "location": "",
+            "time": 1714131496850926,
+            "transactionMode": 1,
+            "transactionType": 1
+          },
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466": {
+            "amount": 100,
+            "category": 7,
+            "date": "26 April 2024",
+            "description": "hi hi",
+            "id": "26-4-2024-17-11-4-IST-1714131664983",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466.jpg?alt=media&token=984ae795-09d0-4b73-a78d-53bba191c606",
+            "location": "",
+            "time": 1714131659705660,
+            "transactionMode": 0,
+            "transactionType": 0
+          },
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1714132682145370": {
+            "amount": 10,
+            "category": 7,
+            "date": "26 April 2024",
+            "description": "again",
+            "id": "26-4-2024-17-28-2-IST-1714132682150",
+            "location": "",
+            "time": 1714132682143842,
+            "transactionMode": 0,
+            "transactionType": 0
+          },
+          "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833": {
+            "amount": 10,
+            "category": 5,
+            "date": "01 May 2024",
+            "description": "",
+            "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833",
+            "location": "",
+            "time": 1714199979565791,
+            "transactionMode": 0,
+            "transactionType": 0
+          }
+        },
+        "month-wise-transactions": {
+          "April-2024": {
+            "day-wise-transactions": {
+              "26": {
+                "day-finance-overview": {
+                  "expense": 110,
+                  "income": 100
+                },
+                "transactions": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979": {
+                    "amount": 100,
+                    "category": -1,
+                    "date": "26 April 2024",
+                    "description": "🥇🏆",
+                    "id": "26-4-2024-17-8-24-IST-1714131504362",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979.jpg?alt=media&token=aba51347-ad77-4903-94de-72b5cde93356",
+                    "location": "",
+                    "time": 1714131496850926,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  },
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466": {
+                    "amount": 100,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "hi hi",
+                    "id": "26-4-2024-17-11-4-IST-1714131664983",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466.jpg?alt=media&token=984ae795-09d0-4b73-a78d-53bba191c606",
+                    "location": "",
+                    "time": 1714131659705660,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  },
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714132682145370": {
+                    "amount": 10,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "again",
+                    "id": "26-4-2024-17-28-2-IST-1714132682150",
+                    "location": "",
+                    "time": 1714132682143842,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              }
+            },
+            "summary": {
+              "categories": {
+                "7": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466": {
+                    "amount": 100,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "hi hi",
+                    "id": "26-4-2024-17-11-4-IST-1714131664983",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466.jpg?alt=media&token=984ae795-09d0-4b73-a78d-53bba191c606",
+                    "location": "",
+                    "time": 1714131659705660,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  },
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714132682145370": {
+                    "amount": 10,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "again",
+                    "id": "26-4-2024-17-28-2-IST-1714132682150",
+                    "location": "",
+                    "time": 1714132682143842,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                },
+                "-1": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979": {
+                    "amount": 100,
+                    "category": -1,
+                    "date": "26 April 2024",
+                    "description": "🥇🏆",
+                    "id": "26-4-2024-17-8-24-IST-1714131504362",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979.jpg?alt=media&token=aba51347-ad77-4903-94de-72b5cde93356",
+                    "location": "",
+                    "time": 1714131496850926,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  }
+                }
+              },
+              "month-finance-overview": {
+                "balance": -10,
+                "budget": 0,
+                "expense": 110,
+                "income": 100,
+                "isSurpassed": true
+              },
+              "transfer-mode": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466": {
+                    "amount": 100,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "hi hi",
+                    "id": "26-4-2024-17-11-4-IST-1714131664983",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466.jpg?alt=media&token=984ae795-09d0-4b73-a78d-53bba191c606",
+                    "location": "",
+                    "time": 1714131659705660,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  },
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714132682145370": {
+                    "amount": 10,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "again",
+                    "id": "26-4-2024-17-28-2-IST-1714132682150",
+                    "location": "",
+                    "time": 1714132682143842,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                },
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979": {
+                    "amount": 100,
+                    "category": -1,
+                    "date": "26 April 2024",
+                    "description": "🥇🏆",
+                    "id": "26-4-2024-17-8-24-IST-1714131504362",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979.jpg?alt=media&token=aba51347-ad77-4903-94de-72b5cde93356",
+                    "location": "",
+                    "time": 1714131496850926,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  }
+                }
+              ],
+              "transfer-type": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466": {
+                    "amount": 100,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "hi hi",
+                    "id": "26-4-2024-17-11-4-IST-1714131664983",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131659707466.jpg?alt=media&token=984ae795-09d0-4b73-a78d-53bba191c606",
+                    "location": "",
+                    "time": 1714131659705660,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  },
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714132682145370": {
+                    "amount": 10,
+                    "category": 7,
+                    "date": "26 April 2024",
+                    "description": "again",
+                    "id": "26-4-2024-17-28-2-IST-1714132682150",
+                    "location": "",
+                    "time": 1714132682143842,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                },
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979": {
+                    "amount": 100,
+                    "category": -1,
+                    "date": "26 April 2024",
+                    "description": "🥇🏆",
+                    "id": "26-4-2024-17-8-24-IST-1714131504362",
+                    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/expense-tracker-a64ac.appspot.com/o/users%2FufVKtHLmGRbX707WtO1QWlLEDR03%2FufVKtHLmGRbX707WtO1QWlLEDR03-1714131496851979.jpg?alt=media&token=aba51347-ad77-4903-94de-72b5cde93356",
+                    "location": "",
+                    "time": 1714131496850926,
+                    "transactionMode": 1,
+                    "transactionType": 1
+                  }
+                }
+              ]
+            }
+          },
+          "May-2024": {
+            "day-wise-transactions": {
+              "01": {
+                "day-finance-overview": {
+                  "expense": 10,
+                  "income": 0
+                },
+                "transactions": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833": {
+                    "amount": 10,
+                    "category": 5,
+                    "date": "01 May 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833",
+                    "location": "",
+                    "time": 1714199979565791,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              }
+            },
+            "summary": {
+              "categories": {
+                "5": {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833": {
+                    "amount": 10,
+                    "category": 5,
+                    "date": "01 May 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833",
+                    "location": "",
+                    "time": 1714199979565791,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              },
+              "month-finance-overview": {
+                "balance": -10,
+                "budget": 0,
+                "expense": 10,
+                "income": 0,
+                "isSurpassed": true
+              },
+              "transfer-mode": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833": {
+                    "amount": 10,
+                    "category": 5,
+                    "date": "01 May 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833",
+                    "location": "",
+                    "time": 1714199979565791,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ],
+              "transfer-type": [
+                {
+                  "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833": {
+                    "amount": 10,
+                    "category": 5,
+                    "date": "01 May 2024",
+                    "description": "",
+                    "id": "ufVKtHLmGRbX707WtO1QWlLEDR03-1714199979562833",
+                    "location": "",
+                    "time": 1714199979565791,
+                    "transactionMode": 0,
+                    "transactionType": 0
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

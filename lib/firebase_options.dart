@@ -52,14 +52,16 @@ class DefaultFirebaseOptions {
     messagingSenderId: '239676754306',
     projectId: 'expense-tracker-a64ac',
     authDomain: 'expense-tracker-a64ac.firebaseapp.com',
+    databaseURL: 'https://expense-tracker-a64ac-default-rtdb.firebaseio.com',
     storageBucket: 'expense-tracker-a64ac.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDJQA6BeXxDShWnHGk7Zs-IEXlsaYydZA0',
-    appId: '1:239676754306:android:f41e8224b6e6a7bdf3279b',
+    appId: '1:239676754306:android:379ef5b75ecfc23ff3279b',
     messagingSenderId: '239676754306',
     projectId: 'expense-tracker-a64ac',
+    databaseURL: 'https://expense-tracker-a64ac-default-rtdb.firebaseio.com',
     storageBucket: 'expense-tracker-a64ac.appspot.com',
   );
 
@@ -68,7 +70,11 @@ class DefaultFirebaseOptions {
     appId: '1:239676754306:ios:4da88717a418864ef3279b',
     messagingSenderId: '239676754306',
     projectId: 'expense-tracker-a64ac',
+    databaseURL: 'https://expense-tracker-a64ac-default-rtdb.firebaseio.com',
     storageBucket: 'expense-tracker-a64ac.appspot.com',
+    androidClientId: '239676754306-152so5n5m3ai9v0oml2umpvbbi8tv37f.apps.googleusercontent.com',
+    iosClientId: '239676754306-psiep4ipm16ucpsn33agq9e4e9nkqq3o.apps.googleusercontent.com',
     iosBundleId: 'com.example.expenseTracker',
   );
+
 }

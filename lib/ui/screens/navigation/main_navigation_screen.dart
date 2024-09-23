@@ -25,7 +25,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       body: PersistentTabView(
         tabs: mainNavigationBloc.persistentTabList,
-        navBarBuilder: (navBarConfig) => Style1BottomNavBar(
+        navBarBuilder: (navBarConfig) => Style14BottomNavBar(
           navBarConfig: navBarConfig,
           navBarDecoration: const NavBarDecoration(),
         ),

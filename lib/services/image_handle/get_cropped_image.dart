@@ -44,23 +44,21 @@ Future<File> cropImage(BuildContext context, File sourceFile) async {
       sourcePath: sourceFile.path,
       compressFormat: ImageCompressFormat.jpg,
       compressQuality: 100,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-      ],
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
       uiSettings: [
         AndroidUiSettings(
-          toolbarTitle: 'Image Cropper',
-          toolbarColor: violet100Color,
-          toolbarWidgetColor: light100Color,
-          activeControlsWidgetColor: violet100Color,
-          cropGridColor: violet20Color,
-          lockAspectRatio: false,
-          initAspectRatio: CropAspectRatioPreset.original,
-        ),
+            toolbarTitle: 'Image Cropper',
+            toolbarColor: violet100Color,
+            toolbarWidgetColor: light100Color,
+            activeControlsWidgetColor: violet100Color,
+            cropGridColor: violet20Color,
+            lockAspectRatio: false,
+            initAspectRatio: CropAspectRatioPreset.original,
+            aspectRatioPresets: [CropAspectRatioPreset.square]),
         IOSUiSettings(
-          title: 'Image Cropper',
-          aspectRatioLockEnabled: true,
-        ),
+            title: 'Image Cropper',
+            aspectRatioLockEnabled: true,
+            aspectRatioPresets: [CropAspectRatioPreset.square]),
         WebUiSettings(context: context),
       ]);
 

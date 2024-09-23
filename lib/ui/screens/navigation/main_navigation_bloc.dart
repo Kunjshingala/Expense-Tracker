@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 import '../../../utils/colors.dart';
+import '../manage_transaction/add_transaction/add_transaction_screen.dart';
 import 'profile/profile_screen.dart';
 
 class MainNavigationBloc {
@@ -44,6 +45,16 @@ class MainNavigationBloc {
     //     inactiveForegroundColor: greyColor,
     //   ),
     // ),
+    PersistentTabConfig(
+      screen: const AddTransactionScreen(),
+      item: ItemConfig(
+        icon: const Icon(CustomIcons.add_icon),
+        inactiveIcon: const Icon(CustomIcons.add_icon),
+        iconSize: averageScreenSize * 0.03,
+        activeForegroundColor: violet100Color,
+        inactiveForegroundColor: greyColor,
+      ),
+    ),
     // PersistentTabConfig(
     //   screen: const AnalysisScreen(),
     //   item: ItemConfig(

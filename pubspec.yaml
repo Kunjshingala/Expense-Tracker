@@ -14,8 +14,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
-  google_fonts: ^5.1.0
+  cupertino_icons: any
+  google_fonts: any
   rxdart: any
   firebase_core: any
   firebase_auth: any
