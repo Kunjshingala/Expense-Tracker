@@ -5,7 +5,7 @@ description: "A new Flutter project."
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
@@ -32,7 +32,8 @@ dependencies:
   intl: any
   firebase_database: any
   firebase_storage: any
-  syncfusion_flutter_charts: any
+  syncfusion_flutter_charts: ^25.2.4
+  #https://github.com/syncfusion/flutter-widgets/issues/1870
   loading_animation_widget: any
   shimmer: any
 
