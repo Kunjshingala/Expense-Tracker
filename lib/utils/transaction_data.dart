@@ -3,19 +3,19 @@ import 'package:expense_tracker/utils/custom_icons.dart';
 import 'package:expense_tracker/utils/dimens.dart';
 import 'package:flutter/material.dart';
 
-enum TransactionType { Expense, Income }
+enum TransactionType { expense, income }
 
 /// Note :
 ///   Expense --> 0
 ///   Income --> 1
 
-enum TransactionMode { Cash, Online }
+enum TransactionMode { cash, online }
 
 /// Note :
 ///   Cash --> 0
 ///   Online --> 1
 
-enum TransactionPeriod { Today, Month, All }
+enum TransactionPeriod { today, month, all }
 
 List<TransactionCategoryModal> expenseTransactionCategoryList = [
   TransactionCategoryModal(
@@ -117,11 +117,10 @@ class TransactionCategoryModal {
 }
 
 class CategoryIcon extends StatelessWidget {
-  const CategoryIcon({super.key, required this.iconData, required this.id});
-
   final IconData iconData;
-
   final int id;
+
+  const CategoryIcon({super.key, required this.iconData, required this.id});
 
   @override
   Widget build(BuildContext context) {

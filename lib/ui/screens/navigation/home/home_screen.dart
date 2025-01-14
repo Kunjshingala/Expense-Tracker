@@ -9,6 +9,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../main.dart';
 import '../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../modals/local_modal/home_chart_data_modal.dart';
 import '../../../../utils/custom_icons.dart';
@@ -112,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Monthly Budget',
+                                languages.monthlyBudget,
                                 style: GoogleFonts.inter(
                                   color: light0Color,
                                   fontWeight: FontWeight.w500,
@@ -124,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return Text(
-                                      '${snapshot.data!.budget}',
+                                      '${snapshot.data?.budget ?? 0}',
                                       style: GoogleFonts.inter(
                                         color: dark75Color,
                                         fontWeight: FontWeight.w500,
@@ -148,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Total Balance',
+                                languages.totalBalance,
                                 style: GoogleFonts.inter(
                                   color: light0Color,
                                   fontWeight: FontWeight.w500,
@@ -160,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData) {
                                     return Text(
-                                      '${snapshot.data!.balance}',
+                                      '${snapshot.data?.balance ?? 0}',
                                       style: GoogleFonts.inter(
                                         color: snapshot.data!.balance > 0 ? green60Color : red60Color,
                                         fontWeight: FontWeight.w500,
@@ -215,8 +216,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
                                     child: Container(
                                       constraints: BoxConstraints(
-                                          maxWidth: averageScreenSize * 0.07,
-                                          maxHeight: averageScreenSize * 0.07),
+                                          maxWidth: averageScreenSize * 0.07, maxHeight: averageScreenSize * 0.07),
                                       decoration: BoxDecoration(
                                         color: light100Color,
                                         borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
@@ -267,8 +267,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                               } else {
                                                 return Container(
                                                   height: screenHeight * 0.05,
-                                                  padding:
-                                                      EdgeInsetsDirectional.only(start: screenWidth * 0.02),
+                                                  padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02),
                                                   child: LoadingAnimationWidget.halfTriangleDot(
                                                     color: light80Color,
                                                     size: averageScreenSize * 0.025,
@@ -313,8 +312,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
                                     child: Container(
                                       constraints: BoxConstraints(
-                                          maxWidth: averageScreenSize * 0.07,
-                                          maxHeight: averageScreenSize * 0.07),
+                                          maxWidth: averageScreenSize * 0.07, maxHeight: averageScreenSize * 0.07),
                                       decoration: BoxDecoration(
                                         color: light100Color,
                                         borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
@@ -365,8 +363,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                               } else {
                                                 return Container(
                                                   height: screenHeight * 0.05,
-                                                  padding:
-                                                      EdgeInsetsDirectional.only(start: screenWidth * 0.02),
+                                                  padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02),
                                                   child: LoadingAnimationWidget.halfTriangleDot(
                                                     color: light80Color,
                                                     size: averageScreenSize * 0.025,

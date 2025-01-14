@@ -49,7 +49,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
               automaticallyImplyLeading: false,
               leadingWidth: screenWidth * 0.12,
               toolbarHeight: screenHeight * 0.065,
-              backgroundColor: snapshot.data == TransactionType.Expense ? red100Color : green100Color,
+              backgroundColor: snapshot.data == TransactionType.expense ? red100Color : green100Color,
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -74,7 +74,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                 ),
               ),
             ),
-            backgroundColor: snapshot.data == TransactionType.Expense ? red100Color : green100Color,
+            backgroundColor: snapshot.data == TransactionType.expense ? red100Color : green100Color,
             body: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: SizedBox(

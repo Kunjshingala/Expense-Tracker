@@ -120,6 +120,7 @@ class SignUpBloc {
         );
       }
     } on FirebaseAuthException catch (e) {
+      debugPrint('----> FirebaseAuthException catch (e) ${e.code}');
       if (context.mounted) {
         if (e.code == 'user-disabled') {
           showMySnackBar(message: e.code, messageType: MessageType.failed);
@@ -128,6 +129,7 @@ class SignUpBloc {
         }
       }
     } catch (e) {
+      debugPrint('----> catch (e) ${e.toString()}');
       if (context.mounted) {
         showMySnackBar(message: 'Something Went Wrong', messageType: MessageType.failed);
       }

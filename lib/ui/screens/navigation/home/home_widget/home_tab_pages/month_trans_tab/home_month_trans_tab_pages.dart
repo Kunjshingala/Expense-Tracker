@@ -112,12 +112,12 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
                                       ),
                                     ),
                                     Text(
-                                      transactionModal.transactionType == TransactionType.Expense.index
+                                      transactionModal.transactionType == TransactionType.expense.index
                                           ? '-${transactionModal.amount}'
                                           : '+${transactionModal.amount}',
                                       style: GoogleFonts.inter(
                                         color:
-                                            transactionModal.transactionType == TransactionType.Expense.index
+                                            transactionModal.transactionType == TransactionType.expense.index
                                                 ? red100Color
                                                 : green100Color,
                                         fontWeight: FontWeight.w600,

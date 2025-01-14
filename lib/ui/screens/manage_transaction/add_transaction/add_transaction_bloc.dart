@@ -34,11 +34,11 @@ class AddTransactionBloc {
   Stream<bool> get getAddTransactionProcessStatus => addTransactionProcessStatusSubject.stream;
   Function(bool) get setAddTransactionProcessStatus => addTransactionProcessStatusSubject.add;
 
-  final transactionTypeSubject = BehaviorSubject<TransactionType>.seeded(TransactionType.Expense);
+  final transactionTypeSubject = BehaviorSubject<TransactionType>.seeded(TransactionType.expense);
   Stream<TransactionType> get getTransactionType => transactionTypeSubject.stream;
   Function(TransactionType) get setTransactionType => transactionTypeSubject.add;
 
-  final transactionModeSubject = BehaviorSubject<TransactionMode>.seeded(TransactionMode.Cash);
+  final transactionModeSubject = BehaviorSubject<TransactionMode>.seeded(TransactionMode.cash);
   Stream<TransactionMode> get getTransactionMode => transactionModeSubject.stream;
   Function(TransactionMode) get setTransactionMode => transactionModeSubject.add;
 
@@ -46,8 +46,7 @@ class AddTransactionBloc {
   Stream<File?> get getFile => fileSubject.stream;
   Function(File?) get setFile => fileSubject.add;
 
-  final categoryListSubject =
-      BehaviorSubject<List<TransactionCategoryModal>>.seeded(expenseTransactionCategoryList);
+  final categoryListSubject = BehaviorSubject<List<TransactionCategoryModal>>.seeded(expenseTransactionCategoryList);
   Stream<List<TransactionCategoryModal>> get getCategoryList => categoryListSubject.stream;
   Function(List<TransactionCategoryModal>) get setCategoryList => categoryListSubject.add;
 
@@ -70,7 +69,7 @@ class AddTransactionBloc {
     }
   }
 
-  clearImage() async {
+  clearImage() {
     fileSubject.value = null;
   }
 
@@ -247,8 +246,7 @@ class AddTransactionBloc {
     required DatabaseReference rtDatabaseRef,
     required Map<String, dynamic> map,
   }) async {
-    final allTransactionRef =
-        rtDatabaseRef.child(FirebaseRealTimeDatabaseRef.allTransaction).child(transactionId);
+    final allTransactionRef = rtDatabaseRef.child(FirebaseRealTimeDatabaseRef.allTransaction).child(transactionId);
 
     await allTransactionRef.set(map).onError((error, stackTrace) {
       debugPrint('allTransactionRef---------------------------------->$error');
@@ -420,8 +418,7 @@ class AddTransactionBloc {
 
       financeOverviewModal = FinanceOverviewModal.fromMap(mappedSnapshot);
     } else {
-      financeOverviewModal =
-          FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0, isSurpassed: false);
+      financeOverviewModal = FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0, isSurpassed: false);
     }
 
     /// update with new data.

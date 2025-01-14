@@ -32,11 +32,11 @@ class UpdateTransactionBloc {
   Stream<bool> get getUpdateTransactionProcessStatus => updateTransactionProcessStatusSubject.stream;
   Function(bool) get setUpdateTransactionProcessStatus => updateTransactionProcessStatusSubject.add;
 
-  final transactionTypeSubject = BehaviorSubject<TransactionType>.seeded(TransactionType.Expense);
+  final transactionTypeSubject = BehaviorSubject<TransactionType>.seeded(TransactionType.expense);
   Stream<TransactionType> get getTransactionType => transactionTypeSubject.stream;
   Function(TransactionType) get setTransactionType => transactionTypeSubject.add;
 
-  final transactionModeSubject = BehaviorSubject<TransactionMode>.seeded(TransactionMode.Cash);
+  final transactionModeSubject = BehaviorSubject<TransactionMode>.seeded(TransactionMode.cash);
   Stream<TransactionMode> get getTransactionMode => transactionModeSubject.stream;
   Function(TransactionMode) get setTransactionMode => transactionModeSubject.add;
 

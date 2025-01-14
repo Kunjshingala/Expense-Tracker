@@ -61,8 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       backgroundColor: light100Color,
       body: Padding(
-        padding:
-            EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.08),
+        padding: EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.08),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -128,8 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       return Container(
                         width: screenWidth,
                         alignment: AlignmentDirectional.centerStart,
-                        padding:
-                            EdgeInsetsDirectional.only(start: screenWidth * 0.02, top: screenHeight * 0.01),
+                        padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02, top: screenHeight * 0.01),
                         child: Column(
                           children: [
                             Text(
@@ -235,8 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: screenHeight * 0.03),
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
                 },
                 child: Text(
                   'Forgot Password?',
@@ -269,8 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
                         },
                     ),
                   ],

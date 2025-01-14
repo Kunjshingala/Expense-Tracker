@@ -40,7 +40,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               automaticallyImplyLeading: false,
               leadingWidth: screenWidth * 0.12,
               toolbarHeight: screenHeight * 0.065,
-              backgroundColor: snapshot.data == TransactionType.Expense ? red100Color : green100Color,
+              backgroundColor: snapshot.data == TransactionType.expense ? red100Color : green100Color,
               leading: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
@@ -65,7 +65,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 ),
               ),
             ),
-            backgroundColor: snapshot.data == TransactionType.Expense ? red100Color : green100Color,
+            backgroundColor: snapshot.data == TransactionType.expense ? red100Color : green100Color,
             body: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: SizedBox(
@@ -159,7 +159,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                     addTransactionBloc.setTransactionType(value!);
 
                                     /// add category list for diff type of transaction.
-                                    final list = value == TransactionType.Expense
+                                    final list = value == TransactionType.expense
                                         ? expenseTransactionCategoryList
                                         : incomeTransactionCategoryList;
 

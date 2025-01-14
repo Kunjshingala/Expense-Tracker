@@ -3,16 +3,17 @@ import 'package:expense_tracker/utils/colors.dart';
 import 'package:expense_tracker/utils/constant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'firebase_options.dart';
 import 'utils/dimens.dart';
 
+late AppLocalizations languages;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Flutter Demo',
+      onGenerateTitle: (context) => AppLocalizations.of(context)?.appName ?? '',
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
@@ -36,7 +38,17 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: violet100Color),
         useMaterial3: true,
       ),
-      home: const SplashScreen(),
+
+      // locale: selectedLocale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // themeMode: ThemeMode.system,
+      home: Builder(
+        builder: (context) {
+          languages = AppLocalizations.of(context)!;
+          return const SplashScreen();
+        },
+      ),
       // home: const MainNavigationScreen(),
       // home: const ProfileScreen(),
       // home: const AddTransactionScreen(),
