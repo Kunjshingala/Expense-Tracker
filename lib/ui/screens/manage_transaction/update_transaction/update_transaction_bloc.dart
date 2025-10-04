@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:expense_tracker/ui/common_view/snack_bar_content.dart';
-import 'package:expense_tracker/utils/transaction_data.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -13,6 +12,8 @@ import '../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../modals/firebase_modal/transaction_modal.dart';
 import '../../../../utils/constant.dart';
 import '../../../../utils/firebase_references.dart';
+import '../../../../utils/transaction_data.dart';
+import '../../../common_view/snack_bar.dart';
 
 class UpdateTransactionBloc {
   final BuildContext context;
@@ -29,19 +30,27 @@ class UpdateTransactionBloc {
   final dateController = TextEditingController();
 
   final updateTransactionProcessStatusSubject = BehaviorSubject<bool>.seeded(false);
+
   Stream<bool> get getUpdateTransactionProcessStatus => updateTransactionProcessStatusSubject.stream;
+
   Function(bool) get setUpdateTransactionProcessStatus => updateTransactionProcessStatusSubject.add;
 
   final transactionTypeSubject = BehaviorSubject<TransactionType>.seeded(TransactionType.expense);
+
   Stream<TransactionType> get getTransactionType => transactionTypeSubject.stream;
+
   Function(TransactionType) get setTransactionType => transactionTypeSubject.add;
 
   final transactionModeSubject = BehaviorSubject<TransactionMode>.seeded(TransactionMode.cash);
+
   Stream<TransactionMode> get getTransactionMode => transactionModeSubject.stream;
+
   Function(TransactionMode) get setTransactionMode => transactionModeSubject.add;
 
   final fileSubject = BehaviorSubject<File?>();
+
   Stream<File?> get getFile => fileSubject.stream;
+
   Function(File?) get setFile => fileSubject.add;
 
   void setLastData(TransactionModal transactionModal) {
@@ -75,12 +84,12 @@ class UpdateTransactionBloc {
 
   bool isReadyToComplete() {
     if (int.parse(amountController.text.trim()) <= 0) {
-      showMySnackBar(message: 'Add Sufficient Amount.', messageType: MessageType.warning);
+      showMySnackBar(message: languages.amountValidationMsg, messageType: MessageType.warning);
       return false;
     }
 
     if (dateController.text.trim().isEmpty) {
-      showMySnackBar(message: 'Select Date.', messageType: MessageType.warning);
+      showMySnackBar(message: '${languages.selectDate}.', messageType: MessageType.warning);
       return false;
     }
 
@@ -195,8 +204,7 @@ class UpdateTransactionBloc {
         .child(FirebaseRealTimeDatabaseRef.transactions);
 
     /// All transaction.
-    await updateAtAllTransaction(
-        id: oldTransactionModal.id, mainReference: rtDatabaseRef, updatedMap: updatedMap);
+    await updateAtAllTransaction(id: oldTransactionModal.id, mainReference: rtDatabaseRef, updatedMap: updatedMap);
 
     /// Monthly transaction.
     await updateAtMonthly(
@@ -263,7 +271,7 @@ class UpdateTransactionBloc {
     await allTransactionRef.update(updatedMap).onError((error, stackTrace) {
       debugPrint('allTransactionRef---------------------------------->$error');
       debugPrint('allTransactionRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
 
     debugPrint('updateAtAllTransaction---------------------------------->Done');
@@ -302,7 +310,7 @@ class UpdateTransactionBloc {
       await oldMonthlyDataRef.update(updatedMap).onError((error, stackTrace) {
         debugPrint('oldMonthlyDataRef---------------------------------->$error');
         debugPrint('oldMonthlyDataRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
     } else {
       debugPrint('monthlyDataRef---------------------------------->Date is not same');
@@ -311,13 +319,13 @@ class UpdateTransactionBloc {
       await oldMonthlyDataRef.remove().onError((error, stackTrace) {
         debugPrint('oldMonthlyDataRef---------------------------------->$error');
         debugPrint('oldMonthlyDataRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
 
       await newMonthlyDataRef.set(updatedMap).onError((error, stackTrace) {
         debugPrint('newMonthlyDataRef---------------------------------->$error');
         debugPrint('newMonthlyDataRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
     }
 
@@ -353,26 +361,25 @@ class UpdateTransactionBloc {
         .child(id);
 
     /// month change then remove and add else just update.
-    if ('${oldDateDataList[1]}-${oldDateDataList[2]}' ==
-        '${updatedDateDataList[1]}-${updatedDateDataList[2]}') {
+    if ('${oldDateDataList[1]}-${oldDateDataList[2]}' == '${updatedDateDataList[1]}-${updatedDateDataList[2]}') {
       await oldCategoryRef.update(updatedMap).onError((error, stackTrace) {
         debugPrint('oldCategoryRef---------------------------------->$error');
         debugPrint('oldCategoryRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
     } else {
       /// remove old category.
       await oldCategoryRef.remove().onError((error, stackTrace) {
         debugPrint('oldCategoryRef---------------------------------->$error');
         debugPrint('oldCategoryRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
 
       /// add at new date category.
       await updatedCategoryRef.set(updatedMap).onError((error, stackTrace) {
         debugPrint('updatedCategoryRef---------------------------------->$error');
         debugPrint('updatedCategoryRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
     }
 
@@ -408,26 +415,25 @@ class UpdateTransactionBloc {
         .child(id);
 
     /// month change then remove and add else just update.
-    if ('${oldDateDataList[1]}-${oldDateDataList[2]}' ==
-        '${updatedDateDataList[1]}-${updatedDateDataList[2]}') {
+    if ('${oldDateDataList[1]}-${oldDateDataList[2]}' == '${updatedDateDataList[1]}-${updatedDateDataList[2]}') {
       await oldTransactionTypeRef.update(updatedMap).onError((error, stackTrace) {
         debugPrint('oldTransactionTypeRef---------------------------------->$error');
         debugPrint('oldTransactionTypeRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
     } else {
       /// remove old transaction type.
       await oldTransactionTypeRef.remove().onError((error, stackTrace) {
         debugPrint('updatedTransactionTypeRef---------------------------------->$error');
         debugPrint('updatedTransactionTypeRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
 
       /// add at new transaction type.
       await updatedTransactionTypeRef.set(updatedMap).onError((error, stackTrace) {
         debugPrint('updatedTransactionTypeRef---------------------------------->$error');
         debugPrint('updatedTransactionTypeRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
     }
 
@@ -463,14 +469,13 @@ class UpdateTransactionBloc {
         .child(id);
 
     /// month change then remove and add else just update.
-    if ('${oldDateDataList[1]}-${oldDateDataList[2]}' ==
-        '${updatedDateDataList[1]}-${updatedDateDataList[2]}') {
+    if ('${oldDateDataList[1]}-${oldDateDataList[2]}' == '${updatedDateDataList[1]}-${updatedDateDataList[2]}') {
       debugPrint('oldTransactionModeRef---------------------------------->Date Same');
 
       await oldTransactionModeRef.update(updatedMap).onError((error, stackTrace) {
         debugPrint('oldTransactionModeRef---------------------------------->$error');
         debugPrint('oldTransactionModeRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
 
       debugPrint(
@@ -482,16 +487,15 @@ class UpdateTransactionBloc {
       await oldTransactionModeRef.remove().onError((error, stackTrace) {
         debugPrint('oldTransactionModeRef---------------------------------->$error');
         debugPrint('oldTransactionModeRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
-      debugPrint(
-          'oldTransactionModeRef---------------------------------->oldTransactionModeRef.remove() complete');
+      debugPrint('oldTransactionModeRef---------------------------------->oldTransactionModeRef.remove() complete');
 
       /// add at new transaction type.
       await updatedTransactionModeRef.set(updatedMap).onError((error, stackTrace) {
         debugPrint('updatedTransactionModeRef---------------------------------->$error');
         debugPrint('updatedTransactionModeRef---------------------------------->$stackTrace');
-        showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       });
       debugPrint('oldTransactionModeRef---------------------------------->Date is not Same');
     }
@@ -552,7 +556,7 @@ class UpdateTransactionBloc {
         .onError((error, stackTrace) {
       debugPrint('oldPlaceDayFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('oldPlaceDayFinanceOverviewSummaryRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
 
     /// update at new place. -------------------------------------------------------------------------------->
@@ -587,7 +591,7 @@ class UpdateTransactionBloc {
         .onError((error, stackTrace) {
       debugPrint('newPlaceDayFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('newPlaceDayFinanceOverviewSummaryRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
 
     debugPrint('updateDataIntoDayFinanceOverviewSummary---------------------------------->Done');
@@ -659,7 +663,7 @@ class UpdateTransactionBloc {
         .onError((error, stackTrace) {
       debugPrint('oldPlaceMonthFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('oldPlaceMonthFinanceOverviewSummaryRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
 
     /// update at old place. done-------------------------------------------------------------------------------->
@@ -715,7 +719,7 @@ class UpdateTransactionBloc {
         .onError((error, stackTrace) {
       debugPrint('newPlaceMonthFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('newPlaceMonthFinanceOverviewSummaryRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
 
     /// update at new place. done-------------------------------------------------------------------------------->

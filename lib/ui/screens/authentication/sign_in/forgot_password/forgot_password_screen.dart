@@ -1,11 +1,12 @@
-import 'package:expense_tracker/ui/screens/authentication/sign_in/forgot_password/forgot_password_bloc.dart';
-import 'package:expense_tracker/utils/custom_icons.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../utils/colors.dart';
+import '../../../../../utils/custom_icons.dart';
 import '../../../../../utils/dimens.dart';
-import '../../../../common_view/main_eleveted_button.dart';
+import '../../../../common_view/common_button.dart';
+import 'forgot_password_bloc.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -19,9 +20,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
     forgotPasswordBloc = ForgotPasswordBloc(context: context);
+    super.didChangeDependencies();
   }
 
   @override
@@ -30,7 +30,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leadingWidth: screenWidth * 0.12,
-        backgroundColor: light100Color,
+        backgroundColor: white100,
         leading: Padding(
           padding: EdgeInsetsDirectional.only(start: screenWidth * 0.03),
           child: GestureDetector(
@@ -39,7 +39,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             },
             child: Icon(
               CustomIcons.arrow_left_icons,
-              color: dark50Color,
+              color: black50,
               size: averageScreenSize * 0.06,
               weight: 1,
             ),
@@ -47,15 +47,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
         centerTitle: true,
         title: Text(
-          'Forgot Password',
+          languages.forgotPassword,
           style: GoogleFonts.inter(
-            color: dark50Color,
+            color: black50,
             fontWeight: FontWeight.w600,
             fontSize: averageScreenSize * 0.035,
           ),
         ),
       ),
-      backgroundColor: light100Color,
+      backgroundColor: white100,
       body: Padding(
         padding: EdgeInsetsDirectional.only(
           start: screenWidth * 0.05,
@@ -69,9 +69,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Don’t worry. \nEnter your email and we’ll send you a link to reset your password.',
+                languages.forgotPassMsg,
                 style: GoogleFonts.inter(
-                  color: dark100Color,
+                  color: black100,
                   fontWeight: FontWeight.w600,
                   fontSize: averageScreenSize * 0.04,
                 ),
@@ -83,9 +83,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 builder: (context, snapshot) {
                   return TextFormField(
                     controller: forgotPasswordBloc.emailController,
-                    cursorColor: light0Color,
+                    cursorColor: white0,
                     style: GoogleFonts.inter(
-                      color: dark25Color,
+                      color: black25,
                       fontWeight: FontWeight.w500,
                       fontSize: averageScreenSize * 0.03,
                     ),
@@ -101,9 +101,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         minWidth: screenWidth - (screenWidth * 0.1),
                         maxWidth: screenWidth - (screenWidth * 0.1),
                       ),
-                      hintText: 'Email',
+                      hintText: languages.email,
                       hintStyle: GoogleFonts.inter(
-                        color: light0Color,
+                        color: white0,
                         fontWeight: FontWeight.w400,
                         fontSize: averageScreenSize * 0.03,
                       ),
@@ -112,11 +112,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         horizontal: screenWidth * 0.05,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: snapshot.data ?? true ? light20Color : red100Color),
+                        borderSide: BorderSide(color: snapshot.data ?? true ? white20 : red100),
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: snapshot.data ?? true ? light20Color : red100Color),
+                        borderSide: BorderSide(color: snapshot.data ?? true ? white20 : red100),
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                       ),
                     ),
@@ -137,14 +137,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       return Container(
                         width: screenWidth,
                         alignment: AlignmentDirectional.centerStart,
-                        padding:
-                            EdgeInsetsDirectional.only(start: screenWidth * 0.02, top: screenHeight * 0.01),
+                        padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02, top: screenHeight * 0.01),
                         child: Column(
                           children: [
                             Text(
-                              'Enter Valid Email.',
+                              languages.emailValidationMsg,
                               style: GoogleFonts.inter(
-                                color: red100Color,
+                                color: red100,
                               ),
                             ),
                           ],
@@ -157,18 +156,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 },
               ),
               SizedBox(height: screenHeight * 0.05),
-              CustomElevatedButton(
+              CustomButton(
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.07,
-                borderRadius: averageScreenSize * 0.03,
-                color: violet100Color,
                 onPressed: () {
                   forgotPasswordBloc.sendResetPassEmail();
                 },
                 child: Text(
-                  'Continue',
+                  languages.continue_,
                   style: GoogleFonts.inter(
-                    color: light80Color,
+                    color: white80,
                     fontWeight: FontWeight.w600,
                     fontSize: averageScreenSize * 0.025,
                   ),

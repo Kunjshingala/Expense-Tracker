@@ -1,12 +1,11 @@
-import 'package:expense_tracker/ui/screens/splash/splash_screen.dart';
-import 'package:expense_tracker/utils/colors.dart';
-import 'package:expense_tracker/utils/constant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'firebase_options.dart';
-import 'utils/dimens.dart';
+import 'ui/screens/splash/splash_screen.dart';
+import 'utils/colors.dart';
+import 'utils/constant.dart';
 
 late AppLocalizations languages;
 
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
       scaffoldMessengerKey: scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: violet100Color),
+        colorScheme: ColorScheme.fromSeed(seedColor: violet100),
         useMaterial3: true,
       ),
 

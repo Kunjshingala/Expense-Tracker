@@ -1,8 +1,3 @@
-import 'package:expense_tracker/ui/common_view/main_eleveted_button.dart';
-import 'package:expense_tracker/ui/screens/navigation/home/home_bloc.dart';
-import 'package:expense_tracker/ui/screens/navigation/home/home_widget/home_tab_pages/month_trans_tab/home_month_trans_tab_pages.dart';
-import 'package:expense_tracker/utils/colors.dart';
-import 'package:expense_tracker/utils/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -12,9 +7,13 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../main.dart';
 import '../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../modals/local_modal/home_chart_data_modal.dart';
+import '../../../../utils/colors.dart';
 import '../../../../utils/custom_icons.dart';
-import '../../manage_transaction/add_transaction/add_transaction_screen.dart';
+import '../../../../utils/dimens.dart';
+import '../../../common_view/common_button.dart';
+import 'home_bloc.dart';
 import 'home_widget/home_tab_pages/all_trans_tab/home_all_trans_tab_pages.dart';
+import 'home_widget/home_tab_pages/month_trans_tab/home_month_trans_tab_pages.dart';
 import 'home_widget/home_tab_pages/today_trans_tab/home_today_trans_tab_pages.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,28 +28,30 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    debugPrint('--------initState--------->called');
   }
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
     homeBloc = HomeBloc(context: context);
-
+    // Todo: Add this at bloc
     homeBloc.tabController = TabController(length: 3, vsync: this);
-    debugPrint('--------didChangeDependencies--------->called');
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    homeBloc.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('--------build--------->called');
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: const Color(0xffFFF6E5),
+        backgroundColor: homeAppBarColor,
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -60,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 Text(
                   '${homeBloc.greeting}, ${homeBloc.currentUserName}',
                   style: GoogleFonts.inter(
-                    color: dark75Color,
+                    color: black75,
                     fontWeight: FontWeight.w500,
                     fontSize: averageScreenSize * 0.035,
                   ),
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 Text(
                   homeBloc.currentDate,
                   style: GoogleFonts.inter(
-                    color: dark50Color,
+                    color: black50,
                     fontWeight: FontWeight.w400,
                     fontSize: averageScreenSize * 0.0275,
                   ),
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   begin: AlignmentDirectional.topCenter,
                   end: AlignmentDirectional.bottomCenter,
                   colors: [
-                    const Color(0xffFFF6E5),
+                    homeAppBarColor,
                     const Color(0xffF8EDD8).withOpacity(0.0),
                   ],
                 ),
@@ -115,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               Text(
                                 languages.monthlyBudget,
                                 style: GoogleFonts.inter(
-                                  color: light0Color,
+                                  color: white0,
                                   fontWeight: FontWeight.w500,
                                   fontSize: averageScreenSize * 0.025,
                                 ),
@@ -127,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     return Text(
                                       '${snapshot.data?.budget ?? 0}',
                                       style: GoogleFonts.inter(
-                                        color: dark75Color,
+                                        color: black75,
                                         fontWeight: FontWeight.w500,
                                         fontSize: averageScreenSize * 0.05,
                                       ),
@@ -136,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     return SizedBox(
                                       height: screenHeight * 0.05,
                                       child: LoadingAnimationWidget.hexagonDots(
-                                        color: dark50Color,
+                                        color: black50,
                                         size: averageScreenSize * 0.03,
                                       ),
                                     );
@@ -151,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               Text(
                                 languages.totalBalance,
                                 style: GoogleFonts.inter(
-                                  color: light0Color,
+                                  color: white0,
                                   fontWeight: FontWeight.w500,
                                   fontSize: averageScreenSize * 0.025,
                                 ),
@@ -163,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     return Text(
                                       '${snapshot.data?.balance ?? 0}',
                                       style: GoogleFonts.inter(
-                                        color: snapshot.data!.balance > 0 ? green60Color : red60Color,
+                                        color: snapshot.data!.balance > 0 ? green60 : red60,
                                         fontWeight: FontWeight.w500,
                                         fontSize: averageScreenSize * 0.05,
                                       ),
@@ -172,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     return SizedBox(
                                       height: screenHeight * 0.05,
                                       child: LoadingAnimationWidget.hexagonDots(
-                                        color: dark50Color,
+                                        color: black50,
                                         size: averageScreenSize * 0.03,
                                       ),
                                     );
@@ -203,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 vertical: screenHeight * 0.01,
                               ),
                               decoration: BoxDecoration(
-                                color: green100Color,
+                                color: green100,
                                 borderRadius: BorderRadius.circular(averageScreenSize * 0.035),
                               ),
                               alignment: Alignment.center,
@@ -218,13 +219,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                       constraints: BoxConstraints(
                                           maxWidth: averageScreenSize * 0.07, maxHeight: averageScreenSize * 0.07),
                                       decoration: BoxDecoration(
-                                        color: light100Color,
+                                        color: white100,
                                         borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
                                       ),
                                       alignment: AlignmentDirectional.center,
                                       child: Icon(
                                         CustomIcons.income_icons,
-                                        color: green100Color,
+                                        color: green100,
                                         size: averageScreenSize * 0.05,
                                       ),
                                     ),
@@ -237,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                       Text(
                                         'Income',
                                         style: GoogleFonts.inter(
-                                          color: light80Color,
+                                          color: white80,
                                           fontWeight: FontWeight.w500,
                                           fontSize: averageScreenSize * 0.0225,
                                         ),
@@ -247,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                           Text(
                                             '\$',
                                             style: GoogleFonts.inter(
-                                              color: light80Color,
+                                              color: white80,
                                               fontWeight: FontWeight.w600,
                                               fontSize: averageScreenSize * 0.03,
                                             ),
@@ -259,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                 return Text(
                                                   '${snapshot.data!.income}',
                                                   style: GoogleFonts.inter(
-                                                    color: light80Color,
+                                                    color: white80,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: averageScreenSize * 0.03,
                                                   ),
@@ -269,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                   height: screenHeight * 0.05,
                                                   padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02),
                                                   child: LoadingAnimationWidget.halfTriangleDot(
-                                                    color: light80Color,
+                                                    color: white80,
                                                     size: averageScreenSize * 0.025,
                                                   ),
                                                 );
@@ -299,7 +300,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 vertical: screenHeight * 0.01,
                               ),
                               decoration: BoxDecoration(
-                                color: red100Color,
+                                color: red100,
                                 borderRadius: BorderRadius.circular(averageScreenSize * 0.035),
                               ),
                               alignment: Alignment.center,
@@ -314,13 +315,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                       constraints: BoxConstraints(
                                           maxWidth: averageScreenSize * 0.07, maxHeight: averageScreenSize * 0.07),
                                       decoration: BoxDecoration(
-                                        color: light100Color,
+                                        color: white100,
                                         borderRadius: BorderRadius.circular(averageScreenSize * 0.02),
                                       ),
                                       alignment: AlignmentDirectional.center,
                                       child: Icon(
                                         CustomIcons.expense_icons,
-                                        color: red100Color,
+                                        color: red100,
                                         size: averageScreenSize * 0.05,
                                       ),
                                     ),
@@ -331,9 +332,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       Text(
-                                        'Expense',
+                                        languages.expense,
                                         style: GoogleFonts.inter(
-                                          color: light80Color,
+                                          color: white80,
                                           fontWeight: FontWeight.w500,
                                           fontSize: averageScreenSize * 0.0225,
                                         ),
@@ -343,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                           Text(
                                             '\$',
                                             style: GoogleFonts.inter(
-                                              color: light80Color,
+                                              color: white80,
                                               fontWeight: FontWeight.w600,
                                               fontSize: averageScreenSize * 0.03,
                                             ),
@@ -355,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                 return Text(
                                                   '${snapshot.data!.expense}',
                                                   style: GoogleFonts.inter(
-                                                    color: light80Color,
+                                                    color: white80,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: averageScreenSize * 0.03,
                                                   ),
@@ -365,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                                   height: screenHeight * 0.05,
                                                   padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02),
                                                   child: LoadingAnimationWidget.halfTriangleDot(
-                                                    color: light80Color,
+                                                    color: white80,
                                                     size: averageScreenSize * 0.025,
                                                   ),
                                                 );
@@ -388,9 +389,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   Padding(
                     padding: EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.05),
                     child: Text(
-                      'Spend Frequency',
+                      languages.spendFrequency,
                       style: GoogleFonts.inter(
-                        color: dark75Color,
+                        color: black75,
                         fontWeight: FontWeight.w600,
                         fontSize: averageScreenSize * 0.03,
                       ),
@@ -414,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               alignment: ChartAlignment.far,
                               text: '${homeBloc.currentMonth}/${homeBloc.currentYear}',
                               textStyle: GoogleFonts.inter(
-                                color: violet80Color,
+                                color: violet80,
                                 fontWeight: FontWeight.w500,
                                 fontSize: averageScreenSize * 0.02,
                               ),
@@ -428,11 +429,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               majorGridLines: MajorGridLines(
                                 // width: averageScreenSize * 0.0025,
                                 width: averageScreenSize * 0.001,
-                                color: violet20Color,
+                                color: violet20,
                               ),
                               labelRotation: -90,
                               labelStyle: GoogleFonts.inter(
-                                color: violet80Color,
+                                color: violet80,
                                 fontWeight: FontWeight.w600,
                                 fontSize: averageScreenSize * 0.015,
                                 height: averageScreenSize * 0.0021,
@@ -445,10 +446,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                               majorGridLines: MajorGridLines(
                                 // width: averageScreenSize * 0.0025,
                                 width: averageScreenSize * 0.0025,
-                                color: violet20Color,
+                                color: violet20,
                               ),
                               labelStyle: GoogleFonts.inter(
-                                color: violet80Color,
+                                color: violet80,
                                 fontWeight: FontWeight.w600,
                                 fontSize: averageScreenSize * 0.0125,
                               ),
@@ -458,26 +459,26 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 dataSource: snapshot.data!.expensesDataList,
                                 xValueMapper: (datum, index) => datum.x,
                                 yValueMapper: (datum, index) => datum.y,
-                                color: red100Color,
+                                color: red100,
                                 width: averageScreenSize * 0.0025,
                                 markerSettings: MarkerSettings(
                                   isVisible: true,
                                   width: averageScreenSize * 0.0075,
                                   height: averageScreenSize * 0.0075,
-                                  color: violet100Color,
+                                  color: violet100,
                                 ),
                               ),
                               SplineSeries(
                                 dataSource: snapshot.data!.incomeDataList,
                                 xValueMapper: (datum, index) => datum.x,
                                 yValueMapper: (datum, index) => datum.y,
-                                color: green100Color,
+                                color: green100,
                                 width: averageScreenSize * 0.0025,
                                 markerSettings: MarkerSettings(
                                   isVisible: true,
                                   width: averageScreenSize * 0.0075,
                                   height: averageScreenSize * 0.0075,
-                                  color: violet100Color,
+                                  color: violet100,
                                 ),
                               ),
                             ],
@@ -485,7 +486,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         } else {
                           return LoadingAnimationWidget.beat(
                             size: averageScreenSize * 0.05,
-                            color: violet80Color,
+                            color: violet80,
                           );
                         }
                       },
@@ -505,18 +506,18 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                             dividerHeight: 0,
                             splashFactory: NoSplash.splashFactory,
                             labelStyle: GoogleFonts.inter(
-                              color: yellow100Color,
+                              color: yellow100,
                               fontWeight: FontWeight.w700,
                               fontSize: averageScreenSize * 0.025,
                             ),
                             unselectedLabelStyle: GoogleFonts.inter(
-                              color: light0Color,
+                              color: white0,
                               fontWeight: FontWeight.w500,
                               fontSize: averageScreenSize * 0.025,
                             ),
                             indicator: NavBarDecoration(
                               shape: BoxShape.rectangle,
-                              color: yellow20Color,
+                              color: yellow20,
                               borderRadius: BorderRadius.circular(averageScreenSize * 0.05),
                             ),
                             onTap: (value) {},
@@ -525,21 +526,21 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                                 child: Container(
                                   width: screenWidth * 0.3,
                                   alignment: AlignmentDirectional.center,
-                                  child: const Text('Today'),
+                                  child: Text(languages.today),
                                 ),
                               ),
                               Tab(
                                 child: Container(
                                   width: screenWidth * 0.3,
                                   alignment: AlignmentDirectional.center,
-                                  child: const Text('Month'),
+                                  child: Text(languages.month),
                                 ),
                               ),
                               Tab(
                                 child: Container(
                                   width: screenWidth * 0.3,
                                   alignment: AlignmentDirectional.center,
-                                  child: const Text('All'),
+                                  child: Text(languages.all),
                                 ),
                               ),
                             ],
@@ -551,23 +552,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Recent Transaction',
+                              languages.recentTransaction,
                               style: GoogleFonts.inter(
-                                color: dark75Color,
+                                color: black75,
                                 fontWeight: FontWeight.w600,
                                 fontSize: averageScreenSize * 0.03,
                               ),
                             ),
-                            CustomElevatedButton(
+                            CustomButton(
                               width: screenWidth * 0.225,
                               height: screenHeight * 0.045,
-                              borderRadius: averageScreenSize * 0.03,
-                              color: violet20Color,
+                              btnColor: violet20,
                               onPressed: () {},
                               child: Text(
-                                'See All',
+                                languages.seeAll,
                                 style: GoogleFonts.inter(
-                                  color: violet100Color,
+                                  color: violet100,
                                   fontWeight: FontWeight.w500,
                                   fontSize: averageScreenSize * 0.025,
                                 ),
@@ -598,41 +598,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
           ],
         ),
       ),
-      floatingActionButton: GestureDetector(
-        onTap: () {
-          pushWithoutNavBar(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddTransactionScreen(),
-            ),
-          );
-        },
-        child: Container(
-          constraints: BoxConstraints(
-            minWidth: averageScreenSize * 0.1,
-            maxWidth: averageScreenSize * 0.1,
-            minHeight: averageScreenSize * 0.1,
-            maxHeight: averageScreenSize * 0.1,
-          ),
-          decoration: BoxDecoration(
-            color: violet20Color,
-            borderRadius: BorderRadius.circular(averageScreenSize * 0.04),
-          ),
-          child: Icon(
-            CustomIcons.add_icon,
-            color: violet100Color,
-            size: averageScreenSize * 0.02,
-          ),
-        ),
-      ),
     );
-  }
-
-  @override
-  void dispose() {
-    debugPrint('--------dispose--------->called');
-    // TODO: implement dispose
-    super.dispose();
-    homeBloc.dispose();
   }
 }

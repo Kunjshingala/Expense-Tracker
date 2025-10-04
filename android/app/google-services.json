@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "239676754306-rr3o0je51vhvqdnhdgsa4fsd50vq71vq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.expense.tracker",
+            "certificate_hash": "e3bdafcf32a11a5974b2683d76717870dc27a5b6"
+          }
+        },
+        {
           "client_id": "239676754306-r3q3ru13mdlm3b0qbaaquand9sidq6sh.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -30,6 +38,13 @@
             {
               "client_id": "239676754306-r3q3ru13mdlm3b0qbaaquand9sidq6sh.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "239676754306-pqtsihq8akp2rd3u5s6bfuc61l6a11ho.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.expense.tracker"
+              }
             }
           ]
         }

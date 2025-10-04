@@ -1,4 +1,4 @@
-import 'package:expense_tracker/ui/screens/navigation/home/home_widget/home_tab_pages/month_trans_tab/home_month_trans_tab_bloc.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -9,6 +9,7 @@ import '../../../../../../../utils/colors.dart';
 import '../../../../../../../utils/dimens.dart';
 import '../../../../../../../utils/transaction_data.dart';
 import '../../../../../manage_transaction/update_transaction/update_transaction_screen.dart';
+import 'home_month_trans_tab_bloc.dart';
 
 class HomeMonthTabPage extends StatefulWidget {
   const HomeMonthTabPage({super.key});
@@ -21,18 +22,10 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
   late HomeMonthTabBloc homeMonthTabBloc;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    homeMonthTabBloc = HomeMonthTabBloc(context: context);
-  }
-
-  @override
   void didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-
+    homeMonthTabBloc = HomeMonthTabBloc(context: context);
     await homeMonthTabBloc.getThisMonthTransaction();
+    super.didChangeDependencies();
   }
 
   @override
@@ -48,10 +41,10 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
               return Container(
                 alignment: AlignmentDirectional.center,
                 child: Text(
-                  'No Transaction has been \ndone in this month!',
+                  languages.noTransactionFoundMonth,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
-                    color: dark50Color,
+                    color: black50,
                     fontWeight: FontWeight.w500,
                     fontSize: averageScreenSize * 0.025,
                   ),
@@ -74,7 +67,7 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: light40Color,
+                        color: white40,
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.03),
                       ),
                       padding: EdgeInsetsDirectional.symmetric(
@@ -106,7 +99,7 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
                                     Text(
                                       getCategoryModalById(transactionModal.category).label,
                                       style: GoogleFonts.inter(
-                                        color: dark50Color,
+                                        color: black50,
                                         fontWeight: FontWeight.w500,
                                         fontSize: averageScreenSize * 0.03,
                                       ),
@@ -116,10 +109,9 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
                                           ? '-${transactionModal.amount}'
                                           : '+${transactionModal.amount}',
                                       style: GoogleFonts.inter(
-                                        color:
-                                            transactionModal.transactionType == TransactionType.expense.index
-                                                ? red100Color
-                                                : green100Color,
+                                        color: transactionModal.transactionType == TransactionType.expense.index
+                                            ? red100
+                                            : green100,
                                         fontWeight: FontWeight.w600,
                                         fontSize: averageScreenSize * 0.03,
                                       ),
@@ -136,7 +128,7 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
                                       child: Text(
                                         transactionModal.description ?? '',
                                         style: GoogleFonts.inter(
-                                          color: light0Color,
+                                          color: white0,
                                           fontWeight: FontWeight.w500,
                                           fontSize: averageScreenSize * 0.025,
                                         ),
@@ -148,7 +140,7 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
                                         transactionModal.date,
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.inter(
-                                          color: light0Color,
+                                          color: white0,
                                           fontWeight: FontWeight.w500,
                                           fontSize: averageScreenSize * 0.025,
                                         ),
@@ -175,7 +167,7 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
               alignment: AlignmentDirectional.center,
               child: LoadingAnimationWidget.staggeredDotsWave(
                 size: averageScreenSize * 0.06,
-                color: violet80Color,
+                color: violet80,
               ),
             );
           }
@@ -186,8 +178,7 @@ class _HomeMonthTabPageState extends State<HomeMonthTabPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     homeMonthTabBloc.dispose();
+    super.dispose();
   }
 }

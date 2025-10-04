@@ -1,15 +1,17 @@
-import 'package:expense_tracker/ui/screens/authentication/sign_in/login/login_screen.dart';
-import 'package:expense_tracker/ui/screens/authentication/sign_up/sign_up_bloc.dart';
-import 'package:expense_tracker/utils/colors.dart';
-import 'package:expense_tracker/utils/custom_icons.dart';
-import 'package:expense_tracker/utils/dimens.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../common_view/main_eleveted_button.dart';
+import '../../../../utils/colors.dart';
+import '../../../../utils/constant.dart';
+import '../../../../utils/custom_icons.dart';
+import '../../../common_view/common_button.dart';
+import '../../../common_view/snack_bar.dart';
+import '../sign_in/login/login_screen.dart';
+import 'sign_up_bloc.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -22,16 +24,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late SignUpBloc signUpBloc;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
     signUpBloc = SignUpBloc(context: context);
+    super.didChangeDependencies();
   }
 
   @override
@@ -40,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leadingWidth: screenWidth * 0.12,
-        backgroundColor: light100Color,
+        backgroundColor: white100,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -49,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: EdgeInsetsDirectional.only(start: screenWidth * 0.03),
             child: Icon(
               CustomIcons.arrow_left_icons,
-              color: dark50Color,
+              color: black50,
               size: averageScreenSize * 0.06,
               weight: 1,
             ),
@@ -57,18 +52,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
         centerTitle: true,
         title: Text(
-          'Sign Up',
+          languages.signUp,
           style: GoogleFonts.inter(
-            color: dark50Color,
+            color: black50,
             fontWeight: FontWeight.w600,
             fontSize: averageScreenSize * 0.035,
           ),
         ),
       ),
-      backgroundColor: light100Color,
+      backgroundColor: white100,
       body: Padding(
-        padding:
-            EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.08),
+        padding: EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.08),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -77,9 +71,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               TextFormField(
                 controller: signUpBloc.nameController,
-                cursorColor: light0Color,
+                cursorColor: white0,
                 style: GoogleFonts.inter(
-                  color: dark25Color,
+                  color: black25,
                   fontWeight: FontWeight.w500,
                   fontSize: averageScreenSize * 0.03,
                 ),
@@ -91,9 +85,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     minWidth: screenWidth - (screenWidth * 0.1),
                     maxWidth: screenWidth - (screenWidth * 0.1),
                   ),
-                  hintText: 'Name',
+                  hintText: languages.name,
                   hintStyle: GoogleFonts.inter(
-                    color: light0Color,
+                    color: white0,
                     fontWeight: FontWeight.w400,
                     fontSize: averageScreenSize * 0.03,
                   ),
@@ -102,11 +96,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     horizontal: screenWidth * 0.05,
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: light20Color),
+                    borderSide: const BorderSide(color: white20),
                     borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: light20Color),
+                    borderSide: const BorderSide(color: white20),
                     borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                   ),
                 ),
@@ -118,9 +112,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 builder: (context, snapshot) {
                   return TextFormField(
                     controller: signUpBloc.emailController,
-                    cursorColor: light0Color,
+                    cursorColor: white0,
                     style: GoogleFonts.inter(
-                      color: dark25Color,
+                      color: black25,
                       fontWeight: FontWeight.w500,
                       fontSize: averageScreenSize * 0.03,
                     ),
@@ -135,9 +129,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         minWidth: screenWidth - (screenWidth * 0.1),
                         maxWidth: screenWidth - (screenWidth * 0.1),
                       ),
-                      hintText: 'Email',
+                      hintText: languages.email,
                       hintStyle: GoogleFonts.inter(
-                        color: light0Color,
+                        color: white0,
                         fontWeight: FontWeight.w400,
                         fontSize: averageScreenSize * 0.03,
                       ),
@@ -146,11 +140,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         horizontal: screenWidth * 0.05,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: snapshot.data ?? true ? light20Color : red100Color),
+                        borderSide: BorderSide(color: snapshot.data ?? true ? white20 : red100),
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: snapshot.data ?? true ? light20Color : red100Color),
+                        borderSide: BorderSide(color: snapshot.data ?? true ? white20 : red100),
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                       ),
                     ),
@@ -171,14 +165,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       return Container(
                         width: screenWidth,
                         alignment: AlignmentDirectional.centerStart,
-                        padding:
-                            EdgeInsetsDirectional.only(start: screenWidth * 0.02, top: screenHeight * 0.01),
+                        padding: EdgeInsetsDirectional.only(start: screenWidth * 0.02, top: screenHeight * 0.01),
                         child: Column(
                           children: [
                             Text(
-                              'Enter Valid Email.',
+                              languages.emailValidationMsg,
                               style: GoogleFonts.inter(
-                                color: red100Color,
+                                color: red100,
                               ),
                             ),
                           ],
@@ -197,9 +190,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   return TextFormField(
                     controller: signUpBloc.passwordController,
                     obscureText: snapshot.hasData ? snapshot.data! : true,
-                    cursorColor: light0Color,
+                    cursorColor: white0,
                     style: GoogleFonts.inter(
-                      color: dark25Color,
+                      color: black25,
                       fontWeight: FontWeight.w500,
                       fontSize: averageScreenSize * 0.03,
                     ),
@@ -211,9 +204,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         minWidth: screenWidth - (screenWidth * 0.1),
                         maxWidth: screenWidth - (screenWidth * 0.1),
                       ),
-                      hintText: 'Password',
+                      hintText: languages.password,
                       hintStyle: GoogleFonts.inter(
-                        color: light0Color,
+                        color: white0,
                         fontWeight: FontWeight.w400,
                         fontSize: averageScreenSize * 0.03,
                       ),
@@ -223,24 +216,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       suffixIcon: IconButton(
                         onPressed: () {
-                          signUpBloc
-                              .setIsShowPassword(!(signUpBloc.isShowPasswordSubject.valueOrNull ?? true));
+                          signUpBloc.setIsShowPassword(!(signUpBloc.isShowPasswordSubject.valueOrNull ?? true));
                         },
                         icon: snapshot.hasData
                             ? snapshot.data!
                                 ? Icon(
                                     CustomIcons.show_icons,
-                                    color: light0Color,
+                                    color: white0,
                                     size: averageScreenSize * 0.06,
                                     weight: 1,
                                   )
                                 : const Icon(
                                     CupertinoIcons.eye_slash,
-                                    color: light0Color,
+                                    color: white0,
                                   )
                             : const Icon(
                                 CupertinoIcons.eye_slash,
-                                color: light0Color,
+                                color: white0,
                               ),
                       ),
                       suffixIconConstraints: BoxConstraints(
@@ -248,11 +240,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         maxHeight: averageScreenSize * 0.1,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: light20Color),
+                        borderSide: const BorderSide(color: white20),
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: light20Color),
+                        borderSide: const BorderSide(color: white20),
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.025),
                       ),
                     ),
@@ -275,7 +267,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                         shape: ContinuousRectangleBorder(
                           borderRadius: BorderRadius.circular(averageScreenSize * 0.01),
-                          side: const BorderSide(color: violet100Color),
+                          side: const BorderSide(color: violet100),
                         ),
                       );
                     },
@@ -285,17 +277,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'By signing up, you agree to the ',
+                            text: languages.term1Text,
                             style: GoogleFonts.inter(
-                              color: dark100Color,
+                              color: black100,
                               fontWeight: FontWeight.w500,
                               fontSize: averageScreenSize * 0.025,
                             ),
                           ),
                           TextSpan(
-                            text: 'Terms of Service and Privacy Policy',
+                            text: " ${languages.term2Text}",
                             style: GoogleFonts.inter(
-                              color: violet100Color,
+                              color: violet100,
                               fontWeight: FontWeight.w500,
                               fontSize: averageScreenSize * 0.025,
                             ),
@@ -308,86 +300,90 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ],
               ),
               SizedBox(height: screenHeight * 0.03),
-              CustomElevatedButton(
+              CustomButton(
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.07,
-                borderRadius: averageScreenSize * 0.03,
-                color: violet100Color,
                 onPressed: () {
-                  signUpBloc.createUserWithEmailPassword();
+                  if (signUpBloc.checkButtonEligible()) {
+                    signUpBloc.createUserWithEmailPassword();
+                  } else {
+                    showMySnackBar(message: languages.fieldValidationMsg, messageType: MessageType.warning);
+                  }
                 },
                 child: Text(
-                  'Sign Up',
+                  languages.signUp,
                   style: GoogleFonts.inter(
-                    color: light80Color,
+                    color: white80,
                     fontWeight: FontWeight.w600,
                     fontSize: averageScreenSize * 0.025,
                   ),
                 ),
               ),
-              SizedBox(height: screenHeight * 0.020),
-              Text(
-                'Or with',
-                style: GoogleFonts.inter(
-                  color: light0Color,
-                  fontWeight: FontWeight.w500,
-                  fontSize: averageScreenSize * 0.025,
+
+              if (isGoogleLogin) ...[
+                SizedBox(height: screenHeight * 0.020),
+                Text(
+                  languages.orWith,
+                  style: GoogleFonts.inter(
+                    color: white0,
+                    fontWeight: FontWeight.w500,
+                    fontSize: averageScreenSize * 0.025,
+                  ),
                 ),
-              ),
-              SizedBox(height: screenHeight * 0.020),
-              CustomElevatedButton(
-                width: screenWidth * 0.9,
-                height: screenHeight * 0.07,
-                borderRadius: averageScreenSize * 0.03,
-                color: light100Color,
-                borderColor: light20Color,
-                onPressed: () {
-                  signUpBloc.signInWithGoogle();
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      'assets/fonts/third_party_icon/google_icons.svg',
-                      width: averageScreenSize * 0.05,
-                      height: averageScreenSize * 0.05,
-                    ),
-                    SizedBox(width: screenWidth * 0.03),
-                    Text(
-                      'Sign Up with Google',
-                      style: GoogleFonts.inter(
-                        color: dark50Color,
-                        fontWeight: FontWeight.w600,
-                        fontSize: averageScreenSize * 0.026,
+                SizedBox(height: screenHeight * 0.020),
+                CustomButton(
+                  width: screenWidth * 0.9,
+                  height: screenHeight * 0.07,
+                  btnColor: white100,
+                  borderColor: white20,
+                  onPressed: () {
+                    signUpBloc.signInWithGoogle();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        'assets/fonts/third_party_icon/google_icons.svg',
+                        width: averageScreenSize * 0.05,
+                        height: averageScreenSize * 0.05,
                       ),
-                    ),
-                  ],
+                      SizedBox(width: screenWidth * 0.03),
+                      Text(
+                        languages.signUpWithGoogle,
+                        style: GoogleFonts.inter(
+                          color: black50,
+                          fontWeight: FontWeight.w600,
+                          fontSize: averageScreenSize * 0.026,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
+
               SizedBox(height: screenHeight * 0.03),
               RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Already have an account?  ',
+                      text: '${languages.alreadyHaveAnAccount} ',
                       style: GoogleFonts.inter(
-                        color: light0Color,
+                        color: white0,
                         fontWeight: FontWeight.w500,
                         fontSize: averageScreenSize * 0.028,
                       ),
                     ),
                     TextSpan(
-                      text: 'Login',
+                      text: languages.login,
                       style: GoogleFonts.inter(
-                        color: violet100Color,
+                        color: violet100,
                         fontWeight: FontWeight.w600,
                         fontSize: averageScreenSize * 0.028,
                         decoration: TextDecoration.underline,
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.push(
-                              context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
                         },
                     ),
                   ],
@@ -402,8 +398,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     signUpBloc.dispose();
+    super.dispose();
   }
 }

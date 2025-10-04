@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:expense_tracker/ui/common_view/snack_bar_content.dart';
-import 'package:expense_tracker/utils/constant.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../ui/common_view/snack_bar.dart';
+import '../../utils/constant.dart';
 
 /// Location Services Status.
 Future<bool> getLocationServiceStatus(BuildContext context) async {
@@ -21,8 +23,7 @@ Future<bool> getLocationServiceStatus(BuildContext context) async {
       return true;
     } else {
       if (context.mounted) {
-        showMySnackBar(
-            message: 'This feature cant use, Enable location services', messageType: MessageType.warning);
+        showMySnackBar(message: languages.locationServiceInfoMsg, messageType: MessageType.warning);
       }
       return false;
     }
@@ -51,8 +52,7 @@ Future<bool> getLocationPermission() async {
     }
 
     if (permission == LocationPermission.denied) {
-      showMySnackBar(
-          message: 'Please allow permission to use this permission.', messageType: MessageType.warning);
+      showMySnackBar(message: languages.locationServiceMsg, messageType: MessageType.warning);
       return false;
     }
   }
@@ -65,8 +65,7 @@ Future<bool> getLocationPermission() async {
     }
 
     if (permission == LocationPermission.denied) {
-      showMySnackBar(
-          message: 'Please allow permission to use this permission.', messageType: MessageType.warning);
+      showMySnackBar(message: languages.locationServiceMsg, messageType: MessageType.warning);
 
       return false;
     }
@@ -93,7 +92,7 @@ Future<bool> checkStoragePermission() async {
       if (status[Permission.storage]!.isGranted) {
         return true;
       } else {
-        showMySnackBar(message: 'Storage Permission Needed', messageType: MessageType.warning);
+        showMySnackBar(message: languages.storagePermissionMsg, messageType: MessageType.warning);
 
         return false;
       }
@@ -104,7 +103,7 @@ Future<bool> checkStoragePermission() async {
             if (status[Permission.storage]!.isGranted) {
               return true;
             } else {
-              showMySnackBar(message: 'Storage Permission Needed', messageType: MessageType.warning);
+              showMySnackBar(message: languages.storagePermissionMsg, messageType: MessageType.warning);
               return false;
             }
           } else {
@@ -133,7 +132,7 @@ Future<bool> checkCameraPermission() async {
     if (status[Permission.camera]!.isGranted) {
       return true;
     } else {
-      showMySnackBar(message: 'Camera Permission Needed', messageType: MessageType.warning);
+      showMySnackBar(message: languages.cameraPermissionMsg, messageType: MessageType.warning);
     }
   } else if (status[Permission.camera]!.isPermanentlyDenied) {
     openAppSettings().then(
@@ -143,7 +142,7 @@ Future<bool> checkCameraPermission() async {
           if (status[Permission.camera]!.isGranted) {
             return true;
           } else {
-            showMySnackBar(message: 'Camera Permission Needed', messageType: MessageType.warning);
+            showMySnackBar(message: languages.cameraPermissionMsg, messageType: MessageType.warning);
 
             return false;
           }

@@ -1,12 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:expense_tracker/ui/screens/authentication/sign_in/login/login_screen.dart';
-import 'package:expense_tracker/utils/dimens.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../utils/colors.dart';
-import '../../common_view/main_eleveted_button.dart';
+import '../../../utils/dimens.dart';
+import '../../common_view/common_button.dart';
+import '../authentication/sign_in/login/login_screen.dart';
 import '../authentication/sign_up/sign_up_screen.dart';
 import 'intro_bloc.dart';
 
@@ -22,16 +23,15 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
     introBloc = IntroBloc();
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: light100Color,
+        color: white100,
         width: screenWidth,
         height: screenHeight,
         child: Stack(
@@ -51,38 +51,37 @@ class _IntroScreenState extends State<IntroScreen> {
                         autoPlay: false,
                         scrollDirection: Axis.horizontal,
                         onPageChanged: (index, reason) {
-                          introBloc.setPageIndex(index);
-                          debugPrint('onPageChanged()---------------------------------->$index , $reason');
+                          introBloc.pageIndexSubject.sink.add(index);
                         },
                       ),
-                      items: const [
+                      items: [
                         IntroPage(
                           image: 'assets/images/intro_1.png',
-                          text1: 'Gain total control of your money',
-                          text2: 'Become your own money manager and make every cent count',
+                          text1: languages.onBoardingPage1Title,
+                          text2: languages.onBoardingPage1Message,
                         ),
                         IntroPage(
                           image: 'assets/images/intro_2.png',
-                          text1: 'Know where your money goes',
-                          text2: 'Track your transaction easily, with categories and financial report ',
+                          text1: languages.onBoardingPage2Title,
+                          text2: languages.onBoardingPage2Message,
                         ),
                         IntroPage(
                           image: 'assets/images/intro_3.png',
-                          text1: 'Planning ahead',
-                          text2: 'Setup your budget for each category so you in control',
+                          text1: languages.onBoardingPage3Title,
+                          text2: languages.onBoardingPage3Message,
                         ),
                       ],
                     ),
                   ),
                   StreamBuilder<int>(
-                    stream: introBloc.getPageIndex,
+                    stream: introBloc.pageIndexSubject.stream,
                     builder: (context, snapshot) {
                       return DotsIndicator(
                         dotsCount: 3,
                         position: snapshot.data ?? 0,
                         decorator: DotsDecorator(
                           color: const Color(0xffEEE5FF),
-                          activeColor: violet100Color,
+                          activeColor: violet100,
                           size: Size.fromRadius(averageScreenSize * 0.006),
                           activeSize: Size.fromRadius(averageScreenSize * 0.013),
                         ),
@@ -98,36 +97,26 @@ class _IntroScreenState extends State<IntroScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CustomElevatedButton(
+                  CustomButton(
                     width: screenWidth * 0.9,
                     height: screenHeight * 0.07,
-                    borderRadius: averageScreenSize * 0.03,
-                    color: violet100Color,
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
                     },
-                    child: Text(
-                      'Sign Up',
-                      style: GoogleFonts.inter(
-                        color: light80Color,
-                        fontWeight: FontWeight.w600,
-                        fontSize: averageScreenSize * 0.025,
-                      ),
-                    ),
+                    text: languages.signUp,
                   ),
                   SizedBox(height: screenHeight * 0.02),
-                  CustomElevatedButton(
+                  CustomButton(
                     width: screenWidth * 0.9,
                     height: screenHeight * 0.07,
-                    borderRadius: averageScreenSize * 0.03,
-                    color: violet20Color,
+                    btnColor: violet20,
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
                     },
                     child: Text(
-                      'Login',
+                      languages.login,
                       style: GoogleFonts.inter(
-                        color: violet100Color,
+                        color: violet100,
                         fontWeight: FontWeight.w600,
                         fontSize: averageScreenSize * 0.025,
                       ),
@@ -144,9 +133,8 @@ class _IntroScreenState extends State<IntroScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     introBloc.dispose();
+    super.dispose();
   }
 }
 
@@ -181,7 +169,7 @@ class _IntroPageState extends State<IntroPage> {
                 widget.text1,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
-                  color: dark50Color,
+                  color: black50,
                   fontWeight: FontWeight.w700,
                   fontSize: averageScreenSize * 0.05,
                   height: screenHeight * 0.0015,
@@ -192,7 +180,7 @@ class _IntroPageState extends State<IntroPage> {
                 widget.text2,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
-                  color: light20Color,
+                  color: white20,
                   fontWeight: FontWeight.w500,
                   fontSize: averageScreenSize * 0.025,
                 ),

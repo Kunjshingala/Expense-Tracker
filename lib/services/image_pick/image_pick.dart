@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:expense_tracker/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../utils/colors.dart';
 import '../permission_handle/permission_handle.dart';
 
 Future<File?> captureAndCropImage(BuildContext context) async {
@@ -48,17 +48,15 @@ Future<File> cropImage(BuildContext context, File sourceFile) async {
       uiSettings: [
         AndroidUiSettings(
             toolbarTitle: 'Image Cropper',
-            toolbarColor: violet100Color,
-            toolbarWidgetColor: light100Color,
-            activeControlsWidgetColor: violet100Color,
-            cropGridColor: violet20Color,
+            toolbarColor: violet100,
+            toolbarWidgetColor: white100,
+            activeControlsWidgetColor: violet100,
+            cropGridColor: violet20,
             lockAspectRatio: false,
             initAspectRatio: CropAspectRatioPreset.original,
             aspectRatioPresets: [CropAspectRatioPreset.square]),
         IOSUiSettings(
-            title: 'Image Cropper',
-            aspectRatioLockEnabled: true,
-            aspectRatioPresets: [CropAspectRatioPreset.square]),
+            title: 'Image Cropper', aspectRatioLockEnabled: true, aspectRatioPresets: [CropAspectRatioPreset.square]),
         WebUiSettings(context: context),
       ]);
 

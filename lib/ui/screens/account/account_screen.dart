@@ -1,5 +1,7 @@
-import 'package:expense_tracker/ui/screens/account/account_bloc.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
+
+import 'account_bloc.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -13,24 +15,22 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
     accountBloc = AccountBloc(context: context);
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('Account'),
+        child: Text(languages.account),
       ),
     );
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     accountBloc.dispose();
+    super.dispose();
   }
 }

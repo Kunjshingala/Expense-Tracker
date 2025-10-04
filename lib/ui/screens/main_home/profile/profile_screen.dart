@@ -1,12 +1,13 @@
-import 'package:expense_tracker/ui/screens/navigation/profile/profile_bloc.dart';
-import 'package:expense_tracker/utils/colors.dart';
-import 'package:expense_tracker/utils/dimens.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../modals/local_modal/profile_screen_modal.dart';
+import '../../../../utils/colors.dart';
 import '../../../../utils/custom_icons.dart';
+import '../../../../utils/dimens.dart';
+import 'profile_bloc.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -20,22 +21,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
     profileBloc = ProfileBloc(context: context);
 
+    // Todo: Add this at bloc
     profileBloc.getProfileFeatureList();
     profileBloc.getBasicDetails();
+
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: light60Color,
+        backgroundColor: white60,
         toolbarHeight: screenHeight * 0.05,
       ),
-      backgroundColor: light60Color,
+      backgroundColor: white60,
       body: Padding(
         padding: EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.05),
         child: SingleChildScrollView(
@@ -58,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: violet80Color,
+                                color: violet80,
                                 width: averageScreenSize * 0.004,
                               ),
                             ),
@@ -74,8 +76,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       highlightColor: shimmerHighlightColor,
                                       child: CircleAvatar(
                                         radius: averageScreenSize * 0.1,
-                                        foregroundColor: dark100Color,
-                                        backgroundColor: dark100Color,
+                                        foregroundColor: black100,
+                                        backgroundColor: black100,
                                       ),
                                     ),
                             ),
@@ -96,18 +98,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'UserName',
+                                    languages.userName,
                                     style: GoogleFonts.inter(
-                                      color: light20Color,
+                                      color: white20,
                                       fontWeight: FontWeight.w500,
                                       fontSize: averageScreenSize * 0.025,
                                     ),
                                   ),
                                   snapshot.hasData
                                       ? Text(
-                                          snapshot.hasData ? snapshot.data!.name : 'Set your name',
+                                          snapshot.hasData ? snapshot.data!.name : languages.setYourName,
                                           style: GoogleFonts.inter(
-                                            color: dark75Color,
+                                            color: black75,
                                             fontWeight: FontWeight.w600,
                                             fontSize: averageScreenSize * 0.045,
                                           ),
@@ -119,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             width: screenWidth * 0.4,
                                             height: screenHeight * 0.035,
                                             decoration: BoxDecoration(
-                                              color: dark100Color,
+                                              color: black100,
                                               borderRadius: BorderRadius.circular(averageScreenSize * 0.01),
                                             ),
                                           ),
@@ -129,13 +131,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                debugPrint(
-                                    '--------------------------------------------------------------------> EditAccount Icon Tap');
                                 profileBloc.editName();
                               },
                               child: Icon(
                                 CustomIcons.edit_icons,
-                                color: dark50Color,
+                                color: black50,
                                 size: averageScreenSize * 0.06,
                               ),
                             )
@@ -148,8 +148,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Material(
                 elevation: averageScreenSize * 0.001,
                 borderRadius: BorderRadius.circular(averageScreenSize * 0.03),
-                color: light100Color,
-                shadowColor: light60Color,
+                color: white100,
+                shadowColor: white60,
                 child: Container(
                   constraints: BoxConstraints(
                     minWidth: screenWidth - screenWidth * 0.1,
@@ -190,7 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Text(
                                 profileBloc.profileFeatureOptionList[index].label,
                                 style: GoogleFonts.inter(
-                                  color: dark50Color,
+                                  color: black50,
                                   fontWeight: FontWeight.w500,
                                   fontSize: averageScreenSize * 0.027,
                                 ),
@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     separatorBuilder: (context, index) {
                       return Divider(
-                        color: light40Color,
+                        color: white40,
                         thickness: averageScreenSize * 0.002,
                         height: screenHeight * 0.01,
                       );

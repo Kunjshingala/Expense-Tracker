@@ -1,8 +1,9 @@
+import 'package:expense_tracker/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../../../../common_view/snack_bar_content.dart';
+import '../../../../common_view/snack_bar.dart';
 import 'forgot_password_email_sent_screen.dart';
 
 class ForgotPasswordBloc {
@@ -15,7 +16,9 @@ class ForgotPasswordBloc {
   final emailController = TextEditingController();
 
   final isEmailEligibleSubject = BehaviorSubject<bool>();
+
   Stream<bool> get getIsEmailEligible => isEmailEligibleSubject.stream;
+
   Function(bool) get setIsEmailEligible => isEmailEligibleSubject.add;
 
   bool checkButtonEligible() {
@@ -43,13 +46,12 @@ class ForgotPasswordBloc {
 
       if (context.mounted) {
         if (context.mounted) {
-          showMySnackBar(message: 'Sent Successfully', messageType: MessageType.success);
+          showMySnackBar(message: languages.sentSuccessfully);
         }
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(
-              builder: (context) => ForgotPasswordEmailSentScreen(email: emailController.text.trim())),
+          MaterialPageRoute(builder: (context) => ForgotPasswordEmailSentScreen(email: emailController.text.trim())),
           (route) => false,
         );
       }
@@ -89,14 +91,14 @@ class ForgotPasswordBloc {
       }
     } catch (e) {
       if (context.mounted) {
-        showMySnackBar(message: 'Something went wrong', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       }
     }
 
     if (isReadyToSend) {
     } else {
       if (context.mounted) {
-        showMySnackBar(message: 'Fill all Required detail', messageType: MessageType.warning);
+        showMySnackBar(message: languages.fieldValidationMsg, messageType: MessageType.warning);
       }
     }
   }

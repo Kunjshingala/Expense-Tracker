@@ -1,3 +1,4 @@
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -8,31 +9,28 @@ import '../../../../../../../utils/colors.dart';
 import '../../../../../../../utils/dimens.dart';
 import '../../../../../../../utils/transaction_data.dart';
 import '../../../../../manage_transaction/update_transaction/update_transaction_screen.dart';
-import 'home_all_trans_tab_bloc.dart';
+import 'home_today_trans_tab_bloc.dart';
 
-class HomeAllTabPage extends StatefulWidget {
-  const HomeAllTabPage({super.key});
+class HomeTodayTabPage extends StatefulWidget {
+  const HomeTodayTabPage({super.key});
 
   @override
-  State<HomeAllTabPage> createState() => _HomeAllTabPageState();
+  State<HomeTodayTabPage> createState() => _HomeTodayTabPageState();
 }
 
-class _HomeAllTabPageState extends State<HomeAllTabPage> {
-  late HomeAllTabBloc homeAllTabBloc;
+class _HomeTodayTabPageState extends State<HomeTodayTabPage> {
+  late HomeTodayTabBloc homeTodayTabBloc;
 
   @override
   void initState() {
-    // TODO: implement initState
+    homeTodayTabBloc = HomeTodayTabBloc(context: context);
     super.initState();
-    homeAllTabBloc = HomeAllTabBloc(context: context);
   }
 
   @override
   void didChangeDependencies() async {
-    // TODO: implement didChangeDependencies
+    await homeTodayTabBloc.getTodayTransaction();
     super.didChangeDependencies();
-
-    await homeAllTabBloc.getThisAllTransaction();
   }
 
   @override
@@ -40,7 +38,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
     return SizedBox(
       height: screenHeight * 0.5,
       child: StreamBuilder<List<TransactionModal>?>(
-        stream: homeAllTabBloc.getTransactionList,
+        stream: homeTodayTabBloc.getTransactionList,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             debugPrint('---------------------------------->snapshot.hasData');
@@ -48,10 +46,10 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
               return Container(
                 alignment: AlignmentDirectional.center,
                 child: Text(
-                  'No Transaction History. \nOR\nYou Never done transaction.',
+                  languages.noTransactionFoundToday,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
-                    color: dark50Color,
+                    color: black50,
                     fontWeight: FontWeight.w500,
                     fontSize: averageScreenSize * 0.025,
                   ),
@@ -64,6 +62,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                 itemBuilder: (context, index) {
                   final transactionModal = snapshot.data![index];
                   return GestureDetector(
+                    behavior: HitTestBehavior.translucent,
                     onTap: () {
                       pushWithoutNavBar(
                         context,
@@ -74,7 +73,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: light40Color,
+                        color: white40,
                         borderRadius: BorderRadius.circular(averageScreenSize * 0.03),
                       ),
                       padding: EdgeInsetsDirectional.symmetric(
@@ -106,7 +105,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                                     Text(
                                       getCategoryModalById(transactionModal.category).label,
                                       style: GoogleFonts.inter(
-                                        color: dark50Color,
+                                        color: black50,
                                         fontWeight: FontWeight.w500,
                                         fontSize: averageScreenSize * 0.03,
                                       ),
@@ -116,10 +115,9 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                                           ? '-${transactionModal.amount}'
                                           : '+${transactionModal.amount}',
                                       style: GoogleFonts.inter(
-                                        color:
-                                            transactionModal.transactionType == TransactionType.expense.index
-                                                ? red100Color
-                                                : green100Color,
+                                        color: transactionModal.transactionType == TransactionType.expense.index
+                                            ? red100
+                                            : green100,
                                         fontWeight: FontWeight.w600,
                                         fontSize: averageScreenSize * 0.03,
                                       ),
@@ -136,7 +134,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                                       child: Text(
                                         transactionModal.description ?? '',
                                         style: GoogleFonts.inter(
-                                          color: light0Color,
+                                          color: white0,
                                           fontWeight: FontWeight.w500,
                                           fontSize: averageScreenSize * 0.025,
                                         ),
@@ -148,7 +146,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                                         transactionModal.date,
                                         textAlign: TextAlign.end,
                                         style: GoogleFonts.inter(
-                                          color: light0Color,
+                                          color: white0,
                                           fontWeight: FontWeight.w500,
                                           fontSize: averageScreenSize * 0.025,
                                         ),
@@ -175,7 +173,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
               alignment: AlignmentDirectional.center,
               child: LoadingAnimationWidget.staggeredDotsWave(
                 size: averageScreenSize * 0.06,
-                color: violet80Color,
+                color: violet80,
               ),
             );
           }
@@ -186,8 +184,7 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    homeTodayTabBloc.dispose();
     super.dispose();
-    homeAllTabBloc.dispose();
   }
 }

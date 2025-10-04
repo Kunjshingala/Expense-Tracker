@@ -1,10 +1,11 @@
-import 'package:expense_tracker/ui/screens/authentication/sign_in/login/login_screen.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../utils/colors.dart';
 import '../../../../../utils/dimens.dart';
-import '../../../../common_view/main_eleveted_button.dart';
+import '../../../../common_view/common_button.dart';
+import '../login/login_screen.dart';
 
 class ForgotPasswordEmailSentScreen extends StatelessWidget {
   const ForgotPasswordEmailSentScreen({super.key, required this.email});
@@ -14,7 +15,7 @@ class ForgotPasswordEmailSentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: light100Color,
+      backgroundColor: white100,
       body: Container(
         width: screenWidth,
         height: screenHeight,
@@ -40,9 +41,9 @@ class ForgotPasswordEmailSentScreen extends StatelessWidget {
                       fit: BoxFit.contain,
                     ),
                     Text(
-                      'Your email is on the way',
+                      languages.yourEmailIsOnTheWay,
                       style: GoogleFonts.inter(
-                        color: dark100Color,
+                        color: black100,
                         fontWeight: FontWeight.w600,
                         fontSize: averageScreenSize * 0.04,
                       ),
@@ -51,10 +52,10 @@ class ForgotPasswordEmailSentScreen extends StatelessWidget {
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: screenWidth - (screenWidth * 0.25)),
                       child: Text(
-                        'Check your email $email and follow the instructions to reset your password from email',
+                        languages.checkEmailMsg(email),
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(
-                          color: dark100Color,
+                          color: black100,
                           fontWeight: FontWeight.w500,
                           fontSize: averageScreenSize * 0.025,
                         ),
@@ -66,11 +67,9 @@ class ForgotPasswordEmailSentScreen extends StatelessWidget {
             ),
             Positioned(
               bottom: screenHeight * 0.04,
-              child: CustomElevatedButton(
+              child: CustomButton(
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.07,
-                borderRadius: averageScreenSize * 0.03,
-                color: violet100Color,
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,
@@ -79,9 +78,9 @@ class ForgotPasswordEmailSentScreen extends StatelessWidget {
                   );
                 },
                 child: Text(
-                  'Continue',
+                  languages.continue_,
                   style: GoogleFonts.inter(
-                    color: light80Color,
+                    color: white80,
                     fontWeight: FontWeight.w600,
                     fontSize: averageScreenSize * 0.025,
                   ),

@@ -1,14 +1,19 @@
+import 'package:expense_tracker/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../../../common_view/snack_bar_content.dart';
-import '../../navigation/main_navigation_screen.dart';
+import '../../../../utils/utils.dart';
+import '../../../common_view/snack_bar.dart';
+import '../../main_home/main_navigation_screen.dart';
 
 class SignUpBloc {
   final BuildContext context;
 
   SignUpBloc({required this.context});
+
+  static const String tag = "SignUpBloc";
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   GoogleAuthProvider provider = GoogleAuthProvider();
@@ -18,15 +23,21 @@ class SignUpBloc {
   final passwordController = TextEditingController();
 
   final isShowPasswordSubject = BehaviorSubject<bool>.seeded(false);
+
   Stream<bool> get getIsShowPassword => isShowPasswordSubject.stream;
+
   Function(bool) get setIsShowPassword => isShowPasswordSubject.add;
 
   final isEmailEligibleSubject = BehaviorSubject<bool>();
+
   Stream<bool> get getIsEmailEligible => isEmailEligibleSubject.stream;
+
   Function(bool) get setIsEmailEligible => isEmailEligibleSubject.add;
 
   final isTermAcceptSubject = BehaviorSubject<bool>.seeded(false);
+
   Stream<bool> get getIsTermAccept => isTermAcceptSubject.stream;
+
   Function(bool) get setIsTermAccept => isTermAcceptSubject.add;
 
   bool checkButtonEligible() {
@@ -51,66 +62,86 @@ class SignUpBloc {
   }
 
   void createUserWithEmailPassword() async {
-    final isReadyToCreate = checkButtonEligible();
+    try {
+      logD(tag, message: emailController.text.trim());
+      logD(tag, message: passwordController.text.trim());
 
-    if (isReadyToCreate) {
-      try {
-        await auth.createUserWithEmailAndPassword(
-          email: emailController.text.trim(),
-          password: passwordController.text.trim(),
+      await auth.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      /// SignOut and Move to Login page.
+      if (context.mounted) showMySnackBar(message: languages.loginSuccessfully);
+
+      if (context.mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainNavigationScreen(),
+          ),
+          (route) => false,
         );
-
-        /// SignOut and Move to Login page.
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use:') {
         if (context.mounted) {
-          showMySnackBar(message: 'Login successfully', messageType: MessageType.success);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
-
-        // await auth.signOut();
-
+      } else if (e.code == 'invalid-email') {
         if (context.mounted) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainNavigationScreen(),
-            ),
-            (route) => false,
-          );
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'email-already-in-use:') {
-          if (context.mounted) {
-            showMySnackBar(message: e.code, messageType: MessageType.failed);
-          }
-        } else if (e.code == 'invalid-email') {
-          if (context.mounted) {
-            showMySnackBar(message: e.code, messageType: MessageType.failed);
-          }
-        } else if (e.code == 'operation-not-allowed') {
-          if (context.mounted) {
-            showMySnackBar(message: e.code, messageType: MessageType.failed);
-          }
-        } else if (e.code == 'weak-password') {
-          if (context.mounted) {
-            showMySnackBar(message: e.code, messageType: MessageType.failed);
-          }
-        } else {
-          if (context.mounted) {
-            showMySnackBar(message: e.code, messageType: MessageType.failed);
-          }
-        }
-      } catch (e) {
+      } else if (e.code == 'operation-not-allowed') {
         if (context.mounted) {
-          showMySnackBar(message: 'Something Went Wrong', messageType: MessageType.failed);
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
+        }
+      } else if (e.code == 'weak-password') {
+        if (context.mounted) {
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
+        }
+      } else {
+        if (context.mounted) {
+          showMySnackBar(message: e.code, messageType: MessageType.failed);
         }
       }
-    } else {
-      showMySnackBar(message: 'Fill all Required detail', messageType: MessageType.warning);
+    } catch (e) {
+      if (context.mounted) {
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
+      }
     }
   }
 
   void signInWithGoogle() async {
     try {
-      await auth.signInWithProvider(provider);
+      // await auth.signOut();
+      //
+      // await auth.signInWithProvider(provider);
+
+      await GoogleSignIn().signOut();
+
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      if (context.mounted) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+          (route) => false,
+        );
+      }
 
       if (context.mounted) {
         Navigator.pushAndRemoveUntil(
@@ -131,7 +162,7 @@ class SignUpBloc {
     } catch (e) {
       debugPrint('----> catch (e) ${e.toString()}');
       if (context.mounted) {
-        showMySnackBar(message: 'Something Went Wrong', messageType: MessageType.failed);
+        showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
       }
     }
   }

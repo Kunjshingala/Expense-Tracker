@@ -1,7 +1,7 @@
 name: expense_tracker
 description: "A new Flutter project."
 
-#---->Version : 3.19.5-stable
+#---->Version : 3.19.6-stable
 
 publish_to: 'none'
 
@@ -22,6 +22,7 @@ dependencies:
   rxdart: any
   firebase_core: any
   firebase_auth: any
+  google_sign_in: any
   carousel_slider: any
   dots_indicator: any
   flutter_svg: any
@@ -39,6 +40,7 @@ dependencies:
   #https://github.com/syncfusion/flutter-widgets/issues/1870
   loading_animation_widget: any
   shimmer: any
+  shared_preferences: any
 
 dev_dependencies:
   flutter_test:

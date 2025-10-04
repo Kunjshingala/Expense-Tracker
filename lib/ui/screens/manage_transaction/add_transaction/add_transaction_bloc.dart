@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:expense_tracker/modals/firebase_modal/transaction_modal.dart';
-import 'package:expense_tracker/ui/common_view/snack_bar_content.dart';
-import 'package:expense_tracker/utils/transaction_data.dart';
+import 'package:expense_tracker/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,7 +10,10 @@ import 'package:rxdart/subjects.dart';
 import '../../../../../../modals/firebase_modal/day_finance_overview_modal.dart';
 import '../../../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../../../utils/firebase_references.dart';
+import '../../../../modals/firebase_modal/transaction_modal.dart';
 import '../../../../utils/constant.dart';
+import '../../../../utils/transaction_data.dart';
+import '../../../common_view/snack_bar.dart';
 
 class AddTransactionBloc {
   final BuildContext context;
@@ -31,27 +32,39 @@ class AddTransactionBloc {
   final dateController = TextEditingController();
 
   final addTransactionProcessStatusSubject = BehaviorSubject<bool>.seeded(false);
+
   Stream<bool> get getAddTransactionProcessStatus => addTransactionProcessStatusSubject.stream;
+
   Function(bool) get setAddTransactionProcessStatus => addTransactionProcessStatusSubject.add;
 
   final transactionTypeSubject = BehaviorSubject<TransactionType>.seeded(TransactionType.expense);
+
   Stream<TransactionType> get getTransactionType => transactionTypeSubject.stream;
+
   Function(TransactionType) get setTransactionType => transactionTypeSubject.add;
 
   final transactionModeSubject = BehaviorSubject<TransactionMode>.seeded(TransactionMode.cash);
+
   Stream<TransactionMode> get getTransactionMode => transactionModeSubject.stream;
+
   Function(TransactionMode) get setTransactionMode => transactionModeSubject.add;
 
   final fileSubject = BehaviorSubject<File?>();
+
   Stream<File?> get getFile => fileSubject.stream;
+
   Function(File?) get setFile => fileSubject.add;
 
   final categoryListSubject = BehaviorSubject<List<TransactionCategoryModal>>.seeded(expenseTransactionCategoryList);
+
   Stream<List<TransactionCategoryModal>> get getCategoryList => categoryListSubject.stream;
+
   Function(List<TransactionCategoryModal>) get setCategoryList => categoryListSubject.add;
 
   final selectedCategorySubject = BehaviorSubject<TransactionCategoryModal?>();
+
   Stream<TransactionCategoryModal?> get getSelectedCategory => selectedCategorySubject.stream;
+
   Function(TransactionCategoryModal?) get setSelectedCategory => selectedCategorySubject.add;
 
   void pickDate() async {
@@ -75,16 +88,16 @@ class AddTransactionBloc {
 
   bool isReadyToComplete() {
     if (int.parse(amountController.text.trim()) <= 0) {
-      showMySnackBar(message: 'Add Sufficient Amount.', messageType: MessageType.warning);
+      showMySnackBar(message: languages.amountValidationMsg, messageType: MessageType.warning);
       return false;
     }
     if (!selectedCategorySubject.hasValue) {
-      showMySnackBar(message: 'Select Category.', messageType: MessageType.warning);
+      showMySnackBar(message: '${languages.selectCategory}.', messageType: MessageType.warning);
       return false;
     }
 
     if (dateController.text.trim().isEmpty) {
-      showMySnackBar(message: 'Select Date.', messageType: MessageType.warning);
+      showMySnackBar(message: '${languages.selectDate}.', messageType: MessageType.warning);
       return false;
     }
 
@@ -114,7 +127,7 @@ class AddTransactionBloc {
       /// Firebase Realtime Database.
       await addData(transactionId, map);
 
-      showMySnackBar(message: 'Transaction Added Successfully.', messageType: MessageType.success);
+      showMySnackBar(message: '${languages.transactionAddedSuccessfully}.');
 
       setAddTransactionProcessStatus(false);
 
@@ -273,7 +286,7 @@ class AddTransactionBloc {
     await monthlyDataRef.set(map).onError((error, stackTrace) {
       debugPrint('monthlyDataRef---------------------------------->$error');
       debugPrint('monthlyDataRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
     debugPrint('monthlyDataRef---------------------------------->Done');
   }
@@ -296,7 +309,7 @@ class AddTransactionBloc {
     await categoryRef.set(map).onError((error, stackTrace) {
       debugPrint('categoryRef---------------------------------->$error');
       debugPrint('categoryRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
   }
 
@@ -318,7 +331,7 @@ class AddTransactionBloc {
     await transactionTypeRef.set(map).onError((error, stackTrace) {
       debugPrint('transactionTypeRef---------------------------------->$error');
       debugPrint('transactionTypeRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
   }
 
@@ -340,7 +353,7 @@ class AddTransactionBloc {
     await transactionModeRef.set(map).onError((error, stackTrace) {
       debugPrint('transactionModeRef---------------------------------->$error');
       debugPrint('transactionModeRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
   }
 
@@ -388,7 +401,7 @@ class AddTransactionBloc {
     await dayFinanceOverviewSummaryRef.set(dayFinanceOverviewModal.toMap()).onError((error, stackTrace) {
       debugPrint('dayFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('dayFinanceOverviewSummaryRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
   }
 
@@ -460,7 +473,7 @@ class AddTransactionBloc {
     await monthFinanceOverviewSummaryRef.update(financeOverviewModal.toMap()).onError((error, stackTrace) {
       debugPrint('monthFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('monthFinanceOverviewSummaryRef---------------------------------->$stackTrace');
-      showMySnackBar(message: 'Something Went wrong!', messageType: MessageType.failed);
+      showMySnackBar(message: languages.transactionAddedSuccessfully, messageType: MessageType.failed);
     });
   }
 

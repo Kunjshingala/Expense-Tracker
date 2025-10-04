@@ -1,13 +1,15 @@
-import 'package:expense_tracker/ui/screens/navigation/home/home_screen.dart';
-import 'package:expense_tracker/utils/custom_icons.dart';
-import 'package:expense_tracker/utils/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 import '../../../utils/colors.dart';
+import '../../../utils/constant.dart';
+import '../../../utils/custom_icons.dart';
 import '../manage_transaction/add_transaction/add_transaction_screen.dart';
+import 'analysis/analysis_screen.dart';
+import 'home/home_screen.dart';
 import 'profile/profile_screen.dart';
+import 'transactions/transactions_screen.dart';
 
 class MainNavigationBloc {
   final BuildContext context;
@@ -27,48 +29,50 @@ class MainNavigationBloc {
           fontWeight: FontWeight.w500,
           fontSize: averageScreenSize * 0.02,
         ),
-        activeForegroundColor: violet100Color,
+        activeForegroundColor: violet100,
         inactiveForegroundColor: greyColor,
       ),
     ),
-    // PersistentTabConfig(
-    //   screen: const TransactionsScreen(),
-    //   item: ItemConfig(
-    //     icon: const Icon(CustomIcons.transaction_icons),
-    //     inactiveIcon: const Icon(CustomIcons.transaction_icons),
-    //     title: "Transaction",
-    //     textStyle: GoogleFonts.inter(
-    //       fontWeight: FontWeight.w500,
-    //       fontSize: averageScreenSize * 0.02,
-    //     ),
-    //     activeForegroundColor: violet100Color,
-    //     inactiveForegroundColor: greyColor,
-    //   ),
-    // ),
+    if (showTransaction)
+      PersistentTabConfig(
+        screen: const TransactionsScreen(),
+        item: ItemConfig(
+          icon: const Icon(CustomIcons.transaction_icons),
+          inactiveIcon: const Icon(CustomIcons.transaction_icons),
+          title: "Transaction",
+          textStyle: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: averageScreenSize * 0.02,
+          ),
+          activeForegroundColor: violet100,
+          inactiveForegroundColor: greyColor,
+        ),
+      ),
     PersistentTabConfig(
       screen: const AddTransactionScreen(),
       item: ItemConfig(
         icon: const Icon(CustomIcons.add_icon),
         inactiveIcon: const Icon(CustomIcons.add_icon),
         iconSize: averageScreenSize * 0.03,
-        activeForegroundColor: violet100Color,
-        inactiveForegroundColor: greyColor,
+        activeForegroundColor: violet100,
+        inactiveForegroundColor: white100,
       ),
     ),
-    // PersistentTabConfig(
-    //   screen: const AnalysisScreen(),
-    //   item: ItemConfig(
-    //     icon: const Icon(CustomIcons.pie_chart_icons),
-    //     inactiveIcon: const Icon(CustomIcons.pie_chart_icons),
-    //     title: "Analysis",
-    //     textStyle: GoogleFonts.inter(
-    //       fontWeight: FontWeight.w500,
-    //       fontSize: averageScreenSize * 0.02,
-    //     ),
-    //     activeForegroundColor: violet100Color,
-    //     inactiveForegroundColor: greyColor,
-    //   ),
-    // ),
+    if (showAnalysis)
+      PersistentTabConfig(
+        screen: const AnalysisScreen(),
+        item: ItemConfig(
+          icon: const Icon(CustomIcons.pie_chart_icons),
+          inactiveIcon: const Icon(CustomIcons.pie_chart_icons),
+          title: "Analysis",
+          textStyle: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: averageScreenSize * 0.02,
+          ),
+          activeForegroundColor: violet100,
+          inactiveForegroundColor: greyColor,
+        ),
+      ),
     PersistentTabConfig(
       screen: const ProfileScreen(),
       item: ItemConfig(
@@ -79,7 +83,7 @@ class MainNavigationBloc {
           fontWeight: FontWeight.w500,
           fontSize: averageScreenSize * 0.02,
         ),
-        activeForegroundColor: violet100Color,
+        activeForegroundColor: violet100,
         inactiveForegroundColor: greyColor,
       ),
     ),

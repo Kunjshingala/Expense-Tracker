@@ -1,7 +1,8 @@
-import 'package:expense_tracker/utils/colors.dart';
-import 'package:expense_tracker/utils/custom_icons.dart';
-import 'package:expense_tracker/utils/dimens.dart';
 import 'package:flutter/material.dart';
+
+import 'colors.dart';
+import 'custom_icons.dart';
+import 'dimens.dart';
 
 enum TransactionType { expense, income }
 
@@ -152,110 +153,110 @@ TransactionCategoryModal getCategoryModalById(int id) {
 
 Color getIconColor(int id) {
   if (id == 0) {
-    return blue100Color;
+    return blue100;
   }
   if (id == 1) {
-    return red80Color;
+    return red80;
   }
   if (id == 2) {
-    return green100Color;
+    return green100;
   }
   if (id == 3) {
-    return dark50Color;
+    return black50;
   }
   if (id == 4) {
-    return violet60Color;
+    return violet60;
   }
   if (id == 5) {
-    return red100Color;
+    return red100;
   }
   if (id == 6) {
-    return blue60Color;
+    return blue60;
   }
   if (id == 7) {
-    return yellow80Color;
+    return yellow80;
   }
   if (id == 8) {
-    return yellow100Color;
+    return yellow100;
   }
   if (id == 9) {
-    return violet60Color;
+    return violet60;
   }
   if (id == 10) {
-    return green80Color;
+    return green80;
   }
   if (id == 11) {
-    return blue100Color;
+    return blue100;
   }
   if (id == -1) {
-    return green100Color;
+    return green100;
   }
   if (id == -2) {
-    return violet80Color;
+    return violet80;
   }
   if (id == -3) {
-    return red80Color;
+    return red80;
   }
   if (id == -4) {
-    return green60Color;
+    return green60;
   }
   if (id == -5) {
-    return blue100Color;
+    return blue100;
   }
-  return light100Color;
+  return white100;
 }
 
 Color getIconBGColor(int id) {
   if (id == 0) {
-    return blue20Color;
+    return blue20;
   }
   if (id == 1) {
-    return red20Color;
+    return red20;
   }
   if (id == 2) {
-    return green20Color;
+    return green20;
   }
   if (id == 3) {
-    return light20Color;
+    return white20;
   }
   if (id == 4) {
-    return violet20Color;
+    return violet20;
   }
   if (id == 5) {
-    return red20Color;
+    return red20;
   }
   if (id == 6) {
-    return blue20Color;
+    return blue20;
   }
   if (id == 7) {
-    return yellow20Color;
+    return yellow20;
   }
   if (id == 8) {
-    return yellow20Color;
+    return yellow20;
   }
   if (id == 9) {
-    return violet20Color;
+    return violet20;
   }
   if (id == 10) {
-    return green20Color;
+    return green20;
   }
   if (id == 11) {
-    return blue20Color;
+    return blue20;
   }
   if (id == -1) {
-    return green20Color;
+    return green20;
   }
   if (id == -2) {
-    return violet20Color;
+    return violet20;
   }
   if (id == -3) {
-    return red20Color;
+    return red20;
   }
   if (id == -4) {
-    return green20Color;
+    return green20;
   }
   if (id == -5) {
-    return blue20Color;
+    return blue20;
   }
-  return light20Color;
+  return white20;
 }
