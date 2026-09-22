@@ -79,7 +79,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     builder: (context, snapshot) {
                       return DotsIndicator(
                         dotsCount: 3,
-                        position: snapshot.data ?? 0,
+                        position: (snapshot.data ?? 0).toDouble(),
                         decorator: DotsDecorator(
                           color: const Color(0xffEEE5FF),
                           activeColor: violet100,

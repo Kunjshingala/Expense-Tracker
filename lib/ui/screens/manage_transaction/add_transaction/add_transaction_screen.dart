@@ -430,10 +430,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                       );
                                     } else {
                                       return DottedBorder(
-                                        dashPattern: [averageScreenSize * 0.011],
-                                        borderType: BorderType.RRect,
-                                        radius: Radius.circular(averageScreenSize * 0.03),
-                                        color: white20,
+                                        options: RoundedRectDottedBorderOptions(
+                                          dashPattern: [averageScreenSize * 0.011],
+                                          radius: Radius.circular(averageScreenSize * 0.03),
+                                          color: white20,
+                                        ),
                                         child: GestureDetector(
                                           onTap: () {
                                             showModalBottomSheet(

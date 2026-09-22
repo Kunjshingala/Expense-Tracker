@@ -429,10 +429,11 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                             Flexible(
                                               fit: FlexFit.loose,
                                               child: DottedBorder(
-                                                dashPattern: [averageScreenSize * 0.011],
-                                                borderType: BorderType.RRect,
-                                                radius: Radius.circular(averageScreenSize * 0.03),
-                                                color: white20,
+                                                options: RoundedRectDottedBorderOptions(
+                                                  dashPattern: [averageScreenSize * 0.011],
+                                                  radius: Radius.circular(averageScreenSize * 0.03),
+                                                  color: white20,
+                                                ),
                                                 child: GestureDetector(
                                                   onTap: () {
                                                     showModalBottomSheet(
