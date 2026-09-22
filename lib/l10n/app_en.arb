@@ -71,6 +71,9 @@
   "locationServiceInfoMsg": "This feature cant use, Enable location services",
   "storagePermissionMsg": "Storage Permission Needed",
   "cameraPermissionMsg": "Camera Permission Needed",
+  "deleteTransaction": "Delete Transaction",
+  "deleteTransactionConfirmationMsg": "Are you sure you want to delete this transaction ? This cannot be undone.",
+  "transactionDeletedSuccessfully": "Transaction deleted successfully",
   "@checkEmailMsg": {
     "description": "Check your email {email} and follow the instructions to reset your password from email",
     "placeholders": {

@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 import '../../../../../../../modals/firebase_modal/transaction_modal.dart';
+import '../../../../../../common_view/delete_transaction_bottom_sheet.dart';
 import '../../../../../../../utils/colors.dart';
 import '../../../../../../../utils/dimens.dart';
 import '../../../../../../../utils/transaction_data.dart';
@@ -56,6 +57,14 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                 itemBuilder: (context, index) {
                   final transactionModal = snapshot.data![index];
                   return GestureDetector(
+                    onLongPress: () {
+                      showModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        backgroundColor: white100,
+                        builder: (context) => DeleteTransactionBottomSheet(transactionModal: transactionModal),
+                      );
+                    },
                     onTap: () {
                       pushWithoutNavBar(
                         context,

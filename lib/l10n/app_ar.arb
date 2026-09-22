@@ -70,5 +70,8 @@
   "locationServiceMsg": "يرجى منح الإذن لاستخدام هذا الإذن",
   "locationServiceInfoMsg": "لا يمكن استخدام هذه الميزة، يُرجى تفعيل خدمات الموقع",
   "storagePermissionMsg": "مطلوب إذن تخزين",
-  "cameraPermissionMsg": "مطلوب إذن كاميرا"
+  "cameraPermissionMsg": "مطلوب إذن كاميرا",
+  "deleteTransaction": "حذف المعاملة",
+  "deleteTransactionConfirmationMsg": "هل أنت متأكد من رغبتك في حذف هذه المعاملة؟ لا يمكن التراجع عن هذا الإجراء.",
+  "transactionDeletedSuccessfully": "تم حذف المعاملة بنجاح"
 }
