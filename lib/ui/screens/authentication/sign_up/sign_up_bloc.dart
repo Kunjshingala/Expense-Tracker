@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../../../../utils/auth_error_message.dart';
 import '../../../../utils/utils.dart';
 import '../../../common_view/snack_bar.dart';
 import '../../main_home/main_navigation_screen.dart';
@@ -84,26 +85,9 @@ class SignUpBloc {
         );
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use:') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'invalid-email') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'operation-not-allowed') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'weak-password') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
+      logD(tag, message: e.code);
+      if (context.mounted) {
+        showMySnackBar(message: authErrorMessage(e), messageType: MessageType.failed);
       }
     } catch (e) {
       if (context.mounted) {
@@ -151,13 +135,9 @@ class SignUpBloc {
         );
       }
     } on FirebaseAuthException catch (e) {
-      debugPrint('----> FirebaseAuthException catch (e) ${e.code}');
+      logD(tag, message: e.code);
       if (context.mounted) {
-        if (e.code == 'user-disabled') {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        } else {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
+        showMySnackBar(message: authErrorMessage(e), messageType: MessageType.failed);
       }
     } catch (e) {
       debugPrint('----> catch (e) ${e.toString()}');

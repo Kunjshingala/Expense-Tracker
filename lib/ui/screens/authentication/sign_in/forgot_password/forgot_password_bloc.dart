@@ -3,10 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../../../../../utils/auth_error_message.dart';
+import '../../../../../utils/utils.dart';
 import '../../../../common_view/snack_bar.dart';
 import 'forgot_password_email_sent_screen.dart';
 
 class ForgotPasswordBloc {
+  static const String tag = "ForgotPasswordBloc";
+
   final BuildContext context;
 
   ForgotPasswordBloc({required this.context});
@@ -56,38 +60,9 @@ class ForgotPasswordBloc {
         );
       }
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'auth/invalid-email') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'auth/missing-android-pkg-name') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'auth/missing-continue-uri') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'auth/missing-ios-bundle-id') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'auth/invalid-continue-uri') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'auth/unauthorized-continue-uri') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else if (e.code == 'auth/user-not-found') {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
-      } else {
-        if (context.mounted) {
-          showMySnackBar(message: e.code, messageType: MessageType.failed);
-        }
+      logD(tag, message: e.code);
+      if (context.mounted) {
+        showMySnackBar(message: authErrorMessage(e), messageType: MessageType.failed);
       }
     } catch (e) {
       if (context.mounted) {

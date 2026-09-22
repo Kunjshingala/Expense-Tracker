@@ -73,5 +73,19 @@
   "cameraPermissionMsg": "مطلوب إذن كاميرا",
   "deleteTransaction": "حذف المعاملة",
   "deleteTransactionConfirmationMsg": "هل أنت متأكد من رغبتك في حذف هذه المعاملة؟ لا يمكن التراجع عن هذا الإجراء.",
-  "transactionDeletedSuccessfully": "تم حذف المعاملة بنجاح"
+  "transactionDeletedSuccessfully": "تم حذف المعاملة بنجاح",
+  "authEmailAlreadyInUse": "يوجد حساب بالفعل لهذا البريد الإلكتروني.",
+  "authInvalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح.",
+  "authWeakPassword": "كلمة المرور ضعيفة جدًا. استخدم 6 أحرف على الأقل.",
+  "authUserNotFound": "لم يتم العثور على حساب لهذا البريد الإلكتروني.",
+  "authWrongPassword": "كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.",
+  "authInvalidCredential": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "authAccountExistsWithDifferentCredential": "هذا البريد الإلكتروني مسجل بالفعل بطريقة تسجيل دخول مختلفة.",
+  "authUserDisabled": "تم تعطيل هذا الحساب.",
+  "authTooManyRequests": "محاولات كثيرة جدًا. يرجى المحاولة لاحقًا.",
+  "authUserTokenExpired": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى.",
+  "authNetworkRequestFailed": "خطأ في الشبكة. تحقق من اتصالك وحاول مرة أخرى.",
+  "authOperationNotAllowed": "طريقة تسجيل الدخول هذه غير متاحة حاليًا.",
+  "authExpiredActionCode": "انتهت صلاحية هذا الرابط. يرجى طلب رابط جديد.",
+  "authInvalidActionCode": "هذا الرابط غير صالح أو تم استخدامه بالفعل."
 }
