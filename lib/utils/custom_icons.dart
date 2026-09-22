@@ -1,3 +1,6 @@
+// Generated icon font bindings — names intentionally match the glyph names from the font.
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/widgets.dart';
 
 class CustomIcons {
