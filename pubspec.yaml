@@ -28,7 +28,7 @@ dependencies:
   flutter_svg: any
   persistent_bottom_nav_bar_v2: any
   dotted_border: any
-  permission_handler: any
+  permission_handler: ^12.0.0
   device_info_plus: any
   geolocator: any
   image_picker: any
