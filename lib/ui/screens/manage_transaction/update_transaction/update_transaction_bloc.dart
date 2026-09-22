@@ -7,10 +7,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/subjects.dart';
 
-import '../../../../modals/firebase_modal/day_finance_overview_modal.dart';
-import '../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../modals/firebase_modal/transaction_modal.dart';
 import '../../../../utils/constant.dart';
+import '../../../../utils/finance_calculation.dart';
+import '../../../../utils/finance_overview_reader.dart';
 import '../../../../utils/firebase_references.dart';
 import '../../../../utils/transaction_data.dart';
 import '../../../common_view/snack_bar.dart';
@@ -511,83 +511,40 @@ class UpdateTransactionBloc {
     required TransactionModal updatedTransactionModal,
     required Map<String, dynamic> updatedMap,
   }) async {
-    final oldDateDataList = oldTransactionModal.date.split(dateSplitFormat);
-    final updatedDateDataList = updatedTransactionModal.date.split(dateSplitFormat);
+    final oldDate = parseTransactionDate(oldTransactionModal.date);
+    final updatedDate = parseTransactionDate(updatedTransactionModal.date);
 
     final oldPlaceDayFinanceOverviewSummaryRef = mainReference
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${oldDateDataList[1]}-${oldDateDataList[2]}')
+        .child(oldDate.monthKey)
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions)
-        .child(oldDateDataList[0])
+        .child(oldDate.day)
         .child(FirebaseRealTimeDatabaseRef.dayFinanceOverview);
 
     final newPlaceDayFinanceOverviewSummaryRef = mainReference
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${updatedDateDataList[1]}-${updatedDateDataList[2]}')
+        .child(updatedDate.monthKey)
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions)
-        .child(updatedDateDataList[0])
+        .child(updatedDate.day)
         .child(FirebaseRealTimeDatabaseRef.dayFinanceOverview);
 
-    /// update at old place. -------------------------------------------------------------------------------->
-    late DayFinanceOverviewModal oldPlaceDayFinanceOverviewModal;
+    /// take the old transaction back out of the day it used to sit in.
+    final oldPlaceOverview = await readDayFinanceOverview(oldPlaceDayFinanceOverviewSummaryRef);
 
-    // get data From Old Place.
-    final oldDataSnapshot = await oldPlaceDayFinanceOverviewSummaryRef.get();
-
-    final oldPlaceDayFinanceOverviewData = oldDataSnapshot.value;
-    Map<String, dynamic> oldPlaceMappedSnapshot = Map.from(oldPlaceDayFinanceOverviewData as Map);
-    oldPlaceDayFinanceOverviewModal = DayFinanceOverviewModal.fromMap(oldPlaceMappedSnapshot);
-
-    int oldPlaceFinanceExpense = oldPlaceDayFinanceOverviewModal.expense;
-    int oldPlaceFinanceIncome = oldPlaceDayFinanceOverviewModal.income;
-
-    if (oldTransactionModal.transactionType == 0) {
-      oldPlaceFinanceExpense = oldPlaceFinanceExpense - oldTransactionModal.amount;
-    } else {
-      oldPlaceFinanceExpense = oldPlaceFinanceIncome - oldTransactionModal.amount;
-    }
-
-    oldPlaceDayFinanceOverviewModal =
-        DayFinanceOverviewModal(expense: oldPlaceFinanceExpense, income: oldPlaceFinanceExpense);
-
-    // update data at Old Place.
     await oldPlaceDayFinanceOverviewSummaryRef
-        .set(oldPlaceDayFinanceOverviewModal.toMap())
+        .set(dayOverviewAfterRemoving(oldPlaceOverview, oldTransactionModal).toMap())
         .onError((error, stackTrace) {
       debugPrint('oldPlaceDayFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('oldPlaceDayFinanceOverviewSummaryRef---------------------------------->$stackTrace');
       showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
 
-    /// update at new place. -------------------------------------------------------------------------------->
-    late DayFinanceOverviewModal newPlaceDayFinanceOverviewModal;
+    /// count the updated transaction towards the day it now belongs to. Read
+    /// after the write above so a same-day edit sees the subtraction.
+    final newPlaceOverview = await readDayFinanceOverview(newPlaceDayFinanceOverviewSummaryRef);
 
-    // get data From new Place.
-    final newDataSnapshot = await newPlaceDayFinanceOverviewSummaryRef.get();
-
-    if (newDataSnapshot.exists) {
-      final newPlaceDayFinanceOverviewData = newDataSnapshot.value;
-      Map<String, dynamic> newPlaceMappedSnapshot = Map.from(newPlaceDayFinanceOverviewData as Map);
-      newPlaceDayFinanceOverviewModal = DayFinanceOverviewModal.fromMap(newPlaceMappedSnapshot);
-    } else {
-      newPlaceDayFinanceOverviewModal = DayFinanceOverviewModal(expense: 0, income: 0);
-    }
-
-    int newPlaceFinanceExpense = newPlaceDayFinanceOverviewModal.expense;
-    int newPlaceFinanceIncome = newPlaceDayFinanceOverviewModal.income;
-
-    if (updatedTransactionModal.transactionType == 0) {
-      newPlaceFinanceExpense = newPlaceFinanceExpense + updatedTransactionModal.amount;
-    } else {
-      newPlaceFinanceIncome = newPlaceFinanceIncome + updatedTransactionModal.amount;
-    }
-
-    newPlaceDayFinanceOverviewModal =
-        DayFinanceOverviewModal(expense: newPlaceFinanceExpense, income: newPlaceFinanceIncome);
-
-    // update data at new Place.
     await newPlaceDayFinanceOverviewSummaryRef
-        .set(newPlaceDayFinanceOverviewModal.toMap())
+        .set(dayOverviewAfterAdding(newPlaceOverview, updatedTransactionModal).toMap())
         .onError((error, stackTrace) {
       debugPrint('newPlaceDayFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('newPlaceDayFinanceOverviewSummaryRef---------------------------------->$stackTrace');
@@ -604,125 +561,43 @@ class UpdateTransactionBloc {
     required TransactionModal updatedTransactionModal,
     required Map<String, dynamic> updatedMap,
   }) async {
-    final oldDateDataList = oldTransactionModal.date.split(dateSplitFormat);
-    final updatedDateDataList = updatedTransactionModal.date.split(dateSplitFormat);
+    final oldDate = parseTransactionDate(oldTransactionModal.date);
+    final updatedDate = parseTransactionDate(updatedTransactionModal.date);
 
     final oldPlaceMonthFinanceOverviewSummaryRef = mainReference
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${oldDateDataList[1]}-${oldDateDataList[2]}')
+        .child(oldDate.monthKey)
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.monthFinanceOverview);
 
     final newPlaceMonthFinanceOverviewSummaryRef = mainReference
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${updatedDateDataList[1]}-${updatedDateDataList[2]}')
+        .child(updatedDate.monthKey)
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.monthFinanceOverview);
 
-    /// update at old place. start-------------------------------------------------------------------------------->
-    late FinanceOverviewModal oldPlaceFinanceOverviewModal;
-
-    final oldPlaceSnapshot = await oldPlaceMonthFinanceOverviewSummaryRef.get();
-    final oldPlaceFinanceOverviewData = oldPlaceSnapshot.value;
-    Map<String, dynamic> oldPlaceMappedSnapshot = Map.from(oldPlaceFinanceOverviewData as Map);
-
-    oldPlaceFinanceOverviewModal = FinanceOverviewModal.fromMap(oldPlaceMappedSnapshot);
-
-    final oldAmount = oldTransactionModal.amount;
-
-    int oldPlaceBudget = oldPlaceFinanceOverviewModal.budget;
-    int oldPlaceExpense = oldPlaceFinanceOverviewModal.expense;
-    int oldPlaceIncome = oldPlaceFinanceOverviewModal.income;
-    int oldPlaceBalance = oldPlaceFinanceOverviewModal.balance;
-    bool oldPlaceIsSurpassed = oldPlaceFinanceOverviewModal.isSurpassed;
-
-    if (oldTransactionModal.transactionType == 0) {
-      oldPlaceExpense = oldPlaceExpense - oldAmount;
-    } else {
-      oldPlaceIncome = oldPlaceIncome - oldAmount;
-    }
-
-    if (((oldPlaceBudget + oldPlaceIncome) - oldPlaceExpense) >= 0) {
-      oldPlaceIsSurpassed = false;
-    } else {
-      oldPlaceIsSurpassed = true;
-    }
-
-    oldPlaceBalance = (oldPlaceBudget + oldPlaceIncome) - oldPlaceExpense;
-
-    oldPlaceFinanceOverviewModal = FinanceOverviewModal(
-      budget: oldPlaceBudget,
-      expense: oldPlaceExpense,
-      income: oldPlaceIncome,
-      balance: oldPlaceBalance,
-      isSurpassed: oldPlaceIsSurpassed,
-    );
+    /// take the old transaction back out of the month it used to sit in.
+    final oldPlaceOverview = await readMonthFinanceOverview(oldPlaceMonthFinanceOverviewSummaryRef);
 
     await oldPlaceMonthFinanceOverviewSummaryRef
-        .update(oldPlaceFinanceOverviewModal.toMap())
+        .update(monthOverviewAfterRemoving(oldPlaceOverview, oldTransactionModal).toMap())
         .onError((error, stackTrace) {
       debugPrint('oldPlaceMonthFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('oldPlaceMonthFinanceOverviewSummaryRef---------------------------------->$stackTrace');
       showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
 
-    /// update at old place. done-------------------------------------------------------------------------------->
-
-    /// update at new place. start-------------------------------------------------------------------------------->
-    late FinanceOverviewModal newPlaceFinanceOverviewModal;
-
-    final newPlaceSnapshot = await newPlaceMonthFinanceOverviewSummaryRef.get();
-
-    if (newPlaceSnapshot.exists) {
-      final newPlaceFinanceOverviewData = newPlaceSnapshot.value;
-
-      Map<String, dynamic> newPlaceMappedSnapshot = Map.from(newPlaceFinanceOverviewData as Map);
-
-      newPlaceFinanceOverviewModal = FinanceOverviewModal.fromMap(newPlaceMappedSnapshot);
-    } else {
-      newPlaceFinanceOverviewModal =
-          FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0, isSurpassed: false);
-    }
-
-    final newAmount = updatedTransactionModal.amount;
-
-    int newPlaceBudget = newPlaceFinanceOverviewModal.budget;
-    int newPlaceExpense = newPlaceFinanceOverviewModal.expense;
-    int newPlaceIncome = newPlaceFinanceOverviewModal.income;
-    int newPlaceBalance = newPlaceFinanceOverviewModal.balance;
-    bool newPlaceIsSurpassed = newPlaceFinanceOverviewModal.isSurpassed;
-
-    if (updatedTransactionModal.transactionType == 0) {
-      newPlaceExpense = newPlaceExpense + newAmount;
-    } else {
-      newPlaceIncome = newPlaceIncome + newAmount;
-    }
-
-    if (((newPlaceBudget + newPlaceIncome) - newPlaceExpense) >= 0) {
-      newPlaceIsSurpassed = false;
-    } else {
-      newPlaceIsSurpassed = true;
-    }
-
-    newPlaceBalance = (newPlaceBudget + newPlaceIncome) - newPlaceExpense;
-
-    newPlaceFinanceOverviewModal = FinanceOverviewModal(
-      budget: newPlaceBudget,
-      expense: newPlaceExpense,
-      income: newPlaceIncome,
-      balance: newPlaceBalance,
-      isSurpassed: newPlaceIsSurpassed,
-    );
+    /// count the updated transaction towards the month it now belongs to. Read
+    /// after the write above so a same-month edit sees the subtraction.
+    final newPlaceOverview = await readMonthFinanceOverview(newPlaceMonthFinanceOverviewSummaryRef);
 
     await newPlaceMonthFinanceOverviewSummaryRef
-        .update(newPlaceFinanceOverviewModal.toMap())
+        .update(monthOverviewAfterAdding(newPlaceOverview, updatedTransactionModal).toMap())
         .onError((error, stackTrace) {
       debugPrint('newPlaceMonthFinanceOverviewSummaryRef---------------------------------->$error');
       debugPrint('newPlaceMonthFinanceOverviewSummaryRef---------------------------------->$stackTrace');
       showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     });
-
-    /// update at new place. done-------------------------------------------------------------------------------->
 
     debugPrint('updateDataIntoMonthFinanceOverviewSummary---------------------------------->Done');
   }
