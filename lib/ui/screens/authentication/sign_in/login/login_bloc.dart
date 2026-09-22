@@ -86,19 +86,20 @@ class LoginBloc {
 
   void signInWithGoogle() async {
     try {
-      await GoogleSignIn().signOut();
+      await GoogleSignIn.instance.signOut();
 
-      // Trigger the authentication flow
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      /// Trigger the authentication flow. Throws rather than returning
+      /// null when the user backs out; see the GoogleSignInException catch.
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance.authenticate();
 
-      // Obtain the auth details from the request
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      /// Obtain the auth details from the request. This is a plain getter
+      /// now, and carries only the id token.
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+      /// Create a new credential. Access tokens moved to the separate
+      /// authorization client in 7.x, and Firebase only needs one of the
+      /// two tokens.
+      final credential = GoogleAuthProvider.credential(idToken: googleAuth.idToken);
 
       // Once signed in, return the UserCredential
       await FirebaseAuth.instance.signInWithCredential(credential);
@@ -106,6 +107,13 @@ class LoginBloc {
       if (context.mounted) {
         openScreenWithClearPrevious(context, const MainNavigationScreen());
       }
+    } on GoogleSignInException catch (e) {
+      logD(tag, message: '${e.code} ${e.description}');
+
+      /// backing out of the account picker is not an error worth showing.
+      if (e.code == GoogleSignInExceptionCode.canceled) return;
+
+      if (context.mounted) showMySnackBar(message: languages.somethingWentWrong, messageType: MessageType.failed);
     } on FirebaseAuthException catch (e) {
       logD(tag, message: e.code);
       if (context.mounted) {
