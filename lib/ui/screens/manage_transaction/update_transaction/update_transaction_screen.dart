@@ -14,6 +14,7 @@ import '../../../../utils/transaction_data.dart';
 import '../../../common_view/attachment_bottom_sheet.dart';
 import '../../../common_view/common_button.dart';
 import 'update_transaction_bloc.dart';
+import '../../../../utils/route.dart';
 
 class UpdateTransactionScreen extends StatefulWidget {
   const UpdateTransactionScreen({super.key, required this.transactionModal});
@@ -48,7 +49,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
               backgroundColor: snapshot.data == TransactionType.expense ? red100 : green100,
               leading: GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  closeScreen(context);
                 },
                 child: Padding(
                   padding: EdgeInsetsDirectional.only(start: screenWidth * 0.03),

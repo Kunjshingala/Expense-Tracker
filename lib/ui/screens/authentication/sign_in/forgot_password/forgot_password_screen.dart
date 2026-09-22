@@ -7,6 +7,7 @@ import '../../../../../utils/custom_icons.dart';
 import '../../../../../utils/dimens.dart';
 import '../../../../common_view/common_button.dart';
 import 'forgot_password_bloc.dart';
+import '../../../../../utils/route.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -35,7 +36,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           padding: EdgeInsetsDirectional.only(start: screenWidth * 0.03),
           child: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              closeScreen(context);
             },
             child: Icon(
               CustomIcons.arrow_left_icons,

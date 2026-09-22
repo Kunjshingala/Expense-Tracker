@@ -7,6 +7,7 @@ import '../../utils/colors.dart';
 import '../../utils/constant.dart';
 import '../screens/manage_transaction/delete_transaction/delete_transaction_bloc.dart';
 import 'common_button.dart';
+import '../../utils/route.dart';
 
 class DeleteTransactionBottomSheet extends StatefulWidget {
   const DeleteTransactionBottomSheet({super.key, required this.transactionModal});
@@ -81,7 +82,7 @@ class _DeleteTransactionBottomSheetState extends State<DeleteTransactionBottomSh
                 height: screenHeight * 0.075,
                 btnColor: violet20,
                 onPressed: () {
-                  if (Navigator.canPop(context)) Navigator.pop(context);
+                  closeScreen(context);
                 },
                 child: Text(
                   languages.no,
@@ -139,7 +140,7 @@ class _DeleteTransactionBottomSheetState extends State<DeleteTransactionBottomSh
     /// bar shown, so the user can retry.
     if (!isDeleted) return;
     if (!mounted) return;
-    if (Navigator.canPop(context)) Navigator.pop(context);
+    closeScreen(context);
   }
 
   @override

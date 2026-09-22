@@ -9,6 +9,7 @@ import '../../../../../utils/auth_error_message.dart';
 import '../../../../../utils/utils.dart';
 import '../../../../common_view/snack_bar.dart';
 import '../../../main_home/main_navigation_screen.dart';
+import '../../../../../utils/route.dart';
 
 class LoginBloc {
   final BuildContext context;
@@ -66,11 +67,7 @@ class LoginBloc {
         if (context.mounted) {
           showMySnackBar(message: languages.loginSuccessfully);
 
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-            (route) => false,
-          );
+          openScreenWithClearPrevious(context, const MainNavigationScreen());
         }
       } on FirebaseAuthException catch (e) {
         logD(tag, message: e.code);
@@ -107,11 +104,7 @@ class LoginBloc {
       await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (context.mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-          (route) => false,
-        );
+        openScreenWithClearPrevious(context, const MainNavigationScreen());
       }
     } on FirebaseAuthException catch (e) {
       logD(tag, message: e.code);

@@ -7,6 +7,7 @@ import '../../../../../utils/auth_error_message.dart';
 import '../../../../../utils/utils.dart';
 import '../../../../common_view/snack_bar.dart';
 import 'forgot_password_email_sent_screen.dart';
+import '../../../../../utils/route.dart';
 
 class ForgotPasswordBloc {
   static const String tag = "ForgotPasswordBloc";
@@ -53,11 +54,7 @@ class ForgotPasswordBloc {
           showMySnackBar(message: languages.sentSuccessfully);
         }
 
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => ForgotPasswordEmailSentScreen(email: emailController.text.trim())),
-          (route) => false,
-        );
+        openScreenWithClearPrevious(context, ForgotPasswordEmailSentScreen(email: emailController.text.trim()));
       }
     } on FirebaseAuthException catch (e) {
       logD(tag, message: e.code);

@@ -10,6 +10,7 @@ import '../../common_view/common_button.dart';
 import '../authentication/sign_in/login/login_screen.dart';
 import '../authentication/sign_up/sign_up_screen.dart';
 import 'intro_bloc.dart';
+import '../../../utils/route.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -101,7 +102,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     width: screenWidth * 0.9,
                     height: screenHeight * 0.07,
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                      openScreen(context, const SignUpScreen());
                     },
                     text: languages.signUp,
                   ),
@@ -111,7 +112,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     height: screenHeight * 0.07,
                     btnColor: violet20,
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                      openScreen(context, const LoginScreen());
                     },
                     child: Text(
                       languages.login,

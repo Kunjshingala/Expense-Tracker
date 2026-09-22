@@ -12,6 +12,7 @@ import '../../../../common_view/common_button.dart';
 import '../../sign_up/sign_up_screen.dart';
 import '../forgot_password/forgot_password_screen.dart';
 import 'login_bloc.dart';
+import '../../../../../utils/route.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsetsDirectional.only(start: screenWidth * 0.03),
           child: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              closeScreen(context);
             },
             child: Icon(
               CustomIcons.arrow_left_icons,
@@ -271,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: screenHeight * 0.020),
               TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
+                  openScreen(context, const ForgotPasswordScreen());
                 },
                 child: Text(
                   languages.forgotPassword,
@@ -304,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                          openScreen(context, const SignUpScreen());
                         },
                     ),
                   ],

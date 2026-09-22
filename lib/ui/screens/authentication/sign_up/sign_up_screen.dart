@@ -12,6 +12,7 @@ import '../../../common_view/common_button.dart';
 import '../../../common_view/snack_bar.dart';
 import '../sign_in/login/login_screen.dart';
 import 'sign_up_bloc.dart';
+import '../../../../utils/route.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -38,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: white100,
         leading: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            closeScreen(context);
           },
           child: Padding(
             padding: EdgeInsetsDirectional.only(start: screenWidth * 0.03),
@@ -383,7 +384,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                          openScreen(context, const LoginScreen());
                         },
                     ),
                   ],

@@ -6,6 +6,7 @@ import '../../../../../utils/colors.dart';
 import '../../../../../utils/dimens.dart';
 import '../../../../common_view/common_button.dart';
 import '../login/login_screen.dart';
+import '../../../../../utils/route.dart';
 
 class ForgotPasswordEmailSentScreen extends StatelessWidget {
   const ForgotPasswordEmailSentScreen({super.key, required this.email});
@@ -71,11 +72,7 @@ class ForgotPasswordEmailSentScreen extends StatelessWidget {
                 width: screenWidth * 0.9,
                 height: screenHeight * 0.07,
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
-                    (route) => false,
-                  );
+                  openScreenWithClearPrevious(context, const LoginScreen());
                 },
                 child: Text(
                   languages.continue_,

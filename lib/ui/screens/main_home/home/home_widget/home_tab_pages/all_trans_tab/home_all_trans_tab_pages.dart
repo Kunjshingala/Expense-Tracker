@@ -2,7 +2,6 @@ import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 import '../../../../../../../modals/firebase_modal/transaction_modal.dart';
 import '../../../../../../common_view/delete_transaction_bottom_sheet.dart';
@@ -11,6 +10,7 @@ import '../../../../../../../utils/dimens.dart';
 import '../../../../../../../utils/transaction_data.dart';
 import '../../../../../manage_transaction/update_transaction/update_transaction_screen.dart';
 import 'home_all_trans_tab_bloc.dart';
+import '../../../../../../../utils/route.dart';
 
 class HomeAllTabPage extends StatefulWidget {
   const HomeAllTabPage({super.key});
@@ -66,11 +66,9 @@ class _HomeAllTabPageState extends State<HomeAllTabPage> {
                       );
                     },
                     onTap: () {
-                      pushWithoutNavBar(
+                      openScreenWithoutNavBar(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => UpdateTransactionScreen(transactionModal: transactionModal),
-                        ),
+                        UpdateTransactionScreen(transactionModal: transactionModal),
                       );
                     },
                     child: Container(

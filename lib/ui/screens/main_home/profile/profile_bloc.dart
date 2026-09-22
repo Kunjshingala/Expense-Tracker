@@ -3,7 +3,6 @@ import 'dart:core';
 import 'package:expense_tracker/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../modals/local_modal/profile_screen_modal.dart';
@@ -12,6 +11,7 @@ import '../../../../utils/custom_icons.dart';
 import '../../../common_view/logout_bottom_sheet.dart';
 import '../../account/account_screen.dart';
 import 'profile_widget/edit_name_dialog.dart';
+import '../../../../utils/route.dart';
 
 class ProfileBloc {
   final BuildContext context;
@@ -84,7 +84,7 @@ class ProfileBloc {
   }
 
   void account() {
-    pushWithoutNavBar(context, MaterialPageRoute(builder: (context) => const AccountScreen()));
+    openScreenWithoutNavBar(context, const AccountScreen());
   }
 
   void editName() {

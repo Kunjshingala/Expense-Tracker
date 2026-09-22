@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../utils/colors.dart';
 import '../permission_handle/permission_handle.dart';
+import '../../utils/route.dart';
 
 Future<File?> captureAndCropImage(BuildContext context) async {
   bool camaraPermissionAllowed = await checkCameraPermission();
@@ -29,7 +30,7 @@ Future<File?> pickAndCropImage(BuildContext context) async {
     final xFile = (await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100))!;
     final file = File(xFile.path);
 
-    if (context.mounted) Navigator.pop(context);
+    if (context.mounted) closeScreen(context);
 
     if (context.mounted) {
       final croppedFile = await cropImage(context, file);

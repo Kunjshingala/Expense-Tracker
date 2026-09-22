@@ -8,6 +8,7 @@ import '../../../../utils/auth_error_message.dart';
 import '../../../../utils/utils.dart';
 import '../../../common_view/snack_bar.dart';
 import '../../main_home/main_navigation_screen.dart';
+import '../../../../utils/route.dart';
 
 class SignUpBloc {
   final BuildContext context;
@@ -76,13 +77,7 @@ class SignUpBloc {
       if (context.mounted) showMySnackBar(message: languages.loginSuccessfully);
 
       if (context.mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainNavigationScreen(),
-          ),
-          (route) => false,
-        );
+        openScreenWithClearPrevious(context, const MainNavigationScreen());
       }
     } on FirebaseAuthException catch (e) {
       logD(tag, message: e.code);
@@ -120,19 +115,11 @@ class SignUpBloc {
       await FirebaseAuth.instance.signInWithCredential(credential);
 
       if (context.mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-          (route) => false,
-        );
+        openScreenWithClearPrevious(context, const MainNavigationScreen());
       }
 
       if (context.mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-          (route) => false,
-        );
+        openScreenWithClearPrevious(context, const MainNavigationScreen());
       }
     } on FirebaseAuthException catch (e) {
       logD(tag, message: e.code);

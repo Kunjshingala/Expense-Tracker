@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../intro/intro_screen.dart';
 import '../main_home/main_navigation_screen.dart';
+import '../../../utils/route.dart';
 
 class SplashBloc {
   final BuildContext context;
@@ -19,12 +20,12 @@ class SplashBloc {
     if (auth.currentUser == null) {
       debugPrint('decideFlow()---------------------------------->null');
       Timer(const Duration(seconds: 3), () {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const IntroScreen()));
+        openScreenWithReplacePrevious(context, const IntroScreen());
       });
     } else {
       debugPrint('decideFlow()---------------------------------->!null');
       Timer(const Duration(seconds: 3), () {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainNavigationScreen()));
+        openScreenWithReplacePrevious(context, const MainNavigationScreen());
       });
     }
   }

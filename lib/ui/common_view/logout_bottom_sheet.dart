@@ -2,7 +2,6 @@ import 'package:expense_tracker/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../utils/colors.dart';
@@ -10,6 +9,7 @@ import '../../utils/constant.dart';
 import '../screens/splash/splash_screen.dart';
 import 'common_button.dart';
 import 'snack_bar.dart';
+import '../../utils/route.dart';
 
 class LogoutBottomSheet extends StatefulWidget {
   const LogoutBottomSheet({super.key});
@@ -87,7 +87,7 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet> {
                 height: screenHeight * 0.075,
                 btnColor: violet20,
                 onPressed: () {
-                  if (Navigator.canPop(context)) Navigator.pop(context);
+                  closeScreen(context);
                 },
                 child: Text(
                   languages.no,
@@ -154,9 +154,9 @@ class _LogoutBottomSheetState extends State<LogoutBottomSheet> {
 
       /// Push to splash screen
 
-      pushReplacementWithoutNavBar(
+      openScreenWithReplacePreviousWithoutNavBar(
         navigatorKey.currentState!.context,
-        MaterialPageRoute(builder: (context) => const SplashScreen()),
+        const SplashScreen(),
       );
     } on FirebaseException catch (e) {
       debugPrint('----------------------------------> on FirebaseException catch (e) $e');

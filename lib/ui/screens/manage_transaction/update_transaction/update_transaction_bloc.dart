@@ -14,6 +14,7 @@ import '../../../../utils/finance_overview_reader.dart';
 import '../../../../utils/firebase_references.dart';
 import '../../../../utils/transaction_data.dart';
 import '../../../common_view/snack_bar.dart';
+import '../../../../utils/route.dart';
 
 class UpdateTransactionBloc {
   final BuildContext context;
@@ -127,7 +128,7 @@ class UpdateTransactionBloc {
 
       setUpdateTransactionProcessStatus(false);
 
-      if (context.mounted && Navigator.canPop(context)) Navigator.pop(context);
+      if (context.mounted) closeScreen(context);
       debugPrint('onComplete---------------------------------->Complete');
     }
   }

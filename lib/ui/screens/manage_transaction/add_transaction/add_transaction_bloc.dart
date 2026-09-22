@@ -14,6 +14,7 @@ import '../../../../modals/firebase_modal/transaction_modal.dart';
 import '../../../../utils/constant.dart';
 import '../../../../utils/transaction_data.dart';
 import '../../../common_view/snack_bar.dart';
+import '../../../../utils/route.dart';
 
 class AddTransactionBloc {
   final BuildContext context;
@@ -131,7 +132,7 @@ class AddTransactionBloc {
 
       setAddTransactionProcessStatus(false);
 
-      if (context.mounted && Navigator.canPop(context)) Navigator.pop(context);
+      if (context.mounted) closeScreen(context);
       debugPrint('onComplete---------------------------------->Complete');
     }
   }

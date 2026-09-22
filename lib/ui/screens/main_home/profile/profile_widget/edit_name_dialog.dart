@@ -6,6 +6,7 @@ import '../../../../../utils/colors.dart';
 import '../../../../../utils/dimens.dart';
 import '../../../../common_view/common_button.dart';
 import '../../../../common_view/snack_bar.dart';
+import '../../../../../utils/route.dart';
 
 class EditNameDialog extends StatefulWidget {
   const EditNameDialog({
@@ -133,6 +134,6 @@ class _EditNameDialogState extends State<EditNameDialog> {
 
       widget.setChangeNameProcessStatus(false);
     }
-    if (context.mounted) Navigator.pop(context);
+    if (context.mounted) closeScreen(context);
   }
 }
