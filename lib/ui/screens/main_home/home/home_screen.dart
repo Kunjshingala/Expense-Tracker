@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   end: AlignmentDirectional.bottomCenter,
                   colors: [
                     homeAppBarColor,
-                    const Color(0xffF8EDD8).withOpacity(0.0),
+                    const Color(0xffF8EDD8).withValues(alpha: 0.0),
                   ],
                 ),
               ),

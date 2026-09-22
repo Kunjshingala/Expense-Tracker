@@ -69,13 +69,13 @@ class CustomButton extends StatelessWidget {
       child: ClipRRect(
         borderRadius: btnRadius,
         child: Material(
-          color: isLoading ? btnColor?.withOpacity(splashColorOpacity ?? 0.5) : btnColor,
+          color: isLoading ? btnColor?.withValues(alpha: splashColorOpacity ?? 0.5) : btnColor,
           type: MaterialType.button,
           animationDuration: const Duration(milliseconds: 500),
           borderRadius: btnRadius,
           child: InkWell(
             onTap: () => isLoading ? null : onPressed?.call(),
-            splashColor: btnColor?.withOpacity(splashColorOpacity ?? 0.3),
+            splashColor: btnColor?.withValues(alpha: splashColorOpacity ?? 0.3),
             borderRadius: btnRadius,
             child: Container(
               margin: btnMargin,

@@ -152,7 +152,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                               stream: updateTransactionBloc.getTransactionType,
                               builder: (context, snapTransactionType) {
                                 return DropdownButtonFormField(
-                                  value: snapTransactionType.data,
+                                  initialValue: snapTransactionType.data,
                                   items: TransactionType.values
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -218,7 +218,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                               stream: updateTransactionBloc.getTransactionMode,
                               builder: (context, snapTransactionMode) {
                                 return DropdownButtonFormField(
-                                  value: snapTransactionMode.data,
+                                  initialValue: snapTransactionMode.data,
                                   items: TransactionMode.values
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -383,7 +383,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
-                                                  color: const Color(0xff000000).withOpacity(0.32),
+                                                  color: const Color(0xff000000).withValues(alpha: 0.32),
                                                 ),
                                                 child: Icon(
                                                   CustomIcons.close_icons,

@@ -138,7 +138,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                               stream: addTransactionBloc.getTransactionType,
                               builder: (context, snapTransactionType) {
                                 return DropdownButtonFormField(
-                                  value: snapTransactionType.data,
+                                  initialValue: snapTransactionType.data,
                                   items: TransactionType.values
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -194,7 +194,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                     stream: addTransactionBloc.getSelectedCategory,
                                     builder: (context, snapSelectedCategory) {
                                       return DropdownButtonFormField(
-                                        value: snapSelectedCategory.data,
+                                        initialValue: snapSelectedCategory.data,
                                         items: (snapCategoryList.data ?? expenseTransactionCategoryList)
                                             .map(
                                               (e) => DropdownMenuItem(
@@ -253,7 +253,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                               stream: addTransactionBloc.getTransactionMode,
                               builder: (context, snapTransactionMode) {
                                 return DropdownButtonFormField(
-                                  value: snapTransactionMode.data,
+                                  initialValue: snapTransactionMode.data,
                                   items: TransactionMode.values
                                       .map(
                                         (e) => DropdownMenuItem(
@@ -417,7 +417,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                                             child: Container(
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: const Color(0xff000000).withOpacity(0.32),
+                                                color: const Color(0xff000000).withValues(alpha: 0.32),
                                               ),
                                               child: Icon(
                                                 CustomIcons.close_icons,
