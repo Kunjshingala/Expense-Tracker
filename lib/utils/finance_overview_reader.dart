@@ -20,7 +20,7 @@ Future<FinanceOverviewModal> readMonthFinanceOverview(DatabaseReference referenc
   final snapshot = await reference.get();
 
   if (!snapshot.exists) {
-    return FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0, isSurpassed: false);
+    return FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0);
   }
 
   return FinanceOverviewModal.fromMap(Map<String, dynamic>.from(snapshot.value as Map));

@@ -98,7 +98,7 @@ void main() {
   group('monthOverviewAfterRemoving', () {
     test('an expense decreases expense and raises the balance', () {
       final result = monthOverviewAfterRemoving(
-        FinanceOverviewModal(budget: 1000, expense: 800, income: 200, balance: 400, isSurpassed: false),
+        FinanceOverviewModal(budget: 1000, expense: 800, income: 200, balance: 400),
         transaction(amount: 300, type: TransactionType.expense),
       );
 
@@ -110,7 +110,7 @@ void main() {
 
     test('an income decreases income and lowers the balance', () {
       final result = monthOverviewAfterRemoving(
-        FinanceOverviewModal(budget: 1000, expense: 800, income: 200, balance: 400, isSurpassed: false),
+        FinanceOverviewModal(budget: 1000, expense: 800, income: 200, balance: 400),
         transaction(amount: 200, type: TransactionType.income),
       );
 
@@ -121,7 +121,7 @@ void main() {
 
     test('flags isSurpassed when removing income pushes the balance negative', () {
       final result = monthOverviewAfterRemoving(
-        FinanceOverviewModal(budget: 0, expense: 500, income: 600, balance: 100, isSurpassed: false),
+        FinanceOverviewModal(budget: 0, expense: 500, income: 600, balance: 100),
         transaction(amount: 600, type: TransactionType.income),
       );
 
@@ -131,7 +131,7 @@ void main() {
 
     test('clears isSurpassed when removing an expense restores a positive balance', () {
       final result = monthOverviewAfterRemoving(
-        FinanceOverviewModal(budget: 0, expense: 900, income: 400, balance: -500, isSurpassed: true),
+        FinanceOverviewModal(budget: 0, expense: 900, income: 400, balance: -500),
         transaction(amount: 900, type: TransactionType.expense),
       );
 
@@ -143,7 +143,7 @@ void main() {
   group('monthOverviewAfterAdding', () {
     test('an expense increases expense and lowers the balance', () {
       final result = monthOverviewAfterAdding(
-        FinanceOverviewModal(budget: 1000, expense: 200, income: 0, balance: 800, isSurpassed: false),
+        FinanceOverviewModal(budget: 1000, expense: 200, income: 0, balance: 800),
         transaction(amount: 300, type: TransactionType.expense),
       );
 
@@ -154,7 +154,7 @@ void main() {
 
     test('flags isSurpassed when an expense exceeds budget plus income', () {
       final result = monthOverviewAfterAdding(
-        FinanceOverviewModal(budget: 100, expense: 0, income: 0, balance: 100, isSurpassed: false),
+        FinanceOverviewModal(budget: 100, expense: 0, income: 0, balance: 100),
         transaction(amount: 250, type: TransactionType.expense),
       );
 
@@ -164,7 +164,7 @@ void main() {
 
     test('a balance of exactly zero is not surpassed', () {
       final result = monthOverviewAfterAdding(
-        FinanceOverviewModal(budget: 100, expense: 0, income: 0, balance: 100, isSurpassed: false),
+        FinanceOverviewModal(budget: 100, expense: 0, income: 0, balance: 100),
         transaction(amount: 100, type: TransactionType.expense),
       );
 

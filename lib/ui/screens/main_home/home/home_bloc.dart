@@ -102,7 +102,7 @@ class HomeBloc {
         debugPrint('financeOverviewStream---------------------------------->$financeOverviewModal');
       } else {
         financeOverviewModal =
-            FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0, isSurpassed: false);
+            FinanceOverviewModal(budget: 0, expense: 0, income: 0, balance: 0);
       }
       setFinanceOverview(financeOverviewModal);
     });

@@ -73,6 +73,5 @@ FinanceOverviewModal _monthOverviewShiftedBy(
     expense: expense,
     income: income,
     balance: balance,
-    isSurpassed: balance < 0,
   );
 }

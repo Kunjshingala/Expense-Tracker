@@ -14,10 +14,19 @@ class DayFinanceOverviewModal {
     };
   }
 
+  /// Missing or non-numeric fields read as 0, for the same reason as
+  /// [FinanceOverviewModal.fromMap]: increments create only the keys they
+  /// touch.
   factory DayFinanceOverviewModal.fromMap(Map<String, dynamic> map) {
     return DayFinanceOverviewModal(
-      expense: map['expense'],
-      income: map['income'],
+      expense: _asInt(map['expense']),
+      income: _asInt(map['income']),
     );
   }
+}
+
+int _asInt(Object? value) {
+  if (value is int) return value;
+  if (value is num) return value.toInt();
+  return 0;
 }

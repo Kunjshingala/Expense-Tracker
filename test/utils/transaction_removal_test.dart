@@ -34,7 +34,7 @@ Map<String, Object?> updatesFor(TransactionModal txn, {
   return transactionRemovalUpdates(
     transaction: txn,
     dayOverview: day ?? DayFinanceOverviewModal(expense: 500, income: 300),
-    monthOverview: month ?? FinanceOverviewModal(budget: 1000, expense: 500, income: 300, balance: 800, isSurpassed: false),
+    monthOverview: month ?? FinanceOverviewModal(budget: 1000, expense: 500, income: 300, balance: 800),
   );
 }
 
@@ -78,7 +78,7 @@ void main() {
     test('writes the recalculated month overview', () {
       final updates = updatesFor(
         transaction(amount: 200, type: TransactionType.expense),
-        month: FinanceOverviewModal(budget: 1000, expense: 500, income: 300, balance: 800, isSurpassed: false),
+        month: FinanceOverviewModal(budget: 1000, expense: 500, income: 300, balance: 800),
       );
 
       final month = updates['month-wise-transactions/04-2024/summary/month-finance-overview'];
@@ -87,7 +87,6 @@ void main() {
         'expense': 300,
         'income': 300,
         'balance': 1000,
-        'isSurpassed': false,
       });
     });
 
