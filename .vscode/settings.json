@@ -1,0 +1,17 @@
+{
+  // Use the fvm-pinned SDK (.fvmrc -> 3.47.5) rather than whatever `flutter`
+  // resolves to on PATH. Without this the extension runs a different SDK than
+  // the CLI and rewrites pubspec.lock with that SDK's package pins.
+  "dart.flutterSdkPath": ".fvm/flutter_sdk",
+
+  // The symlinked SDK is large and would otherwise be indexed and watched.
+  "search.exclude": {
+    "**/.fvm/**": true
+  },
+  "files.watcherExclude": {
+    "**/.fvm/**": true
+  },
+  "files.exclude": {
+    "**/.fvm/versions": true
+  }
+}
