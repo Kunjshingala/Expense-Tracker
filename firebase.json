@@ -1,1 +1,24 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"expense-tracker-a64ac","appId":"1:239676754306:android:e87597ed8128e299f3279b","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"expense-tracker-a64ac","configurations":{"android":"1:239676754306:android:e87597ed8128e299f3279b"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "expense-tracker-a64ac",
+          "appId": "1:239676754306:android:e87597ed8128e299f3279b",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "expense-tracker-a64ac",
+          "configurations": {
+            "android": "1:239676754306:android:e87597ed8128e299f3279b"
+          }
+        }
+      }
+    }
+  },
+  "database": {
+    "rules": "database.rules.json"
+  }
+}
