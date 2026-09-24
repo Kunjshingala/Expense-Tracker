@@ -53,11 +53,29 @@ class UpdateTransactionBloc {
 
   Function(File?) get setFile => fileSubject.add;
 
+  final categoryListSubject = BehaviorSubject<List<TransactionCategoryModal>>.seeded(expenseTransactionCategoryList);
+
+  Stream<List<TransactionCategoryModal>> get getCategoryList => categoryListSubject.stream;
+
+  Function(List<TransactionCategoryModal>) get setCategoryList => categoryListSubject.add;
+
+  final selectedCategorySubject = BehaviorSubject<TransactionCategoryModal?>();
+
+  Stream<TransactionCategoryModal?> get getSelectedCategory => selectedCategorySubject.stream;
+
+  Function(TransactionCategoryModal?) get setSelectedCategory => selectedCategorySubject.add;
+
   void setLastData(TransactionModal transactionModal) {
     amountController.text = transactionModal.amount.toString();
     setTransactionType(TransactionType.values[transactionModal.transactionType]);
 
-    /// category and image already set directly.
+    /// seed the category list and selection from what is actually stored, so
+    /// editing starts from the real category rather than always defaulting.
+    final categoryList = transactionModal.transactionType == TransactionType.expense.index
+        ? expenseTransactionCategoryList
+        : incomeTransactionCategoryList;
+    setCategoryList(categoryList);
+    setSelectedCategory(getCategoryModalById(transactionModal.category));
 
     setTransactionMode(TransactionMode.values[transactionModal.transactionMode]);
     dateController.text = transactionModal.date;
@@ -82,9 +100,17 @@ class UpdateTransactionBloc {
     fileSubject.value = null;
   }
 
+  /// see AddTransactionBloc._amount for why this is nullable.
+  int? get _amount => int.tryParse(amountController.text.trim());
+
   bool isReadyToComplete() {
-    if (int.parse(amountController.text.trim()) <= 0) {
+    final amount = _amount;
+    if (amount == null || amount <= 0) {
       showMySnackBar(message: languages.amountValidationMsg, messageType: MessageType.warning);
+      return false;
+    }
+    if (!selectedCategorySubject.hasValue) {
+      showMySnackBar(message: '${languages.selectCategory}.', messageType: MessageType.warning);
       return false;
     }
 
@@ -161,9 +187,11 @@ class UpdateTransactionBloc {
   }
 
   TransactionModal setDataIntoModal(TransactionModal oldTransactionModal, String? fileUrl) {
-    final amount = int.parse(amountController.text.trim());
+    /// safe: onComplete only reaches here after isReadyToComplete() confirmed
+    /// the amount parses.
+    final amount = _amount!;
     final transactionType = transactionTypeSubject.value.index;
-    final category = oldTransactionModal.category;
+    final category = selectedCategorySubject.value!.id;
     final transactionMode = transactionModeSubject.value.index;
     final date = dateController.text;
     final description = descriptionController.text.trim();
@@ -224,6 +252,8 @@ class UpdateTransactionBloc {
     descriptionController.dispose();
     transactionModeSubject.close();
     fileSubject.close();
+    categoryListSubject.close();
+    selectedCategorySubject.close();
     dateController.dispose();
     updateTransactionProcessStatusSubject.close();
   }

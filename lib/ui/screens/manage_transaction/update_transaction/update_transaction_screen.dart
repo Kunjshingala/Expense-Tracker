@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../../services/permission_handle/permission_handle.dart';
@@ -112,6 +113,7 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                             child: TextFormField(
                               controller: updateTransactionBloc.amountController,
                               keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               cursorColor: white100,
                               style: GoogleFonts.inter(
                                 color: white80,
@@ -163,6 +165,16 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                                       .toList(),
                                   onChanged: (value) {
                                     updateTransactionBloc.setTransactionType(value!);
+
+                                    /// a category id encodes which side it belongs to (expense
+                                    /// vs income), so a category chosen under the old type can
+                                    /// no longer be valid once the type changes.
+                                    final list = value == TransactionType.expense
+                                        ? expenseTransactionCategoryList
+                                        : incomeTransactionCategoryList;
+
+                                    updateTransactionBloc.setCategoryList(list);
+                                    updateTransactionBloc.setSelectedCategory(null);
                                   },
                                   style: GoogleFonts.inter(
                                     color: black50,
@@ -191,28 +203,67 @@ class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
                               },
                             ),
                             SizedBox(height: screenHeight * 0.02),
-                            Container(
-                              height: screenHeight * 0.08,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: white40),
-                                borderRadius: BorderRadius.circular(averageScreenSize * 0.03),
-                              ),
-                              padding: EdgeInsetsDirectional.symmetric(horizontal: screenWidth * 0.03),
-                              child: Row(
-                                children: [
-                                  getCategoryModalById(widget.transactionModal.category).icon,
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Text(
-                                    getCategoryModalById(widget.transactionModal.category).label,
-                                    style: GoogleFonts.inter(
-                                      color: black50,
-                                      fontSize: averageScreenSize * 0.03,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            StreamBuilder<List<TransactionCategoryModal>>(
+                                stream: updateTransactionBloc.getCategoryList,
+                                builder: (context, snapCategoryList) {
+                                  return StreamBuilder<TransactionCategoryModal?>(
+                                    stream: updateTransactionBloc.getSelectedCategory,
+                                    builder: (context, snapSelectedCategory) {
+                                      return DropdownButtonFormField(
+                                        initialValue: snapSelectedCategory.data,
+                                        items: (snapCategoryList.data ?? expenseTransactionCategoryList)
+                                            .map(
+                                              (e) => DropdownMenuItem(
+                                                value: e,
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    e.icon,
+                                                    SizedBox(width: screenWidth * 0.02),
+                                                    Text(e.label),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                        onChanged: (value) {
+                                          updateTransactionBloc.setSelectedCategory(value);
+                                        },
+                                        style: GoogleFonts.inter(
+                                          color: black50,
+                                          fontSize: averageScreenSize * 0.03,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        isDense: true,
+                                        dropdownColor: white100,
+                                        icon: Icon(
+                                          CustomIcons.arrow_down_icons,
+                                          color: white20,
+                                          size: averageScreenSize * 0.04,
+                                        ),
+                                        hint: Text(
+                                          languages.selectCategory,
+                                          style: GoogleFonts.inter(
+                                            color: white0,
+                                            fontSize: averageScreenSize * 0.03,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        decoration: InputDecoration(
+                                          constraints: BoxConstraints.expand(height: screenHeight * 0.08),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(color: white40),
+                                            borderRadius: BorderRadius.circular(averageScreenSize * 0.03),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(color: white40),
+                                            borderRadius: BorderRadius.circular(averageScreenSize * 0.03),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }),
                             SizedBox(height: screenHeight * 0.02),
                             StreamBuilder<TransactionMode>(
                               stream: updateTransactionBloc.getTransactionMode,
