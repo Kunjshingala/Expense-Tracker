@@ -86,8 +86,14 @@ class AddTransactionBloc {
     fileSubject.value = null;
   }
 
+  /// Null when the field is empty or holds something that isn't a whole
+  /// number — the digits-only keyboard filter blocks most of that, but not
+  /// every IME honors it, and the field can always be cleared to empty.
+  int? get _amount => int.tryParse(amountController.text.trim());
+
   bool isReadyToComplete() {
-    if (int.parse(amountController.text.trim()) <= 0) {
+    final amount = _amount;
+    if (amount == null || amount <= 0) {
       showMySnackBar(message: languages.amountValidationMsg, messageType: MessageType.warning);
       return false;
     }
@@ -161,7 +167,9 @@ class AddTransactionBloc {
   TransactionModal setDataIntoModal(String transactionId, String? url) {
     late TransactionModal transactionModal;
 
-    final amount = int.parse(amountController.text.trim());
+    /// safe: onComplete only reaches here after isReadyToComplete() confirmed
+    /// the amount parses.
+    final amount = _amount!;
     final transactionType = transactionTypeSubject.value.index;
     final date = dateController.text;
     final category = selectedCategorySubject.value!.id;

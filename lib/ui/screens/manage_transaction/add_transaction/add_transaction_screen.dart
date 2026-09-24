@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:expense_tracker/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../../utils/colors.dart';
@@ -98,6 +99,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             child: TextFormField(
                               controller: addTransactionBloc.amountController,
                               keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               cursorColor: white100,
                               style: GoogleFonts.inter(
                                 color: white80,
