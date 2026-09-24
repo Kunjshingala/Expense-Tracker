@@ -3,7 +3,12 @@
     "users": {
       "$uid": {
         ".read": "$uid === auth.uid",
-        ".write": "$uid === auth.uid"
+        ".write": "$uid === auth.uid",
+        "transactions": {
+          "all-transactions": {
+            ".indexOn": "time"
+          }
+        }
       }
     }
   }

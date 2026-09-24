@@ -24,6 +24,12 @@ class HomeAllTabBloc {
   Stream<List<TransactionModal>?> get getTransactionList => transactionListSubject.stream;
   Function(List<TransactionModal>?) get setTransactionList => transactionListSubject.add;
 
+  /// how many of the most recent transactions this tab keeps live. Without a
+  /// limit, every add re-downloads the user's entire transaction history to
+  /// every subscribed client — full payloads, images and all — which grows
+  /// without bound as the account ages.
+  static const _recentTransactionLimit = 100;
+
   getThisAllTransaction() async {
     /// Main Ref.
     final allTransactionDatabaseRef = realtimeDatabase
@@ -33,34 +39,12 @@ class HomeAllTabBloc {
         .child(FirebaseRealTimeDatabaseRef.transactions)
         .child(FirebaseRealTimeDatabaseRef.allTransaction);
 
-    // final snapshot = await allTransactionDatabaseRef.get();
-    //
-    // if (snapshot.exists) {
-    //   List<TransactionModal> list = [];
-    //
-    //   final transactionData = snapshot.children;
-    //
-    //   for (var element in transactionData) {
-    //     Map<String, dynamic> mappedSnapshot = Map.from(element.value as Map);
-    //     list.add(TransactionModal.fromMap(mappedSnapshot));
-    //   }
-    //
-    //   list.sort(
-    //     (a, b) {
-    //       return a.time.compareTo(b.time);
-    //     },
-    //   );
-    //
-    //   setTransactionList(list);
-    //   debugPrint('---------------------------------->${list.length}');
-    // } else {
-    //   setTransactionList([]);
-    //   debugPrint('---------------------------------->No data available.');
-    // }
-
     await _transactionSubscription?.cancel();
 
-    _transactionSubscription = allTransactionDatabaseRef.onValue.listen((event) {
+    final recentTransactionsQuery =
+        allTransactionDatabaseRef.orderByChild('time').limitToLast(_recentTransactionLimit);
+
+    _transactionSubscription = recentTransactionsQuery.onValue.listen((event) {
       List<TransactionModal> list = [];
 
       final transactionData = event.snapshot.children;
@@ -70,11 +54,9 @@ class HomeAllTabBloc {
         list.add(TransactionModal.fromMap(mappedSnapshot));
       }
 
-      list.sort(
-        (a, b) {
-          return a.time.compareTo(b.time);
-        },
-      );
+      /// newest first — a transaction feed reads top-down by recency, and the
+      /// query above returns oldest-of-the-window first.
+      list.sort((a, b) => b.time.compareTo(a.time));
 
       setTransactionList(list);
     });
