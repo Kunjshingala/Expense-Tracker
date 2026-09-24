@@ -17,17 +17,29 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late ProfileBloc profileBloc;
+  ProfileBloc? _profileBloc;
+
+  ProfileBloc get profileBloc => _profileBloc!;
 
   @override
   void didChangeDependencies() {
-    profileBloc = ProfileBloc(context: context);
+    /// dependencies change more than once over a screen's life, and the
+    /// feature labels are rebuilt here so they follow the locale. Each rebuild
+    /// used to strand the previous bloc with its auth listener still attached.
+    _profileBloc?.dispose();
+    _profileBloc = ProfileBloc(context: context);
 
     // Todo: Add this at bloc
     profileBloc.getProfileFeatureList();
     profileBloc.getBasicDetails();
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _profileBloc?.dispose();
+    super.dispose();
   }
 
   @override

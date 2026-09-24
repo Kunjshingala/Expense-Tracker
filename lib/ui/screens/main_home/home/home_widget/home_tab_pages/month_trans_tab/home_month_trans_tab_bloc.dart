@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,10 @@ class HomeMonthTabBloc {
 
   late FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
+
+  /// see [HomeAllTabBloc] for why the subscription is held rather than
+  /// relying on the subject being closed.
+  StreamSubscription<DatabaseEvent>? _transactionSubscription;
 
   final transactionListSubject = BehaviorSubject<List<TransactionModal>?>();
   Stream<List<TransactionModal>?> get getTransactionList => transactionListSubject.stream;
@@ -62,9 +67,9 @@ class HomeMonthTabBloc {
     //   debugPrint('---------------------------------->No data available.');
     // }
 
-    final monthDataStream = monthlyTransactionsRef.onValue;
+    await _transactionSubscription?.cancel();
 
-    monthDataStream.listen((event) {
+    _transactionSubscription = monthlyTransactionsRef.onValue.listen((event) {
       List<TransactionModal> list = [];
 
       final monthData = event.snapshot.children;
@@ -82,6 +87,7 @@ class HomeMonthTabBloc {
   }
 
   void dispose() {
+    _transactionSubscription?.cancel();
     transactionListSubject.close();
   }
 }

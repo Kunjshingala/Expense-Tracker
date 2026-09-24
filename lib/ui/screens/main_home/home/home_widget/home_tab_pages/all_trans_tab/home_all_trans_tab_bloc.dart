@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,11 @@ class HomeAllTabBloc {
 
   late FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
+
+  /// held so the Firebase listener can be detached when the tab goes away.
+  /// Closing the subject alone leaves the listener attached, still syncing and
+  /// still pushing events into a closed subject.
+  StreamSubscription<DatabaseEvent>? _transactionSubscription;
 
   final transactionListSubject = BehaviorSubject<List<TransactionModal>?>();
   Stream<List<TransactionModal>?> get getTransactionList => transactionListSubject.stream;
@@ -52,9 +58,9 @@ class HomeAllTabBloc {
     //   debugPrint('---------------------------------->No data available.');
     // }
 
-    final allTransactionDataStream = allTransactionDatabaseRef.onValue;
+    await _transactionSubscription?.cancel();
 
-    allTransactionDataStream.listen((event) {
+    _transactionSubscription = allTransactionDatabaseRef.onValue.listen((event) {
       List<TransactionModal> list = [];
 
       final transactionData = event.snapshot.children;
@@ -75,6 +81,7 @@ class HomeAllTabBloc {
   }
 
   void dispose() {
+    _transactionSubscription?.cancel();
     transactionListSubject.close();
   }
 }

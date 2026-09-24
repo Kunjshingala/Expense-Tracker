@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,12 @@ class HomeBloc {
 
   late FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
+
+  /// both Firebase listeners are held so they can be detached in [dispose].
+  /// Closing the subjects alone leaves them attached, still syncing and still
+  /// pushing events into a closed subject.
+  StreamSubscription<DatabaseEvent>? _financeOverviewSubscription;
+  StreamSubscription<DatabaseEvent>? _chartSubscription;
 
   final chartDataListSubject = BehaviorSubject<HomeGraphSpineSeriesListModal>();
   Stream<HomeGraphSpineSeriesListModal> get getChartDataList => chartDataListSubject.stream;
@@ -85,9 +92,9 @@ class HomeBloc {
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.monthFinanceOverview);
 
-    final financeOverviewStream = financeOverviewSummaryRef.onValue;
+    await _financeOverviewSubscription?.cancel();
 
-    financeOverviewStream.listen((event) {
+    _financeOverviewSubscription = financeOverviewSummaryRef.onValue.listen((event) {
       if (event.snapshot.exists) {
         debugPrint('financeOverviewStream---------------------------------->${event.snapshot}');
         debugPrint('financeOverviewStream---------------------------------->${event.snapshot.value}');
@@ -126,19 +133,13 @@ class HomeBloc {
         .child('${dateDataList[1]}-${dateDataList[2]}')
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions);
 
-    final daysDataStream = transactionsRef.onValue;
-
-    daysDataStream.listen((event) {
+    _chartSubscription = transactionsRef.onValue.listen((event) {
       List<HomeChartDataModal> expenseChartDataList = [];
       List<HomeChartDataModal> incomeChartDataList = [];
 
       final daysData = event.snapshot.children;
 
       for (var daysElement in daysData) {
-        daysElement
-            .child(FirebaseRealTimeDatabaseRef.daySummary)
-            .child(FirebaseRealTimeDatabaseRef.dayFinanceOverview);
-
         int date = int.parse(daysElement.key!);
 
         final dayFinanceOverviewData =
@@ -164,12 +165,14 @@ class HomeBloc {
         HomeGraphSpineSeriesListModal(
             expensesDataList: expenseChartDataList, incomeDataList: incomeChartDataList),
       );
-    }).onError((e) {
+    }, onError: (e) {
       debugPrint('---------------------------------->$e');
     });
   }
 
   void dispose() {
+    _financeOverviewSubscription?.cancel();
+    _chartSubscription?.cancel();
     chartDataListSubject.close();
     financeOverviewSubject.close();
   }

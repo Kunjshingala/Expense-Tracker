@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,10 @@ class HomeTodayTabBloc {
 
   late FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseDatabase realtimeDatabase = FirebaseDatabase.instance;
+
+  /// see [HomeAllTabBloc] for why the subscription is held rather than
+  /// relying on the subject being closed.
+  StreamSubscription<DatabaseEvent>? _transactionSubscription;
 
   final transactionListSubject = BehaviorSubject<List<TransactionModal>?>();
   Stream<List<TransactionModal>?> get getTransactionList => transactionListSubject.stream;
@@ -56,9 +61,9 @@ class HomeTodayTabBloc {
     //   debugPrint('---------------------------------->No data available.');
     // }
 
-    final todayDataStream = todayTransactionsRef.onValue;
+    await _transactionSubscription?.cancel();
 
-    todayDataStream.listen((event) {
+    _transactionSubscription = todayTransactionsRef.onValue.listen((event) {
       List<TransactionModal> list = [];
 
       final daysData = event.snapshot.children;
@@ -72,6 +77,7 @@ class HomeTodayTabBloc {
   }
 
   void dispose() {
+    _transactionSubscription?.cancel();
     transactionListSubject.close();
   }
 }

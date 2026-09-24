@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:core';
 
 import 'package:expense_tracker/main.dart';
@@ -24,6 +25,10 @@ class ProfileBloc {
 
   final editNameController = TextEditingController();
 
+  /// held so the auth listener is detached with the screen. userChanges()
+  /// outlives the bloc otherwise, and fires again on every sign-in.
+  StreamSubscription<User?>? _currentUserSubscription;
+
   final basicUserDetailsSubject = BehaviorSubject<UserDetails>();
 
   Stream<UserDetails> get getBasicUserDetails => basicUserDetailsSubject.stream;
@@ -37,10 +42,14 @@ class ProfileBloc {
   Function(bool) get setChangeNameProcessStatus => changeNameProcessStatusSubject.add;
 
   void getBasicDetails() async {
-    final currentUserStream = auth.userChanges();
+    await _currentUserSubscription?.cancel();
 
-    currentUserStream.listen((currentUser) {
-      String name = currentUser!.displayName != null && currentUser.displayName!.isNotEmpty
+    _currentUserSubscription = auth.userChanges().listen((currentUser) {
+      /// userChanges() emits null on sign out, while this screen is still
+      /// mounted behind the logout sheet. There is nothing to show then.
+      if (currentUser == null) return;
+
+      String name = currentUser.displayName != null && currentUser.displayName!.isNotEmpty
           ? currentUser.displayName!
           : languages.setYourName;
       final profileUrl = currentUser.photoURL ??
@@ -108,6 +117,7 @@ class ProfileBloc {
   }
 
   void dispose() {
+    _currentUserSubscription?.cancel();
     basicUserDetailsSubject.close();
     editNameController.dispose();
     changeNameProcessStatusSubject.close();
