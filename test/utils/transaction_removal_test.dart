@@ -11,7 +11,7 @@ TransactionModal transaction({
   TransactionType type = TransactionType.expense,
   TransactionMode mode = TransactionMode.cash,
   int category = 3,
-  String date = '12 04 2024',
+  String date = '12 April 2024',
 }) {
   return TransactionModal(
     id: id,
@@ -50,7 +50,7 @@ void main() {
     test('nulls the transaction out of its day node', () {
       final updates = updatesFor(transaction());
 
-      const path = 'month-wise-transactions/04-2024/day-wise-transactions/12/transactions/txn-1';
+      const path = 'month-wise-transactions/2024-04/day-wise-transactions/12/transactions/txn-1';
       expect(updates.containsKey(path), isTrue);
       expect(updates[path], isNull);
     });
@@ -60,9 +60,9 @@ void main() {
         transaction(category: 3, type: TransactionType.income, mode: TransactionMode.online),
       );
 
-      expect(updates.containsKey('month-wise-transactions/04-2024/summary/categories/3/txn-1'), isTrue);
-      expect(updates.containsKey('month-wise-transactions/04-2024/summary/transfer-type/1/txn-1'), isTrue);
-      expect(updates.containsKey('month-wise-transactions/04-2024/summary/transfer-mode/1/txn-1'), isTrue);
+      expect(updates.containsKey('month-wise-transactions/2024-04/summary/categories/3/txn-1'), isTrue);
+      expect(updates.containsKey('month-wise-transactions/2024-04/summary/transfer-type/1/txn-1'), isTrue);
+      expect(updates.containsKey('month-wise-transactions/2024-04/summary/transfer-mode/1/txn-1'), isTrue);
     });
 
     test('writes the recalculated day overview', () {
@@ -71,7 +71,7 @@ void main() {
         day: DayFinanceOverviewModal(expense: 500, income: 300),
       );
 
-      final day = updates['month-wise-transactions/04-2024/day-wise-transactions/12/day-finance-overview'];
+      final day = updates['month-wise-transactions/2024-04/day-wise-transactions/12/day-finance-overview'];
       expect(day, {'expense': 300, 'income': 300});
     });
 
@@ -81,7 +81,7 @@ void main() {
         month: FinanceOverviewModal(budget: 1000, expense: 500, income: 300, balance: 800),
       );
 
-      final month = updates['month-wise-transactions/04-2024/summary/month-finance-overview'];
+      final month = updates['month-wise-transactions/2024-04/summary/month-finance-overview'];
       expect(month, {
         'budget': 1000,
         'expense': 300,

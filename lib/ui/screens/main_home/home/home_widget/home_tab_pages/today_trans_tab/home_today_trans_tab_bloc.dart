@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../../../../../../modals/firebase_modal/transaction_modal.dart';
+import '../../../../../../../utils/finance_calculation.dart';
 import '../../../../../../../utils/firebase_references.dart';
 
 class HomeTodayTabBloc {
@@ -37,7 +38,7 @@ class HomeTodayTabBloc {
     final dateDataList = date.split(' ');
 
     final todayTransactionsRef = rtDatabaseRef
-        .child('${dateDataList[1]}-${dateDataList[2]}')
+        .child(monthKeyFor(DateTime.now()))
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions)
         .child(dateDataList[0])
         .child(FirebaseRealTimeDatabaseRef.transactions);

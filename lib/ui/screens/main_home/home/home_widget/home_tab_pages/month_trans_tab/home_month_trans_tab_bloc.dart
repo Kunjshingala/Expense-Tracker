@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../../../../../../modals/firebase_modal/transaction_modal.dart';
+import '../../../../../../../utils/finance_calculation.dart';
 import '../../../../../../../utils/firebase_references.dart';
 
 class HomeMonthTabBloc {
@@ -35,11 +34,8 @@ class HomeMonthTabBloc {
         .child(FirebaseRealTimeDatabaseRef.transactions)
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions);
 
-    String date = DateFormat('dd MMMM yyyy').format(DateTime.now());
-    final dateDataList = date.split(' ');
-
     final monthlyTransactionsRef = rtDatabaseRef
-        .child('${dateDataList[1]}-${dateDataList[2]}')
+        .child(monthKeyFor(DateTime.now()))
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions);
 
     // final snapshot = await monthlyTransactionsRef.get();
@@ -78,7 +74,6 @@ class HomeMonthTabBloc {
         final daysTransactions = days.child(FirebaseRealTimeDatabaseRef.transactions).children;
         for (var transaction in daysTransactions) {
           Map<String, dynamic> mappedSnapshot = Map.from(transaction.value as Map);
-          log('snapshot---------------------------------->days.value $mappedSnapshot}');
           list.add(TransactionModal.fromMap(mappedSnapshot));
         }
       }

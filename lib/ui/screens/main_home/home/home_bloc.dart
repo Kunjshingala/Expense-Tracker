@@ -8,6 +8,7 @@ import 'package:rxdart/subjects.dart';
 import '../../../../modals/firebase_modal/day_finance_overview_modal.dart';
 import '../../../../modals/firebase_modal/month_finance_overview_modal.dart';
 import '../../../../modals/local_modal/home_chart_data_modal.dart';
+import '../../../../utils/finance_calculation.dart';
 import '../../../../utils/firebase_references.dart';
 
 class HomeBloc {
@@ -78,17 +79,13 @@ class HomeBloc {
   void getBudgetSummary() async {
     late FinanceOverviewModal financeOverviewModal;
 
-    /// get last data from server.
-    String date = DateFormat('dd MMMM yyyy').format(DateTime.now());
-    final dateDataList = date.split(' ');
-
     final financeOverviewSummaryRef = realtimeDatabase
         .ref()
         .child(FirebaseRealTimeDatabaseRef.users)
         .child(auth.currentUser!.uid)
         .child(FirebaseRealTimeDatabaseRef.transactions)
         .child(FirebaseRealTimeDatabaseRef.monthWiseTransactions)
-        .child('${dateDataList[1]}-${dateDataList[2]}')
+        .child(monthKeyFor(DateTime.now()))
         .child(FirebaseRealTimeDatabaseRef.summary)
         .child(FirebaseRealTimeDatabaseRef.monthFinanceOverview);
 
@@ -117,9 +114,6 @@ class HomeBloc {
 
   /// For Chart
   void getMonthlyDataForChart() {
-    String date = DateFormat('dd MMMM yyyy').format(DateTime.now());
-    final dateDataList = date.split(' ');
-
     /// Main Ref.
     final rtDatabaseRef = realtimeDatabase
         .ref()
@@ -130,7 +124,7 @@ class HomeBloc {
 
     /// this Month transaction Ref.
     final transactionsRef = rtDatabaseRef
-        .child('${dateDataList[1]}-${dateDataList[2]}')
+        .child(monthKeyFor(DateTime.now()))
         .child(FirebaseRealTimeDatabaseRef.dayWiseTransactions);
 
     _chartSubscription = transactionsRef.onValue.listen((event) {

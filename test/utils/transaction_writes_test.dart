@@ -9,7 +9,7 @@ TransactionModal transaction({
   TransactionType type = TransactionType.expense,
   TransactionMode mode = TransactionMode.cash,
   int category = 3,
-  String date = '12 04 2024',
+  String date = '12 April 2024',
   String? description,
 }) {
   return TransactionModal(
@@ -32,7 +32,7 @@ Map<String, Object?> increment(num delta) => {
       '.sv': {'increment': delta}
     };
 
-const month = 'month-wise-transactions/04-2024';
+const month = 'month-wise-transactions/2024-04';
 const day = '$month/day-wise-transactions/12';
 const summary = '$month/summary';
 
@@ -172,11 +172,11 @@ void main() {
 
     test('moving to another month empties the old month and fills the new one', () {
       final updates = transactionWriteUpdates(
-        previous: transaction(amount: 200, date: '12 04 2024'),
-        next: transaction(amount: 200, date: '03 05 2024'),
+        previous: transaction(amount: 200, date: '12 April 2024'),
+        next: transaction(amount: 200, date: '03 May 2024'),
       );
 
-      const newMonth = 'month-wise-transactions/05-2024';
+      const newMonth = 'month-wise-transactions/2024-05';
       const newDay = '$newMonth/day-wise-transactions/03';
 
       /// every old path is vacated.
@@ -197,8 +197,8 @@ void main() {
 
     test('moving to another day in the same month keeps one month total', () {
       final updates = transactionWriteUpdates(
-        previous: transaction(amount: 200, date: '12 04 2024'),
-        next: transaction(amount: 200, date: '13 04 2024'),
+        previous: transaction(amount: 200, date: '12 April 2024'),
+        next: transaction(amount: 200, date: '13 April 2024'),
       );
 
       /// the day totals move...
@@ -216,7 +216,7 @@ void main() {
     test('keys are relative paths with no leading slash', () {
       final updates = transactionWriteUpdates(
         previous: transaction(),
-        next: transaction(date: '03 05 2024'),
+        next: transaction(date: '03 May 2024'),
       );
 
       for (final key in updates.keys) {

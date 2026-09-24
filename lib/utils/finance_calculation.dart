@@ -4,22 +4,34 @@ import '../modals/firebase_modal/transaction_modal.dart';
 import 'constant.dart';
 import 'transaction_data.dart';
 
-/// The parts of a stored `'DD MM YYYY'` transaction date, as the realtime
+/// The parts of a stored `'DD MMMM YYYY'` transaction date, as the realtime
 /// database paths need them.
 class TransactionDateKey {
+  /// The stored day, unpadded-or-padded exactly as `dateFormat` produced it
+  /// (e.g. `'07'`) — kept as a string so existing `day-wise-transactions`
+  /// keys never shift.
   final String day;
-  final String month;
-  final String year;
 
-  const TransactionDateKey({required this.day, required this.month, required this.year});
+  /// Key of the `month-wise-transactions` child holding this date, e.g.
+  /// `'2026-09'`.
+  final String monthKey;
 
-  /// Key of the `month-wise-transactions` child holding this date.
-  String get monthKey => '$month-$year';
+  const TransactionDateKey({required this.day, required this.monthKey});
+}
+
+/// `'YYYY-MM'` for [date]. Numeric rather than the locale month name, so it
+/// sorts and range-queries correctly and stays stable no matter what
+/// language the app displays in — a locale-formatted key would file each
+/// language's transactions under a different, unrelated month bucket.
+String monthKeyFor(DateTime date) {
+  final year = date.year.toString().padLeft(4, '0');
+  final month = date.month.toString().padLeft(2, '0');
+  return '$year-$month';
 }
 
 TransactionDateKey parseTransactionDate(String date) {
-  final parts = date.split(dateSplitFormat);
-  return TransactionDateKey(day: parts[0], month: parts[1], year: parts[2]);
+  final day = date.split(dateSplitFormat)[0];
+  return TransactionDateKey(day: day, monthKey: monthKeyFor(dateFormat.parse(date)));
 }
 
 bool _isExpense(TransactionModal transaction) => transaction.transactionType == TransactionType.expense.index;

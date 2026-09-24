@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 TransactionModal transaction({
   required int amount,
   required TransactionType type,
-  String date = '12 04 2024',
+  String date = '12 April 2024',
 }) {
   return TransactionModal(
     id: 'test-id',
@@ -28,16 +28,29 @@ TransactionModal transaction({
 
 void main() {
   group('parseTransactionDate', () {
-    test('splits a stored date into day, month and year', () {
-      final parsed = parseTransactionDate('12 04 2024');
-
-      expect(parsed.day, '12');
-      expect(parsed.month, '04');
-      expect(parsed.year, '2024');
+    test('keeps the stored day exactly as it appears in the date string', () {
+      expect(parseTransactionDate('12 April 2024').day, '12');
     });
 
-    test('builds the MM-YYYY key used for month-wise-transactions nodes', () {
-      expect(parseTransactionDate('12 04 2024').monthKey, '04-2024');
+    test('builds the numeric YYYY-MM key used for month-wise-transactions nodes', () {
+      expect(parseTransactionDate('12 April 2024').monthKey, '2024-04');
+    });
+
+    test('the key does not depend on the month name, only the calendar month', () {
+      /// a locale switch changes the month name in the stored date string but
+      /// must not change which month-wise-transactions node it resolves to.
+      expect(parseTransactionDate('01 September 2026').monthKey, '2026-09');
+    });
+  });
+
+  group('monthKeyFor', () {
+    test('pads single-digit months to two digits', () {
+      expect(monthKeyFor(DateTime(2024, 4, 12)), '2024-04');
+    });
+
+    test('sorts correctly as a plain string, unlike a month name', () {
+      final keys = [monthKeyFor(DateTime(2024, 11, 1)), monthKeyFor(DateTime(2024, 2, 1))]..sort();
+      expect(keys, ['2024-02', '2024-11']);
     });
   });
 
